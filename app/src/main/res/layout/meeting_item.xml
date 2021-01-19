@@ -6,22 +6,13 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:outlineAmbientShadowColor="@color/black"
-        android:src="@drawable/ic_launcher_foreground"
+        android:src="@android:drawable/ic_menu_view"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="Lieu"
-        app:layout_constraintEnd_toStartOf="@+id/participation"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        tools:layout_editor_absoluteY="10dp" />
 
     <TextView
         android:id="@+id/date"
@@ -29,31 +20,53 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="l'heure"
-        app:layout_constraintEnd_toEndOf="@+id/participation"
+        android:textStyle="bold"
+
+        app:layout_constraintBottom_toBottomOf="@+id/subject"
+        app:layout_constraintEnd_toStartOf="@+id/subject"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/participation"
+        app:layout_constraintStart_toEndOf="@+id/location"
         app:layout_constraintTop_toTopOf="@+id/location" />
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Lieu"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/date"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView" />
 
     <TextView
         android:id="@+id/subject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="44dp"
         android:padding="10dp"
         android:text="Sujet"
-        app:layout_constraintBottom_toBottomOf="@+id/date"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/delete"
-        app:layout_constraintStart_toEndOf="@+id/participation"
-        app:layout_constraintTop_toTopOf="@+id/date" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/date"
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/participation"
-        android:layout_width="wrap_content"
+        android:layout_width="277dp"
         android:layout_height="wrap_content"
         android:padding="15dp"
         android:text="Participant"
         android:textColor="#E91E63"
+        android:textSize="9dp"
+        android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/delete"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView" />
 
     <ImageView

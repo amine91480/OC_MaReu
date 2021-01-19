@@ -2,10 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Controller.AddNewMeeting"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_marginTop="50dp"
+    android:orientation="vertical"
+    tools:context=".Controller.AddNewMeeting">
 
     <TextView
         android:id="@+id/textView"
@@ -13,50 +14,67 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Ajouter une Réunion !"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="139dp"
-        tools:layout_editor_absoluteY="134dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints" />
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/textInputEditText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="25dp"
-        android:hint="hint"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="25dp"
-        tools:layout_editor_absoluteY="273dp" />
+        android:hint="LOCALISATION"
+        app:layout_constraintBottom_toTopOf="@+id/textInputEditText2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:ignore="MissingConstraints" />
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/textInputEditText2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="hint"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="376dp" />
+        android:hint="DATE"
+        app:layout_constraintBottom_toTopOf="@+id/textInputEditText3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/textInputEditText3"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="hint"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="490dp" />
+        android:hint="SUJET"
+        app:layout_constraintBottom_toTopOf="@+id/textInputEditText4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputEditText2"
+        tools:ignore="MissingConstraints" />
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/textInputEditText4"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="hint"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="592dp" />
+        android:hint="PARTICIPANT"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputEditText3"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Crée"
-        tools:layout_editor_absoluteX="163dp"
-        tools:layout_editor_absoluteY="660dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputEditText4"
         tools:ignore="MissingConstraints" />
 
 
