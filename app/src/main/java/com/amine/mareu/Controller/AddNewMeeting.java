@@ -14,29 +14,21 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.amine.mareu.DI.DI;
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.R;
 import com.amine.mareu.Service.MeetingApiService;
 
-import java.text.DateFormat;
-import java.time.LocalTime;
 import java.util.Calendar;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static android.widget.Toast.*;
-
 public class AddNewMeeting extends AppCompatActivity {
 
     private MeetingApiService mApiService;
-    DateFormat DFormat = DateFormat.getDateInstance();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +40,8 @@ public class AddNewMeeting extends AppCompatActivity {
     }
 
     private void receipData(){
-        Button mButton = (Button)findViewById(R.id.button);
-        Button mBack = (Button)findViewById(R.id.backButton);
+        Button addButton = (Button)findViewById(R.id.addMeeting);
+        Button backButton = (Button)findViewById(R.id.backButton);
 
         TextView laDate = (TextView) findViewById(R.id.laDate);
         laDate.setOnClickListener(new View.OnClickListener() {
@@ -59,14 +51,13 @@ public class AddNewMeeting extends AppCompatActivity {
                 dateButton();
             }
         });
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addMeeting();
             }
         });
-        mBack.setOnClickListener(new View.OnClickListener() {
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -75,7 +66,6 @@ public class AddNewMeeting extends AppCompatActivity {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void addMeeting(){
         Integer size = mApiService.getMeetings().size() + 1;
         EditText mLocalisation = (EditText)findViewById(R.id.addLocalisation);
@@ -90,12 +80,8 @@ public class AddNewMeeting extends AppCompatActivity {
                 mSubject.getText().toString(),
                 mParticipant.getText().toString()
         );
-        Toast.makeText(getApplicationContext(),meeting.toString(), LENGTH_LONG).show();
-        systemeOut(meeting);
-        Meeting meeting1 = new Meeting(
-                size + 1, LocalTime.now().toString(),"Android","OpenClasserooms","Quelqu'un");
         mApiService.createMeeting(meeting);
-        mApiService.createMeeting(meeting1);
+        finish();
     }
 
     private void dateButton(){
@@ -135,14 +121,5 @@ public class AddNewMeeting extends AppCompatActivity {
             }
         },HOUR,MINUTE, true);
         timePickerDialog.show();
-    }
-    private void systemeOut(Meeting meeting){
-        System.out.println(meeting.getId());
-        System.out.println(meeting.getDate());
-        System.out.println(meeting.getLocation());
-        System.out.println(meeting.getSubject());
-        System.out.println(meeting.getParticipants());
-        System.out.println(mApiService.getMeetings().size());
-
     }
 }
