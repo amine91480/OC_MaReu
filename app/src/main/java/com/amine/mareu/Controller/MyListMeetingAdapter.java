@@ -1,12 +1,14 @@
 package com.amine.mareu.Controller;
 
-import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amine.mareu.Model.Meeting;
@@ -14,17 +16,20 @@ import com.amine.mareu.R;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+
 public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdapter.MyListMeetingHolder> {
 
-    List<Meeting> mMeetingList;
+    private final List<Meeting> mMeetingList;
 
-    public MyListMeetingAdapter(List<Meeting> mMeetingList) {this.mMeetingList = mMeetingList;}
+    public MyListMeetingAdapter(List<Meeting> items) {
+        this.mMeetingList = items;
+    }
 
     @Override
     public MyListMeetingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.meeting_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).
+                inflate(R.layout.meeting_item, parent, false);
         return new MyListMeetingHolder(view);
     }
 
@@ -38,6 +43,16 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
                 notifyDataSetChanged();
             }
         });
+        holder.mListitem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent = new Intent(v.getContext(), ShowMeetingActivity.class);
+                //intent.putExtra("meeting", (Parcelable) mMeetingList);
+                //v.getContext().startActivity(intent);
+                System.out.println("OKAY");
+
+            }
+        });
     }
 
     @Override
@@ -45,24 +60,27 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
         return mMeetingList.size();
     }
 
-    class MyListMeetingHolder extends RecyclerView.ViewHolder {
+    public class MyListMeetingHolder extends RecyclerView.ViewHolder {
 
         private TextView mDate;
-        private TextView mLocation ;
-        private TextView mSubject ;
-        private TextView mParticipant ;
-        private ImageView mImageView ;
+        private TextView mLocation;
+        private TextView mSubject;
+        private TextView mParticipant;
+        private ImageView mImageView;
+        private ConstraintLayout mListitem;
 
-        MyListMeetingHolder(View itemView){
+        MyListMeetingHolder(View itemView) {
             super(itemView);
-            mDate = (TextView)itemView.findViewById(R.id.date);
-            mLocation = (TextView)itemView.findViewById(R.id.location);
-            mSubject = (TextView)itemView.findViewById(R.id.subject);
-            mParticipant = (TextView)itemView.findViewById(R.id.participation);
-            mImageView = (ImageView)itemView.findViewById(R.id.delete);
+            ButterKnife.bind(this, itemView);
+            mDate = (TextView) itemView.findViewById(R.id.date);
+            mLocation = (TextView) itemView.findViewById(R.id.location);
+            mSubject = (TextView) itemView.findViewById(R.id.subject);
+            mParticipant = (TextView) itemView.findViewById(R.id.participation);
+            mImageView = (ImageView) itemView.findViewById(R.id.delete);
+            mListitem = (ConstraintLayout) itemView.findViewById(R.id.superItem);
         }
 
-        void show(Meeting meeting){
+        void show(Meeting meeting) {
             mDate.setText(String.valueOf(meeting.getDate()));
             mSubject.setText(meeting.getSubject());
             mLocation.setText(meeting.getLocation());
@@ -70,5 +88,4 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
 
         }
     }
-
 }
