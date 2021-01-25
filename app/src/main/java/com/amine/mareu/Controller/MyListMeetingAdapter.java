@@ -1,5 +1,7 @@
 package com.amine.mareu.Controller;
 
+import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -7,12 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amine.mareu.MainActivity;
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.R;
+import com.amine.mareu.Service.MeetingApiService;
 
 import java.util.List;
 
@@ -20,7 +26,7 @@ import butterknife.ButterKnife;
 
 public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdapter.MyListMeetingHolder> {
 
-    private final List<Meeting> mMeetingList;
+    private List<Meeting> mMeetingList;
 
     public MyListMeetingAdapter(List<Meeting> items) {
         this.mMeetingList = items;
@@ -35,7 +41,7 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
 
     @Override
     public void onBindViewHolder(MyListMeetingHolder holder, int position) {
-        holder.show(mMeetingList.get(position));
+        holder.updateElement(mMeetingList.get(position));
         holder.mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,7 +56,6 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
                 //intent.putExtra("meeting", (Parcelable) mMeetingList);
                 //v.getContext().startActivity(intent);
                 System.out.println("OKAY");
-
             }
         });
     }
@@ -71,21 +76,20 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
 
         MyListMeetingHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
             mDate = (TextView) itemView.findViewById(R.id.date);
             mLocation = (TextView) itemView.findViewById(R.id.location);
             mSubject = (TextView) itemView.findViewById(R.id.subject);
             mParticipant = (TextView) itemView.findViewById(R.id.participation);
             mImageView = (ImageView) itemView.findViewById(R.id.delete);
             mListitem = (ConstraintLayout) itemView.findViewById(R.id.superItem);
+            ButterKnife.bind(this, itemView);
         }
 
-        void show(Meeting meeting) {
+        void updateElement(Meeting meeting) {
             mDate.setText(String.valueOf(meeting.getDate()));
-            mSubject.setText(meeting.getSubject());
+            mSubject.setText(meeting.getSubject()+(meeting.getId()));
             mLocation.setText(meeting.getLocation());
             mParticipant.setText(meeting.getParticipants());
-
         }
     }
 }

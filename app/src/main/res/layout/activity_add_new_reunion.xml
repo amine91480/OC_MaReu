@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:text="Date"
         android:textSize="22dp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/addMeeting"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addParticipant" />
@@ -68,13 +68,13 @@
         android:layout_height="wrap_content"
         android:text="Heure"
         android:textSize="22dp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/addMeeting"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/laDate" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/addMeeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Crée"

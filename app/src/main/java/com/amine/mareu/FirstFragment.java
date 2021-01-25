@@ -33,7 +33,6 @@ public class FirstFragment extends Fragment {
     private RecyclerView mRecyclerView;
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -41,18 +40,24 @@ public class FirstFragment extends Fragment {
         Context context = view.getContext();
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
-        configureRecyclerView();
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        configureRecyclerView();
+    }
+
 
     private void configureRecyclerView() {
         mApiService = DI.getMeetingApiService();
         mMeetings = mApiService.getMeetings();
         mRecyclerView.setAdapter(new MyListMeetingAdapter(mMeetings));
     }
-
 }
+
     /*public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
