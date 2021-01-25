@@ -5,12 +5,12 @@ import java.time.LocalTime;
 public class Meeting {
 
     private Integer id;
-    private LocalTime date;
+    private String date;
     private String location;
     private String subject;
     private String participants;
 
-    public Meeting(Integer id, LocalTime date,String location,String subject,String partcipants){
+    public Meeting(Integer id, String date, String location, String subject, String partcipants){
         this.id = id;
         this.date = date;
         this.location = location;
@@ -50,11 +50,11 @@ public class Meeting {
         this.participants = participants;
     }
 
-    public LocalTime getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalTime date) {
+    public void setDate() {
         this.date = date;
     }
 }
