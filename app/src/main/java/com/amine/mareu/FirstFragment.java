@@ -7,10 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +17,6 @@ import com.amine.mareu.DI.DI;
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.Service.MeetingApiService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,7 +25,6 @@ public class FirstFragment extends Fragment {
 
     private List<Meeting> mMeetings;
     private MeetingApiService mApiService;
-    private MyListMeetingAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
 

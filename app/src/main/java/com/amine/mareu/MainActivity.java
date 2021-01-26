@@ -14,10 +14,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.MenuInflater;
 import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 import java.util.List;
@@ -41,7 +43,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FloatingActionButton addMeeting = (FloatingActionButton)findViewById(R.id.fab);
+        Toolbar mToolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        FloatingActionButton addMeeting = (FloatingActionButton) findViewById(R.id.fab);
         addMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,22 +58,40 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        Log.d("OK", "Fragment.onCreateOptionsMenu///////////////////////////////////");
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d("OK", "OK///////////////////////////////////");
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Toast.makeText(this, "It's Action setting", Toast.LENGTH_LONG).show();
+                System.out.println("It's Action setting");
+                return true;
+
+            case R.id.filter_date:
+                Toast.makeText(this, "It's Date setting", Toast.LENGTH_LONG).show();
+                System.out.println("It's Date setting");
+                return true;
+
+            case R.id.filter_location:
+                Toast.makeText(this, "It's Loca setting", Toast.LENGTH_LONG).show();
+                return true;
+
+            case R.id.filter_location_and_date:
+                Toast.makeText(this, "It's the booth setting", Toast.LENGTH_LONG).show();
+                return true;
+            default:
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
+
