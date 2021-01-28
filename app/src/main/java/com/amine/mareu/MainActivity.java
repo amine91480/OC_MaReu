@@ -1,5 +1,8 @@
 package com.amine.mareu;
 
+import android.app.Application;
+import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,10 +12,12 @@ import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.Service.MeetingApiService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
@@ -58,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        Log.d("OK", "Fragment.onCreateOptionsMenu///////////////////////////////////");
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
         return true;
@@ -66,32 +70,41 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d("OK", "OK///////////////////////////////////");
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Toast.makeText(this, "It's Action setting", Toast.LENGTH_LONG).show();
-                System.out.println("It's Action setting");
+                String setting ="It's Action setting";
+                dialog(setting);
                 return true;
 
             case R.id.filter_date:
-                Toast.makeText(this, "It's Date setting", Toast.LENGTH_LONG).show();
-                System.out.println("It's Date setting");
+                Toast.makeText(MainActivity.this, "It's Date setting", Toast.LENGTH_LONG).show();
+                String date ="It's Date setting";
+                dialog(date);
                 return true;
 
             case R.id.filter_location:
-                Toast.makeText(this, "It's Loca setting", Toast.LENGTH_LONG).show();
+                String location ="It's Loca setting";
+                dialog(location);
                 return true;
 
             case R.id.filter_location_and_date:
-                Toast.makeText(this, "It's the booth setting", Toast.LENGTH_LONG).show();
+                String nul ="PTDR té qui ?";
+                dialog(nul);
                 return true;
             default:
         }
         return super.onOptionsItemSelected(item);
     }
+    private void dialog(String string){
+        AlertDialog.Builder myAlert = new AlertDialog.Builder(MainActivity.this);
+        myAlert.setTitle(string);
+        myAlert.show();
+    }
+
+
 }
 
