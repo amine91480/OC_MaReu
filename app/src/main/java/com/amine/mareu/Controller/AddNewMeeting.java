@@ -36,13 +36,11 @@ public class AddNewMeeting extends AppCompatActivity {
         setContentView(R.layout.activity_add_new_reunion);
         mApiService = DI.getMeetingApiService();
         receipData();
-
     }
 
     private void receipData(){
         Button addButton = (Button)findViewById(R.id.addMeeting);
         Button backButton = (Button)findViewById(R.id.backButton);
-
         TextView laDate = (TextView) findViewById(R.id.laDate);
         laDate.setOnClickListener(new View.OnClickListener() {
             @Override

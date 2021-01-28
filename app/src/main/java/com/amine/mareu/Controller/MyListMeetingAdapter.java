@@ -67,10 +67,7 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
 
     public class MyListMeetingHolder extends RecyclerView.ViewHolder {
 
-        private TextView mDate;
-        private TextView mLocation;
-        private TextView mSubject;
-        private TextView mParticipant;
+        private TextView mDate, mLocation, mSubject, mParticipant;
         private ImageView mImageView;
         private ConstraintLayout mListitem;
 
