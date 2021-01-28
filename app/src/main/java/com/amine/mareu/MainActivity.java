@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.amine.mareu.Controller.AddNewMeeting;
+import com.amine.mareu.Controller.FilterDialogue;
 import com.amine.mareu.Controller.MyListMeetingAdapter;
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.Service.MeetingApiService;
@@ -33,11 +34,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
-
-    private RecyclerView mRecyclerView;
-    private MyListMeetingAdapter mAdapter;
-    private List<Meeting> mMeeting;
-    private MeetingApiService mApiService;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -77,13 +73,15 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 Toast.makeText(this, "It's Action setting", Toast.LENGTH_LONG).show();
                 String setting ="It's Action setting";
-                dialog(setting);
                 return true;
 
             case R.id.filter_date:
                 Toast.makeText(MainActivity.this, "It's Date setting", Toast.LENGTH_LONG).show();
                 String date ="It's Date setting";
-                dialog(date);
+
+                FilterDialogue filterDialogue = new FilterDialogue(MainActivity.this);
+                filterDialogue.setTitle("It's Date setting");
+                filterDialogue.build();
                 return true;
 
             case R.id.filter_location:
@@ -104,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
         myAlert.setTitle(string);
         myAlert.show();
     }
-
 
 }
 
