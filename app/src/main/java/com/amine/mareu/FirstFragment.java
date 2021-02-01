@@ -1,5 +1,6 @@
 package com.amine.mareu;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,12 +17,16 @@ import com.amine.mareu.Controller.MyListMeetingAdapter;
 import com.amine.mareu.DI.DI;
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.Service.MeetingApiService;
+import com.amine.mareu.databinding.ActivityMainBinding;
+import com.amine.mareu.databinding.FragmentFirstBinding;
 
 import java.util.List;
 
-import butterknife.BindView;
 
 public class FirstFragment extends Fragment {
+
+    //ViewBindind
+    private FragmentFirstBinding binding;
 
     private List<Meeting> mMeetings;
     private MeetingApiService mApiService;
@@ -31,12 +36,13 @@ public class FirstFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_first, container, false);
+        binding = FragmentFirstBinding.inflate(getLayoutInflater(), container, false);
+        View view = binding.getRoot();
         Context context = view.getContext();
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        return view;
+        return binding.getRoot();
     }
 
     @Override

@@ -7,25 +7,22 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amine.mareu.MainActivity;
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.R;
 import com.amine.mareu.Service.MeetingApiService;
+import com.amine.mareu.databinding.MeetingItemBinding;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
 
 public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdapter.MyListMeetingHolder> {
 
+    private MeetingItemBinding binding;
     private List<Meeting> mMeetingList;
 
     public MyListMeetingAdapter(List<Meeting> items) {
@@ -34,22 +31,22 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
 
     @Override
     public MyListMeetingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).
-                inflate(R.layout.meeting_item, parent, false);
-        return new MyListMeetingHolder(view);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        binding = MeetingItemBinding.inflate(inflater, parent, false);
+        return new MyListMeetingHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(MyListMeetingHolder holder, int position) {
         holder.updateElement(mMeetingList.get(position));
-        holder.mImageView.setOnClickListener(new View.OnClickListener() {
+        holder.mBinding.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mMeetingList.remove(mMeetingList.get(position));
                 notifyDataSetChanged();
             }
         });
-        holder.mListitem.setOnClickListener(new View.OnClickListener() {
+        holder.mBinding.superItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Intent intent = new Intent(v.getContext(), ShowMeetingActivity.class);
@@ -67,26 +64,21 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
 
     public class MyListMeetingHolder extends RecyclerView.ViewHolder {
 
-        private TextView mDate, mLocation, mSubject, mParticipant;
-        private ImageView mImageView;
-        private ConstraintLayout mListitem;
+        private MeetingItemBinding mBinding;
 
-        MyListMeetingHolder(View itemView) {
-            super(itemView);
-            mDate = (TextView) itemView.findViewById(R.id.date);
-            mLocation = (TextView) itemView.findViewById(R.id.location);
-            mSubject = (TextView) itemView.findViewById(R.id.subject);
-            mParticipant = (TextView) itemView.findViewById(R.id.participation);
-            mImageView = (ImageView) itemView.findViewById(R.id.delete);
-            mListitem = (ConstraintLayout) itemView.findViewById(R.id.superItem);
-            ButterKnife.bind(this, itemView);
+        MyListMeetingHolder(MeetingItemBinding mBinding) {
+            super(mBinding.getRoot());
+            this.mBinding = mBinding;
         }
 
         void updateElement(Meeting meeting) {
-            mDate.setText(String.valueOf(meeting.getDate()));
-            mSubject.setText(meeting.getSubject()+(meeting.getId()));
-            mLocation.setText(meeting.getLocation());
-            mParticipant.setText(meeting.getParticipants());
+            binding.text.setText(String.valueOf(
+                    meeting.getLocation() + " - "
+                            + meeting.getDate().
+                            substring(meeting.getDate().length() - 10, meeting.getDate().length() - 4) + " - "
+                            + meeting.getSubject()));
+
+            binding.participation.setText(meeting.getParticipants());
         }
     }
 }
