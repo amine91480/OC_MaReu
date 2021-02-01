@@ -8,23 +8,24 @@ import android.app.TimePickerDialog;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.amine.mareu.DI.DI;
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.R;
 import com.amine.mareu.Service.MeetingApiService;
 
+import java.sql.Time;
 import java.util.Calendar;
+import java.util.Date;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class AddNewMeeting extends AppCompatActivity {
 
@@ -38,10 +39,10 @@ public class AddNewMeeting extends AppCompatActivity {
         receipData();
     }
 
-    private void receipData(){
-        Button addButton = (Button)findViewById(R.id.addMeeting);
-        Button backButton = (Button)findViewById(R.id.backButton);
-        TextView laDate = (TextView) findViewById(R.id.laDate);
+    private void receipData() {
+        Button addButton = (Button) findViewById(R.id.addMeeting);
+        Button backButton = (Button) findViewById(R.id.backButton);
+        DatePicker laDate = (DatePicker) findViewById(R.id.laDate);
         laDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,16 +65,25 @@ public class AddNewMeeting extends AppCompatActivity {
 
     }
 
-    private void addMeeting(){
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void addMeeting() {
         Integer size = mApiService.getMeetings().size() + 1;
-        EditText mLocalisation = (EditText)findViewById(R.id.addLocalisation);
-        EditText mSubject = (EditText)findViewById(R.id.addSubject);
-        EditText mParticipant = (EditText)findViewById(R.id.addParticipant);
-        TextView laDate = (TextView) findViewById(R.id.laDate);
+        EditText mLocalisation = (EditText) findViewById(R.id.addLocalisation);
+        EditText mSubject = (EditText) findViewById(R.id.addSubject);
+        EditText mParticipant = (EditText) findViewById(R.id.addParticipant);
+        DatePicker laDate = (DatePicker) findViewById(R.id.laDate);
+        TimePicker lheure = (TimePicker) findViewById(R.id.heure);
+        Date heure = (Time) new Time(lheure.getHour());
+        Date date1 = (Date) new Date(laDate.getYear(),
+                laDate.getDayOfMonth(),
+                laDate.getMonth());
+
+        System.out.println(heure + "////////////////////////////////////////////////////////////");
+        System.out.println(date1 + "////////////////////////////////////////////////////////////");
 
         Meeting meeting = new Meeting(
                 size,
-                laDate.getText().toString(),
+                heure.toString(),
                 mLocalisation.getText().toString(),
                 mSubject.getText().toString(),
                 mParticipant.getText().toString()
@@ -82,7 +92,7 @@ public class AddNewMeeting extends AppCompatActivity {
         finish();
     }
 
-    private void dateButton(){
+    private void dateButton() {
         Calendar calendar = Calendar.getInstance();
         Integer YEAR = calendar.get(Calendar.YEAR);
         Integer MONTH = calendar.get(Calendar.MONTH);
@@ -91,21 +101,19 @@ public class AddNewMeeting extends AppCompatActivity {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int date) {
-                TextView dateTextView = (TextView)findViewById(R.id.laDate);
-
                 Calendar calendarDate = Calendar.getInstance();
-                calendarDate.set(Calendar.YEAR,YEAR);
-                calendarDate.set(Calendar.MONTH,MONTH);
-                calendarDate.set(Calendar.YEAR,YEAR);
+                calendarDate.set(Calendar.YEAR, YEAR);
+                calendarDate.set(Calendar.MONTH, MONTH);
+                calendarDate.set(Calendar.YEAR, YEAR);
 
-                CharSequence charSequence = android.text.format.DateFormat.format("dd-MM-yyyy",calendarDate);
-                dateTextView.setText(charSequence);
+                String dateString = (String) DateFormat.format("dd-MM-yyyy", calendarDate);
+                System.out.println(dateString + "////////////////////////////////////////////////////////////");
             }
         }, YEAR, MONTH, DATE);
         datePickerDialog.show();
     }
 
-    private  void hoursButton() {
+    private void hoursButton() {
         Calendar calendar = Calendar.getInstance();
         Integer HOUR = calendar.get(Calendar.HOUR);
         Integer MINUTE = calendar.get(Calendar.MINUTE);
@@ -113,11 +121,10 @@ public class AddNewMeeting extends AppCompatActivity {
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
-                TextView timeTextView = (TextView)findViewById(R.id.heure);
-                String timeString = hour+":"+minute;
-                timeTextView.setText(timeString);
+                String timeString = (String) DateFormat.format("hh:mm", calendar);
+                System.out.println(timeString + "////////////////////////////////////////////////////////////");
             }
-        },HOUR,MINUTE, true);
+        }, HOUR, MINUTE, true);
         timePickerDialog.show();
     }
 }
