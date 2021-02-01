@@ -7,8 +7,10 @@ import android.content.Context;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 
@@ -20,8 +22,8 @@ public class FilterDialogue extends Dialog {
 
     private String mTitle;
     private TextView mFilter;
-    private EditText mEditDate;
-    private EditText mEditTime;
+    private DatePicker mEditDate;
+    private TimePicker mEditTime;
     private Button mValide;
 
     @SuppressLint("WrongViewCast")
@@ -31,11 +33,11 @@ public class FilterDialogue extends Dialog {
         this.mTitle = "Its the Title ?!";
         this.mFilter = (TextView) findViewById(R.id.filter);
         this.mValide = (Button) findViewById(R.id.valide);
-        this.mEditDate = (EditText) findViewById(R.id.editDate);
-        this.mEditTime = (EditText) findViewById(R.id.editTime);
+        this.mEditDate = (DatePicker) findViewById(R.id.editDate);
+        this.mEditTime = (TimePicker) findViewById(R.id.editTime);
     }
 
-    public void setTitle() {
+    public void setTitle(String mTitle) {
         this.mTitle = mTitle;
     }
 
@@ -43,9 +45,9 @@ public class FilterDialogue extends Dialog {
         return mValide;
     }
 
-    public void build(){
+    public void build() {
         show();
-        setTitle();
+        mFilter.setText(mTitle);
         getYesButton();
     }
 
