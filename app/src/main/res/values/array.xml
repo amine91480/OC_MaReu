@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="defaultValue">
+        <item> "Réunion A "</item>
+        <item> "Réunion B "</item>
+        <item> "Réunion C "</item>
+    </string-array>
+</resources>
