@@ -1,20 +1,12 @@
 package com.amine.mareu.Controller;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.amine.mareu.MainActivity;
 import com.amine.mareu.Model.Meeting;
-import com.amine.mareu.R;
-import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.MeetingItemBinding;
 
 import java.util.List;
@@ -75,7 +67,7 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
             binding.text.setText(String.valueOf(
                     meeting.getLocation() + " - "
                             + meeting.getDate().
-                            substring(meeting.getDate().length() - 10, meeting.getDate().length() - 4) + " - "
+                            substring(meeting.getDate().length() - 10, meeting.getDate().length() - 5) + " - "
                             + meeting.getSubject()));
 
             binding.participation.setText(meeting.getParticipants());
