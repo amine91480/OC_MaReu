@@ -2,17 +2,23 @@ package com.amine.mareu.Controller;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -21,110 +27,80 @@ import com.amine.mareu.DI.DI;
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.R;
 import com.amine.mareu.Service.MeetingApiService;
+import com.amine.mareu.databinding.ActivityAddNewReunionBinding;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
-public class AddNewMeeting extends AppCompatActivity {
+public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    private ActivityAddNewReunionBinding binding;
     private MeetingApiService mApiService;
+    private String spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new_reunion);
+        //ViewBinding
+        binding = ActivityAddNewReunionBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+
         mApiService = DI.getMeetingApiService();
         receipData();
     }
 
     private void receipData() {
-        Button addButton = (Button) findViewById(R.id.addMeeting);
-        Button backButton = (Button) findViewById(R.id.backButton);
-        DatePicker laDate = (DatePicker) findViewById(R.id.laDate);
-        laDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hoursButton();
-                dateButton();
-            }
-        });
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
+        spinnerOption();
+
+        binding.addMeeting.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 addMeeting();
+                }
             }
-        });
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        );
+    }
+
+    public void spinnerOption() {
+        List<String> salle = new ArrayList<String>();
+        salle.add(" Réunion A ");
+        salle.add(" Réunion B ");
+        salle.add(" Réunion C ");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, salle);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.salle.setAdapter(adapter);
+        binding.salle.setOnItemSelectedListener(this);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        spinner = selectedItem;
+        Toast.makeText(AddNewMeeting.this, "Value choose" + selectedItem, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private void addMeeting() {
-        Integer size = mApiService.getMeetings().size() + 1;
-        EditText mLocalisation = (EditText) findViewById(R.id.addLocalisation);
-        EditText mSubject = (EditText) findViewById(R.id.addSubject);
-        EditText mParticipant = (EditText) findViewById(R.id.addParticipant);
-        DatePicker laDate = (DatePicker) findViewById(R.id.laDate);
-        TimePicker lheure = (TimePicker) findViewById(R.id.heure);
-        Date heure = (Time) new Time(lheure.getHour());
-        Date date1 = (Date) new Date(laDate.getYear(),
-                laDate.getDayOfMonth(),
-                laDate.getMonth());
+        Integer size;
+        size = mApiService.getMeetings().size();
+        String participant, subject;
 
-        System.out.println(heure + "////////////////////////////////////////////////////////////");
-        System.out.println(date1 + "////////////////////////////////////////////////////////////");
 
-        Meeting meeting = new Meeting(
-                size,
-                heure.toString(),
-                mLocalisation.getText().toString(),
-                mSubject.getText().toString(),
-                mParticipant.getText().toString()
-        );
+        participant = binding.participant.getText().toString();
+        subject = binding.subject.getText().toString();
+        Date date = new Date();
+        Meeting meeting = new Meeting(size, date.toString(), spinner, subject, participant );
         mApiService.createMeeting(meeting);
         finish();
     }
 
-    private void dateButton() {
-        Calendar calendar = Calendar.getInstance();
-        Integer YEAR = calendar.get(Calendar.YEAR);
-        Integer MONTH = calendar.get(Calendar.MONTH);
-        Integer DATE = calendar.get(Calendar.DATE);
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int date) {
-                Calendar calendarDate = Calendar.getInstance();
-                calendarDate.set(Calendar.YEAR, YEAR);
-                calendarDate.set(Calendar.MONTH, MONTH);
-                calendarDate.set(Calendar.YEAR, YEAR);
-
-                String dateString = (String) DateFormat.format("dd-MM-yyyy", calendarDate);
-                System.out.println(dateString + "////////////////////////////////////////////////////////////");
-            }
-        }, YEAR, MONTH, DATE);
-        datePickerDialog.show();
-    }
-
-    private void hoursButton() {
-        Calendar calendar = Calendar.getInstance();
-        Integer HOUR = calendar.get(Calendar.HOUR);
-        Integer MINUTE = calendar.get(Calendar.MINUTE);
-
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hour, int minute) {
-                String timeString = (String) DateFormat.format("hh:mm", calendar);
-                System.out.println(timeString + "////////////////////////////////////////////////////////////");
-            }
-        }, HOUR, MINUTE, true);
-        timePickerDialog.show();
-    }
 }

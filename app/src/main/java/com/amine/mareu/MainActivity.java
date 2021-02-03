@@ -59,28 +59,12 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.button_menu:
                 Toast.makeText(this, "It's Action setting", Toast.LENGTH_LONG).show();
-                String setting = "It's Action setting";
-                return true;
-
-            case R.id.filter_date:
-                Toast.makeText(MainActivity.this, "It's Date setting", Toast.LENGTH_LONG).show();
-                String date = "Filter Meeting with Date";
-
+                String option = "It's Action setting";
                 FilterDialogue filterDialogue = new FilterDialogue(MainActivity.this);
-                filterDialogue.setTitle(date);
+                filterDialogue.setTitle(option);
                 filterDialogue.build();
-                return true;
-
-            case R.id.filter_location:
-                String location = "It's Loca setting";
-                dialog(location);
-                return true;
-
-            case R.id.filter_location_and_date:
-                String nul = "PTDR té qui ?";
-                dialog(nul);
                 return true;
             default:
         }

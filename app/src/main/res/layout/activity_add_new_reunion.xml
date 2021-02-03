@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".Controller.AddNewMeeting">
 
-    <EditText
+    <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,55 +19,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <EditText
-        android:id="@+id/addLocalisation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="LOCALISATION"
-        app:layout_constraintEnd_toStartOf="@+id/addParticipant"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <EditText
-        android:id="@+id/addSubject"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="SUJET"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/addParticipant"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <EditText
-        android:id="@+id/addParticipant"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="PARTICIPANT"
-        app:layout_constraintEnd_toStartOf="@+id/addSubject"
-        app:layout_constraintStart_toEndOf="@+id/addLocalisation"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <DatePicker
-        android:id="@+id/laDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner"
-        app:layout_constraintBottom_toTopOf="@+id/heure"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addParticipant" />
-
-    <TimePicker
-        android:id="@+id/heure"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:timePickerMode="spinner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/laDate" />
-
     <Button
         android:id="@+id/addMeeting"
         android:layout_width="wrap_content"
@@ -76,7 +27,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/heure" />
+    />
 
     <Button
         android:id="@+id/backButton"
@@ -86,6 +37,35 @@
         app:layout_constraintEnd_toStartOf="@+id/textView"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
+
+
+    <Spinner
+        android:id="@+id/salle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/defaultValue"
+        app:layout_constraintBottom_toTopOf="@+id/addMeeting"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/backButton" />
+
+    <EditText
+        android:id="@+id/subject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/salle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/participant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/salle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
