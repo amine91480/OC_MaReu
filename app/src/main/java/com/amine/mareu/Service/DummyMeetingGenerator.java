@@ -15,8 +15,7 @@ public abstract class DummyMeetingGenerator {
             new Meeting(3, new Date().toString(), "Réunion C", "Kotlin", "valentin91, tuto45@hotmail.fr"),
             new Meeting(4, new Date().toString(), "Réunion A", "Front", "Caroline@hotmail.fr"),
             new Meeting(5, new Date().toString(), "Réunion B", "API", "jack@hotmail.fr"),
-            new Meeting(6, new Date().toString(), "Réunion C", "RH", "Fred@hotmail.fr"),
-            new Meeting(7, new Date().toString(), "Marseille", "Alterance", "Karen@hotmail.fr")
+            new Meeting(6, new Date().toString(), "Réunion C", "RH", "Fred@hotmail.fr")
     );
 
     static List<Meeting> generateMeetings() {
