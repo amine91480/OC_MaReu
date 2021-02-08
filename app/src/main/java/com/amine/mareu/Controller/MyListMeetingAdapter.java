@@ -70,7 +70,6 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
                 strMeetDat = meeting.getDate().substring(11, 16);
             else
                 strMeetDat = meeting.getDate();
-            Log.d("KIKOU         ICI C'est", strMeetDat);
 
             binding.text.setText(String.valueOf(
                     meeting.getLocation() + " - "
