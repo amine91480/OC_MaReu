@@ -45,12 +45,12 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
 
     private ActivityAddNewReunionBinding binding;
     private MeetingApiService mApiService;
-    private TextView mDate;
 
     // Element View
     private String spinner;
     private DatePickerDialog mDateSetListener;
     private TimePickerDialog mTimePickerDialog;
+    private List<Meeting> meetings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,31 +89,11 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String selectedItem = (String) parent.getItemAtPosition(position);
         spinner = selectedItem;
-        Toast.makeText(AddNewMeeting.this, "Value choose" + selectedItem, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
-    }
-
-    private void addMeeting() {
-        binding.addMeeting.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            Integer size;
-            size = mApiService.getMeetings().size();
-            String participant, subject, date;
-
-            participant = binding.participant.getText().toString();
-            subject = binding.subject.getText().toString();
-            date = binding.time.getText().toString();
-
-            Meeting meeting = new Meeting(size, date, spinner, subject, participant);
-            mApiService.createMeeting(meeting);
-            finish();
-            }
-            }
-        );
     }
 
     private void dialogDate() {
@@ -137,19 +117,51 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
                                 date.set(Calendar.HOUR_OF_DAY, hourOfDay);
                                 date.set(Calendar.MINUTE, minute);
                                 binding.time.setText(DateFormat.getTimeFormat(getApplicationContext()).format(date.getTime()));
-                                Log.d("HEURE //////////////////////////////////////////////////:", String.valueOf(date.getTime()));
-                                Log.d("DATE //////////////////--------------------------------------------------------------", String.valueOf(date.getTime()));
+                                verifyData();
                             }
                         }, mHour, mMinute, false);
-
                         mTimePickerDialog.show();
                     }
                 }, mYear, mMonth, mDay);
-
-                Log.d("----------------------------------------------------------------------------------", String.valueOf(date));
                 mDateSetListener.show();
             }
         });
+    }
 
+    private void addMeeting() {
+        binding.addMeeting.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Integer size;
+                size = mApiService.getMeetings().size();
+                String participant, subject, date;
+
+                participant = binding.participant.getText().toString();
+                subject = binding.subject.getText().toString();
+                date = binding.time.getText().toString();
+
+                Meeting meeting = new Meeting(size, date, spinner, subject, participant);
+                if (!mApiService.isReserved(meeting)) {
+                    Log.d("isReserved/addM", "The Date and the Time Choose is OK !");
+                    mApiService.createMeeting(meeting);
+                    finish();
+                    return;
+                    }
+                else if (mApiService.isReserved(meeting))
+                Log.d("isReserved/addM", "The Date and the Choose of the Salle is the Same! ");
+                }
+            }
+        );
+    }
+
+    private void verifyData() {
+        meetings = mApiService.getMeetings();
+        for (Meeting m : meetings) {
+            if (m.getLocation() == spinner)
+                if (m.getDate() == binding.date.getText()) {
+                    Toast.makeText(this, binding.date.getText() + spinner, Toast.LENGTH_SHORT).show();
+                    Log.d("isReserved/verifiData", "The Date and the Choose of the Salle is the Same ! ");
+                    break;
+                }
+        }
     }
 }
