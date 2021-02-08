@@ -1,5 +1,6 @@
 package com.amine.mareu.Controller;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,10 +65,16 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
         }
 
         void updateElement(Meeting meeting) {
+            String strMeetDat;
+            if (meeting.getDate().length() > 5)
+                strMeetDat = meeting.getDate().substring(11, 16);
+            else
+                strMeetDat = meeting.getDate();
+            Log.d("KIKOU         ICI C'est", strMeetDat);
+
             binding.text.setText(String.valueOf(
                     meeting.getLocation() + " - "
-                            + meeting.getDate().
-                            substring(meeting.getDate().length() - 10, meeting.getDate().length() - 5) + " - "
+                            + strMeetDat + " - "
                             + meeting.getSubject()));
 
             binding.participation.setText(meeting.getParticipants());
