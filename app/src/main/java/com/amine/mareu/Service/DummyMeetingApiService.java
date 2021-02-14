@@ -32,22 +32,4 @@ public class DummyMeetingApiService implements MeetingApiService {
     @Override
     public void deleteMeeting(Meeting meeting) {meetings.remove(meeting);}
 
-    @Override
-    public boolean isReserved(Meeting meeting) {
-        boolean isReserve = false;
-        for (Meeting m : meetings) {
-            if ( m.getDate() == meeting.getDate() ) {
-                isReserve = true;
-                Log.d("isReserved/APi", "La même heure !"+m.getId()+"--> "+m.getDate()+"-"+meeting.getDate() );
-                return isReserve;
-            }
-            if ( m.getLocation() == meeting.getLocation()) {
-                Log.d("isReserved/APi", "Seulement la même salle "+m.getId()+"-->"+m.getLocation()+meeting.getLocation() );
-                return isReserve;
-            }
-                Log.d("isReserved/API", m.getId()+"--> "+m.getDate()+"-"+meeting.getDate()+" "+m.getLocation()+meeting.getLocation());
-        }
-        return isReserve;
-    }
-
 }

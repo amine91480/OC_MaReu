@@ -3,17 +3,17 @@ package com.amine.mareu.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.time.LocalTime;
+import java.util.Date;
 
 public class Meeting implements Parcelable {
 
     private Integer id;
-    private String date;
+    private Date date;
     private String location;
     private String subject;
     private String participants;
 
-    public Meeting(Integer id, String date, String location, String subject, String partcipants){
+    public Meeting(Integer id, Date date, String location, String subject, String partcipants){
         this.id = id;
         this.date = date;
         this.location = location;
@@ -27,7 +27,7 @@ public class Meeting implements Parcelable {
         } else {
             id = in.readInt();
         }
-        date = in.readString();
+        date = (Date) in.readSerializable();
         location = in.readString();
         subject = in.readString();
         participants = in.readString();
@@ -77,7 +77,7 @@ public class Meeting implements Parcelable {
         this.participants = participants;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -98,7 +98,7 @@ public class Meeting implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeInt(id);
         }
-        dest.writeString(date);
+        dest.writeSerializable(date);
         dest.writeString(location);
         dest.writeString(subject);
         dest.writeString(participants);
