@@ -10,13 +10,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.databinding.MeetingItemBinding;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdapter.MyListMeetingHolder> {
 
     private MeetingItemBinding binding;
     private List<Meeting> mMeetingList;
+
+    private String strMeetDat;
+    private SimpleDateFormat createDate;
 
     public MyListMeetingAdapter(List<Meeting> items) {
         this.mMeetingList = items;
@@ -65,11 +71,9 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
         }
 
         void updateElement(Meeting meeting) {
-            String strMeetDat;
-            if (meeting.getDate().length() > 5)
-                strMeetDat = meeting.getDate().substring(11, 16);
-            else
-                strMeetDat = meeting.getDate();
+            createDate  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            strMeetDat = createDate.format(meeting.getDateBegin());
+            strMeetDat = strMeetDat.substring(11,16);
 
             binding.text.setText(String.valueOf(
                     meeting.getLocation() + " - "
