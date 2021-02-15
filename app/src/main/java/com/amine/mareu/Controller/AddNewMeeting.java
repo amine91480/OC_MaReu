@@ -35,10 +35,13 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static android.widget.Toast.*;
 
@@ -52,6 +55,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
     private String spinner;
     private DatePickerDialog mDateSetListener;
     private TimePickerDialog mTimePickerDialog;
+    private Calendar mDateBegin, mDateFinish;
     private List<Meeting> meetings;
 
     @Override
@@ -101,12 +105,13 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
     /**/ //
 
     private void dialogDate() {
-        Calendar date = Calendar.getInstance();
-        int mDay = date.get(Calendar.DAY_OF_MONTH);
-        int mMonth = date.get(Calendar.MONTH);
-        int mYear = date.get(Calendar.YEAR);
-        int mHour = date.get(Calendar.HOUR);
-        int mMinute = date.get(Calendar.MINUTE);
+        mDateBegin = Calendar.getInstance();
+        mDateFinish = Calendar.getInstance();
+        int mDay = mDateBegin.get(Calendar.DAY_OF_MONTH);
+        int mMonth = mDateBegin.get(Calendar.MONTH);
+        int mYear = mDateBegin.get(Calendar.YEAR);
+        int mHour = mDateBegin.get(Calendar.HOUR);
+        int mMinute = mDateBegin.get(Calendar.MINUTE);
 
         binding.info.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("LongLogTag")
@@ -116,12 +121,10 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
 
                         mTimePickerDialog = new TimePickerDialog(AddNewMeeting.this, new TimePickerDialog.OnTimeSetListener() {
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                date.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                                date.set(Calendar.MINUTE, minute);
-                                date.set(year, month, dayOfMonth);
-                                binding.date.setText(DateFormat.getDateFormat(getApplicationContext()).format(date.getTime()));
-                                binding.time.setText(DateFormat.getTimeFormat(getApplicationContext()).format(date.getTime()));
-                                /*verifyData();*/
+                                mDateBegin.set(year, month, dayOfMonth, hourOfDay,minute,00);
+                                mDateFinish.set(year, month, dayOfMonth, hourOfDay + 1,minute,00);
+                                binding.date.setText(DateFormat.getDateFormat(getApplicationContext()).format(mDateBegin.getTime()));
+                                binding.time.setText(DateFormat.getTimeFormat(getApplicationContext()).format(mDateBegin.getTime()));
                                 Log.d("TimePicker/verifiData", "Lunch method to find if the Meeting have reserved a the same time");
                             }
                         }, mHour, mMinute, false);
@@ -138,35 +141,21 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
             public void onClick(View v) {
                 Integer size;
                 size = mApiService.getMeetings().size();
-                String participant, subject, date;
+                String participant, subject;
+
+                SimpleDateFormat createDate  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+                Log.d("isReserved", createDate.format(mDateBegin.getTime())+"// //"+createDate.format(mDateFinish.getTime()));
+                Log.d("isReserved", mDateBegin.getTime()+"// //"+mDateFinish.getTime());
 
                 participant = binding.participant.getText().toString();
                 subject = binding.subject.getText().toString();
-                date = binding.time.getText().toString();
 
-                Meeting meeting = new Meeting(size, date, spinner, subject, participant);
-                makeText(getApplicationContext(), "La date et heure des autres meeting sont different", LENGTH_SHORT).show();
+                Meeting meeting = new Meeting(size, mDateBegin.getTime() , mDateFinish.getTime() , spinner, subject, participant);
                 mApiService.createMeeting(meeting);
                 finish();
             }
         });
-    }
-
-    private boolean verifyData() {
-        boolean isOK = false;
-        Integer id = 0;
-        Log.d("isReserved/verifiData", spinner.length() + " " + binding.time.getText().length());
-        meetings = mApiService.getMeetings();
-        for (id = 0; id < meetings.size(); id++) {
-            if (meetings.get(id).getDate().equals(binding.time.getText()) || meetings.get(id).getLocation().equals(spinner)) {
-                Toast.makeText(this, "This Date and Time is reserved", LENGTH_SHORT).show();
-                Log.d("isReserved/verifiData", "Trouver !!" + meetings.get(id).getId() + " BD: " + meetings.get(id).getDate() + " New: " + binding.time.getText());
-                isOK = true;
-            } else {
-                Log.d("isReserved/verifiData", "Non sa pue  ID " + meetings.get(id).getId() + " BD: " + meetings.get(id).getDate() + " New: " + binding.time.getText());
-            }
-        }
-        return isOK;
     }
 
 }

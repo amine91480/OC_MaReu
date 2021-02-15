@@ -15,18 +15,19 @@ public class DummyMeetingApiService implements MeetingApiService {
 
     @Override
     public void createMeeting(Meeting meeting) {
-        boolean isReserve = false;
-        for (Meeting m : meetings) {
-            if (m.getLocation() == meeting.getLocation() && m.getDate() == meeting.getDate()) {
-                isReserve = true;
-                System.out.println(m.getDate()+"////"+meeting.getDate()+"/////"+isReserve);
-                break;
+        Boolean isReserved;
+        isReserved = false;
+        for (Meeting meet : meetings) {
+            if (meeting.getLocation().equals(meet.getLocation())) {
+                if ( (meeting.getDateBegin().after(meet.getDateBegin()) ) && ( meeting.getDateBegin().before(meet.getDateAfter()) )
+                    || ( meeting.getDateAfter().after(meet.getDateBegin()) ) && ( meeting.getDateAfter().before(meet.getDateAfter()) ) ) {
+                        isReserved = true;
+                        Log.d("isReserve/API", "Réservation impossible....");
+                        break;
+                }
             }
         }
-        if (isReserve == false) {
-            System.out.println("////" + meeting.getDate());
-            meetings.add(meeting);
-        }
+        if (!isReserved) meetings.add(meeting);
     }
 
     @Override
