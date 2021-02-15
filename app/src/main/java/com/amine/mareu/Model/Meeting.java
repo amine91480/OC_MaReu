@@ -8,14 +8,16 @@ import java.util.Date;
 public class Meeting implements Parcelable {
 
     private Integer id;
-    private Date date;
+    private Date dateBegin;
+    private Date dateFinish;
     private String location;
     private String subject;
     private String participants;
 
-    public Meeting(Integer id, Date date, String location, String subject, String partcipants){
+    public Meeting(Integer id, Date dateBegin, Date dateFinish, String location, String subject, String partcipants) {
         this.id = id;
-        this.date = date;
+        this.dateBegin = dateBegin;
+        this.dateFinish = dateFinish;
         this.location = location;
         this.subject = subject;
         this.participants = partcipants;
@@ -27,7 +29,8 @@ public class Meeting implements Parcelable {
         } else {
             id = in.readInt();
         }
-        date = (Date) in.readSerializable();
+        dateBegin = (Date) in.readSerializable();
+        dateFinish = (Date) in.readSerializable();
         location = in.readString();
         subject = in.readString();
         participants = in.readString();
@@ -77,12 +80,20 @@ public class Meeting implements Parcelable {
         this.participants = participants;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDateBegin() {
+        return dateBegin;
     }
 
-    public void setDate() {
-        this.date = date;
+    public void setDateBegin() {
+        this.dateBegin = dateBegin;
+    }
+
+    public Date getDateAfter() {
+        return dateFinish;
+    }
+
+    public void setDateAfter() {
+        this.dateFinish = dateFinish;
     }
 
     @Override
@@ -98,7 +109,8 @@ public class Meeting implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeInt(id);
         }
-        dest.writeSerializable(date);
+        dest.writeSerializable(dateBegin);
+        dest.writeSerializable(dateFinish);
         dest.writeString(location);
         dest.writeString(subject);
         dest.writeString(participants);
