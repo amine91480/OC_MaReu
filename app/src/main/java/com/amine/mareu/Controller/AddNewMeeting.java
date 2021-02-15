@@ -121,8 +121,8 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
 
                         mTimePickerDialog = new TimePickerDialog(AddNewMeeting.this, new TimePickerDialog.OnTimeSetListener() {
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                mDateBegin.set(year, month, dayOfMonth, hourOfDay,minute,00);
-                                mDateFinish.set(year, month, dayOfMonth, hourOfDay + 1,minute,00);
+                                mDateBegin.set(year, month, dayOfMonth, hourOfDay, minute, 00);
+                                mDateFinish.set(year, month, dayOfMonth, hourOfDay + 1, minute, 00);
                                 binding.date.setText(DateFormat.getDateFormat(getApplicationContext()).format(mDateBegin.getTime()));
                                 binding.time.setText(DateFormat.getTimeFormat(getApplicationContext()).format(mDateBegin.getTime()));
                                 Log.d("TimePicker/verifiData", "Lunch method to find if the Meeting have reserved a the same time");
@@ -143,15 +143,15 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
                 size = mApiService.getMeetings().size();
                 String participant, subject;
 
-                SimpleDateFormat createDate  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                SimpleDateFormat createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
-                Log.d("isReserved", createDate.format(mDateBegin.getTime())+"// //"+createDate.format(mDateFinish.getTime()));
-                Log.d("isReserved", mDateBegin.getTime()+"// //"+mDateFinish.getTime());
+                Log.d("isReserved", createDate.format(mDateBegin.getTime()) + "// //" + createDate.format(mDateFinish.getTime()));
+                Log.d("isReserved", mDateBegin.getTime() + "// //" + mDateFinish.getTime());
 
                 participant = binding.participant.getText().toString();
                 subject = binding.subject.getText().toString();
 
-                Meeting meeting = new Meeting(size, mDateBegin.getTime() , mDateFinish.getTime() , spinner, subject, participant);
+                Meeting meeting = new Meeting(size, mDateBegin.getTime(), mDateFinish.getTime(), spinner, subject, participant);
                 mApiService.createMeeting(meeting);
                 finish();
             }

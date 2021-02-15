@@ -11,7 +11,9 @@ public class DummyMeetingApiService implements MeetingApiService {
     private List<Meeting> meetings = DummyMeetingGenerator.generateMeetings();
 
     @Override
-    public List<Meeting> getMeetings() {return meetings;}
+    public List<Meeting> getMeetings() {
+        return meetings;
+    }
 
     @Override
     public void createMeeting(Meeting meeting) {
@@ -19,11 +21,11 @@ public class DummyMeetingApiService implements MeetingApiService {
         isReserved = false;
         for (Meeting meet : meetings) {
             if (meeting.getLocation().equals(meet.getLocation())) {
-                if ( (meeting.getDateBegin().after(meet.getDateBegin()) ) && ( meeting.getDateBegin().before(meet.getDateAfter()) )
-                    || ( meeting.getDateAfter().after(meet.getDateBegin()) ) && ( meeting.getDateAfter().before(meet.getDateAfter()) ) ) {
-                        isReserved = true;
-                        Log.d("isReserve/API", "Réservation impossible....");
-                        break;
+                if ((meeting.getDateBegin().after(meet.getDateBegin())) && (meeting.getDateBegin().before(meet.getDateAfter()))
+                        || (meeting.getDateAfter().after(meet.getDateBegin())) && (meeting.getDateAfter().before(meet.getDateAfter()))) {
+                    isReserved = true;
+                    Log.d("isReserve/API", "Réservation impossible....");
+                    break;
                 }
             }
         }
@@ -31,6 +33,8 @@ public class DummyMeetingApiService implements MeetingApiService {
     }
 
     @Override
-    public void deleteMeeting(Meeting meeting) {meetings.remove(meeting);}
+    public void deleteMeeting(Meeting meeting) {
+        meetings.remove(meeting);
+    }
 
 }

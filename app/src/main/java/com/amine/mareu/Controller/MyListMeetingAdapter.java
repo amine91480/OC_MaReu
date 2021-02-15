@@ -71,9 +71,9 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
         }
 
         void updateElement(Meeting meeting) {
-            createDate  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             strMeetDat = createDate.format(meeting.getDateBegin());
-            strMeetDat = strMeetDat.substring(11,16);
+            strMeetDat = strMeetDat.substring(11, 16);
 
             binding.text.setText(String.valueOf(
                     meeting.getLocation() + " - "
