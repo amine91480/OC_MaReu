@@ -1,6 +1,7 @@
 package com.amine.mareu;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.amine.mareu.Controller.AddNewMeeting;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
+
+        binding.fab.setColorFilter(Color.WHITE);
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
