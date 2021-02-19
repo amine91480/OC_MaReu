@@ -80,7 +80,7 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
             strMeetDat = strMeetDat.substring(11, 16);
 
             binding.text.setText(String.valueOf(
-                    meeting.getLocation() + " - "
+                    meeting.getRoom() + " - "
                             + strMeetDat + " - "
                             + meeting.getSubject()));
 

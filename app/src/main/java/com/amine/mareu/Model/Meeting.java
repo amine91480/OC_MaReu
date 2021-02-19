@@ -10,17 +10,26 @@ public class Meeting implements Parcelable {
     private Integer id;
     private Date dateBegin;
     private Date dateFinish;
-    private String location;
+    private String room;
     private String subject;
     private String participants;
 
-    public Meeting(Integer id, Date dateBegin, Date dateFinish, String location, String subject, String partcipants) {
+    public Meeting(Integer id, Date dateBegin, Date dateFinish, String room, String subject, String partcipants) {
         this.id = id;
         this.dateBegin = dateBegin;
         this.dateFinish = dateFinish;
-        this.location = location;
+        this.room = room;
         this.subject = subject;
         this.participants = partcipants;
+    }
+
+    public boolean isCompleted() {
+        if(id != null && room != null && dateBegin != null && dateFinish != null && subject != null && participants != null){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     protected Meeting(Parcel in) {
@@ -31,7 +40,7 @@ public class Meeting implements Parcelable {
         }
         dateBegin = (Date) in.readSerializable();
         dateFinish = (Date) in.readSerializable();
-        location = in.readString();
+        room = in.readString();
         subject = in.readString();
         participants = in.readString();
     }
@@ -56,12 +65,13 @@ public class Meeting implements Parcelable {
         this.id = id;
     }
 
-    public String getLocation() {
-        return location;
+    public String getRoom() {
+        return room;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+
+    public void setRoom(String room) {
+        this.room = room;
     }
 
     public String getSubject() {
@@ -111,7 +121,7 @@ public class Meeting implements Parcelable {
         }
         dest.writeSerializable(dateBegin);
         dest.writeSerializable(dateFinish);
-        dest.writeString(location);
+        dest.writeString(room);
         dest.writeString(subject);
         dest.writeString(participants);
     }

@@ -52,7 +52,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
     private MeetingApiService mApiService;
 
     // Element View
-    private String spinner;
+    private String room;
     private DatePickerDialog mDateSetListener;
     private TimePickerDialog mTimePickerDialog;
     private Calendar mDateBegin, mDateFinish;
@@ -96,7 +96,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String selectedItem = (String) parent.getItemAtPosition(position);
-        spinner = selectedItem;
+        room = selectedItem;
     }
 
     @Override
@@ -145,7 +145,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
         binding.addMeeting.setEnabled(false); /* Block the Button Create Meeting*/
 
         for (Meeting meet : mMeetings) { /* Loop sur tout les Meeting existant */
-            if (spinner.equals(meet.getLocation())) { /* Vérifie si la salle et la même */
+            if (room.equals(meet.getRoom())) { /* Vérifie si la salle et la même */
                 /*Log.d("isReserve/Check", "Même salle !" + meet.getDateBegin() + " " + debut.getTime() + "// " + meet.getDateAfter() + " " + fin.getTime());*/
                 if ((debut.getTime().after(meet.getDateBegin())) && (debut.getTime().before(meet.getDateAfter()))
                         || (fin.getTime().after(meet.getDateBegin())) && (fin.getTime().before(meet.getDateAfter()))) { /* Vérifie si l'heure entre dans l'intervalle */
@@ -163,8 +163,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
     private void addMeeting() {
         binding.addMeeting.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Integer size; /* -> Params utile à la création d'une réunion */
-                size = mApiService.getMeetings().size(); /* -> Params utile à la création d'une réunion */
+                Integer size = mApiService.getMeetings().size(); /* Génére un Id */
                 String participant, subject; /* -> Params utile à la création d'une réunion */
 
                 participant = binding.participant.getText().toString();  /* -> Initilisation du Params */
@@ -172,8 +171,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
 
                 SimpleDateFormat createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()); /* Sert à rien pour l'instant */
 
-
-                Meeting meeting = new Meeting(size, mDateBegin.getTime(), mDateFinish.getTime(), spinner, subject, participant); /* -> Création d'une nouvelle Instance de Meeting avec les Params récolter */
+                Meeting meeting = new Meeting(size, mDateBegin.getTime(), mDateFinish.getTime(), room, subject, participant); /* -> Création d'une nouvelle Instance de Meeting avec les Params récolter */
 
                 mApiService.createMeeting(meeting); /* -> API qui va vérifier si c'est réserver et crée le Meeting*/
 
