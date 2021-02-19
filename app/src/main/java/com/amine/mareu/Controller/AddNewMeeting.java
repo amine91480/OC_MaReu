@@ -138,6 +138,26 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
             }
         });
     }
+    /*Methode lancer quand l'utilisateur séléctionne une Date et Heure -> elle bloque le bouton Crée quand la salle et la Date/Heure est déjà réserver !*/
+    private void isReserved(Calendar debut, Calendar fin) {
+        Boolean isReserved = false;
+
+        binding.addMeeting.setEnabled(false); /* Block the Button Create Meeting*/
+
+        for (Meeting meet : mMeetings) { /* Loop sur tout les Meeting existant */
+            if (spinner.equals(meet.getLocation())) { /* Vérifie si la salle et la même */
+                /*Log.d("isReserve/Check", "Même salle !" + meet.getDateBegin() + " " + debut.getTime() + "// " + meet.getDateAfter() + " " + fin.getTime());*/
+                if ((debut.getTime().after(meet.getDateBegin())) && (debut.getTime().before(meet.getDateAfter()))
+                        || (fin.getTime().after(meet.getDateBegin())) && (fin.getTime().before(meet.getDateAfter()))) { /* Vérifie si l'heure entre dans l'intervalle */
+                    isReserved = true;
+                    /*Log.d("isReserve/Check", "Impossible");*/
+                    Toast.makeText(getApplicationContext(), "Dejà réserver", LENGTH_SHORT).show();
+                    binding.addMeeting.setEnabled(true); /* Bouton devient clicable*/
+                    break;
+                }
+            }
+        }
+    }
 
     /*Method to Create a New Meeting with the Data(Room,Date/Time,Subject,Participant) */
     private void addMeeting() {
@@ -164,26 +184,5 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
                 }
             }
         });
-    }
-
-    /*Methode lancer quand l'utilisateur séléctionne une Date et Heure -> elle bloque le bouton Crée quand la salle et la Date/Heure est déjà réserver !*/
-    private void isReserved(Calendar debut, Calendar fin) {
-        Log.d("isReserve/Check", "Tout va bien");
-        Boolean isReserved;
-        isReserved = false;
-        for (Meeting meet : mMeetings) {
-            if (spinner.equals(meet.getLocation())) {
-                Log.d("isReserve/Check", "Même salle !" + meet.getDateBegin() + " " + debut.getTime() + "// " + meet.getDateAfter() + " " + fin.getTime());
-                if ((debut.getTime().after(meet.getDateBegin())) && (debut.getTime().before(meet.getDateAfter()))
-                        || (fin.getTime().after(meet.getDateBegin())) && (fin.getTime().before(meet.getDateAfter()))) {
-                    isReserved = true;
-                    Log.d("isReserve/Check", "Impossible");
-                    Toast.makeText(getApplicationContext(), "Dejà réserver", LENGTH_SHORT).show();
-                    binding.addMeeting.setEnabled(false);
-                    break;
-                }
-            }
-        }
-
     }
 }

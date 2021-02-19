@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amine.mareu.DI.DI;
 import com.amine.mareu.Model.Meeting;
+import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.MeetingItemBinding;
 
 import java.text.SimpleDateFormat;
@@ -19,6 +21,7 @@ import java.util.Locale;
 public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdapter.MyListMeetingHolder> {
 
     private MeetingItemBinding binding;
+    private MeetingApiService mApiService;
     private List<Meeting> mMeetingList;
 
     private String strMeetDat;
@@ -32,6 +35,7 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
     public MyListMeetingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         binding = MeetingItemBinding.inflate(inflater, parent, false);
+        mApiService = DI.getMeetingApiService();
         return new MyListMeetingHolder(binding);
     }
 
@@ -41,8 +45,8 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
         holder.mBinding.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMeetingList.remove(mMeetingList.get(position));
-                notifyDataSetChanged();
+                mApiService.deleteMeeting(mMeetingList.get(position)); /* A test pour savoir si sa marche !*/
+                notifyDataSetChanged(); /* Permet de remettre les éléments en place quand un diparait */
             }
         });
         holder.mBinding.superItem.setOnClickListener(new View.OnClickListener() {
