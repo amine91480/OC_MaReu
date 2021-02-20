@@ -17,20 +17,40 @@ public class DummyMeetingApiService implements MeetingApiService {
 
     @Override
     public void createMeeting(Meeting meeting) {
-        Boolean isReserved;
-        isReserved = false;
+        if (isReserved(meeting) == false) {
+            meetings.add(meeting);
+        }
+    }
+
+    @Override
+    public boolean isReserved(Meeting meeting) {
+        boolean isReserved = false;
         for (Meeting meet : meetings) {
-            if (meeting.getLocation().equals(meet.getLocation())) {
-                if ((meeting.getDateBegin().after(meet.getDateBegin())) && (meeting.getDateBegin().before(meet.getDateAfter()))
-                        || (meeting.getDateAfter().after(meet.getDateBegin())) && (meeting.getDateAfter().before(meet.getDateAfter()))) {
+            if (meeting.getRoom().equals(meet.getRoom())) { // Vérifie si la salle est identique
+
+                // Vérifier si date de début de meeting n'est pas entre le date de début du meet et la date de fin de meet
+                if ((meeting.getDateBegin().after(meet.getDateBegin())) && (meeting.getDateBegin().before(meet.getDateAfter()))) {
+                    Log.d("isReserve/API", "Date de debut et entre l'intervalle");
                     isReserved = true;
-                    Log.d("isReserve/API", "Réservation impossible....");
+                    break;
+                }
+                // Vérifier si la date de fin de meeting n'est pas entre la date de début du meet et la date de fin du meet
+                if ((meeting.getDateAfter().after(meet.getDateBegin())) && (meeting.getDateAfter().before(meet.getDateAfter()))) {
+                    Log.d("isReserve/API", "Date de fin et entre l'intervalle");
+                    isReserved = true;
+                    break;
+                }
+                // Vérifier si la date du début de meeting n'est pas égal au meet
+                if (meeting.getDateBegin().equals(meet.getDateBegin())) {
+                    Log.d("isReserve/API", "date identiaque");
+                    isReserved = true;
                     break;
                 }
             }
         }
-        if (!isReserved) meetings.add(meeting);
+        return isReserved;
     }
+
 
     @Override
     public void deleteMeeting(Meeting meeting) {

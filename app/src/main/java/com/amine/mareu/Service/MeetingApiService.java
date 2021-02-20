@@ -11,4 +11,6 @@ public interface MeetingApiService {
     void createMeeting(Meeting meeting);
 
     void deleteMeeting(Meeting meeting);
+
+    boolean isReserved(Meeting meeting);
 }
