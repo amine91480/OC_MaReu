@@ -56,7 +56,8 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
     private DatePickerDialog mDateSetListener;
     private TimePickerDialog mTimePickerDialog;
     private Calendar mDateBegin, mDateFinish;
-    private List<Meeting> mMeetings;
+    private List<Meeting> mMeetingList;
+    private Meeting mMeeting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
         setContentView(view);
 
         mApiService = DI.getMeetingApiService();
-        mMeetings = mApiService.getMeetings();
+        mMeetingList = mApiService.getMeetings();
         receipData();
     }
 
@@ -77,15 +78,14 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
         // Open Dialogue Alert to choose a Date -> OK but the Time not Working :/
         dialogDate();
         // Give data for Add a new Meeting -> OK
-        addMeeting();
     }
 
     // Spinner for choose the Room of the Meeting -> OK /*/
     public void spinnerOption() {
         List<String> salle = new ArrayList<String>();
-        salle.add(" Réunion A ");
-        salle.add(" Réunion B ");
-        salle.add(" Réunion C ");
+        salle.add("Réunion A");
+        salle.add("Réunion B");
+        salle.add("Réunion C");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, salle);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -106,6 +106,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
     /**/ //
 
     private void dialogDate() {
+        binding.addMeeting.setEnabled(false);
         mDateBegin = Calendar.getInstance();
         mDateFinish = Calendar.getInstance();
         int mDay = mDateBegin.get(Calendar.DAY_OF_MONTH);
@@ -128,7 +129,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
                                 binding.time.setText(DateFormat.getTimeFormat(getApplicationContext()).format(mDateBegin.getTime()));
                                 Log.d("TimePicker/verifiData", "Lunch method to find if the Meeting have reserved a the same time");
                                 /* Vérifie si la HEURE DATE et Salle sont déjà réserver et bloque le bouton Crée*/
-                                isReserved(mDateBegin, mDateFinish);
+                                newMeetingData();
                             }
                         }, mHour, mMinute, true);
                         mTimePickerDialog.show();
@@ -138,44 +139,40 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
             }
         });
     }
-    /*Methode lancer quand l'utilisateur séléctionne une Date et Heure -> elle bloque le bouton Crée quand la salle et la Date/Heure est déjà réserver !*/
-    private void isReserved(Calendar debut, Calendar fin) {
-        Boolean isReserved = false;
 
-        binding.addMeeting.setEnabled(false); /* Block the Button Create Meeting*/
+    private void newMeetingData() {
+        Integer id = mApiService.getMeetings().size(); /* Génére un Id */
+        String participant, subject; /* -> Params utile à la création d'une réunion */
 
-        for (Meeting meet : mMeetings) { /* Loop sur tout les Meeting existant */
-            if (room.equals(meet.getRoom())) { /* Vérifie si la salle et la même */
-                /*Log.d("isReserve/Check", "Même salle !" + meet.getDateBegin() + " " + debut.getTime() + "// " + meet.getDateAfter() + " " + fin.getTime());*/
-                if ((debut.getTime().after(meet.getDateBegin())) && (debut.getTime().before(meet.getDateAfter()))
-                        || (fin.getTime().after(meet.getDateBegin())) && (fin.getTime().before(meet.getDateAfter()))) { /* Vérifie si l'heure entre dans l'intervalle */
-                    isReserved = true;
-                    /*Log.d("isReserve/Check", "Impossible");*/
-                    Toast.makeText(getApplicationContext(), "Dejà réserver", LENGTH_SHORT).show();
-                    binding.addMeeting.setEnabled(true); /* Bouton devient clicable*/
-                    break;
-                }
-            }
+        participant = binding.participant.getText().toString();  /* -> Initilisation du Params */
+        subject = binding.subject.getText().toString(); /* -> Initilisation du Params */
+
+        SimpleDateFormat createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()); /* Sert à rien pour l'instant */
+
+        mMeeting = new Meeting(id, mDateBegin.getTime(), mDateFinish.getTime(), room, subject, participant); /* -> Création d'une nouvelle Instance de Meeting avec les Params récolter */
+        checkReservation(mMeeting);
+        addMeeting();
+
+    }
+
+    public void checkReservation(Meeting meeting) {
+        if (mApiService.isReserved(meeting) == true) {
+            binding.addMeeting.setEnabled(false); /* Bouton désactiver*/
+        }
+        if (mApiService.isReserved(meeting) == false) {
+            Toast.makeText(getApplicationContext(), "libre", LENGTH_SHORT).show();
+            binding.addMeeting.setEnabled(true); /* Bouton activé*/
         }
     }
+
 
     /*Method to Create a New Meeting with the Data(Room,Date/Time,Subject,Participant) */
     private void addMeeting() {
         binding.addMeeting.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Integer size = mApiService.getMeetings().size(); /* Génére un Id */
-                String participant, subject; /* -> Params utile à la création d'une réunion */
+                mApiService.createMeeting(mMeeting); /* -> API qui va vérifier si c'est réserver et crée le Meeting*/
 
-                participant = binding.participant.getText().toString();  /* -> Initilisation du Params */
-                subject = binding.subject.getText().toString(); /* -> Initilisation du Params */
-
-                SimpleDateFormat createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()); /* Sert à rien pour l'instant */
-
-                Meeting meeting = new Meeting(size, mDateBegin.getTime(), mDateFinish.getTime(), room, subject, participant); /* -> Création d'une nouvelle Instance de Meeting avec les Params récolter */
-
-                mApiService.createMeeting(meeting); /* -> API qui va vérifier si c'est réserver et crée le Meeting*/
-
-                if (mMeetings.contains(meeting)) { /*Si le nouveau Meeting et dans la liste des Meeting -> Redirige vers la RecyclerView*/
+                if (mMeetingList.contains(mMeeting)) { /*Si le nouveau Meeting et dans la liste des Meeting -> Redirige vers la RecyclerView*/
                     finish();
                 } else { /* Sinon Affiche un Toast message comme quoi la salle et l'heure et déjà pris :D*/
                     Toast.makeText(getApplicationContext(), "This Place is reserved a this time, Can't you change the date please ?", LENGTH_SHORT).show();
