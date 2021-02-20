@@ -24,10 +24,9 @@ public class Meeting implements Parcelable {
     }
 
     public boolean isCompleted() {
-        if(id != null && room != null && dateBegin != null && dateFinish != null && subject != null && participants != null){
+        if (id != null && room != null && dateBegin != null && dateFinish != null && subject != null && participants != null) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -68,7 +67,6 @@ public class Meeting implements Parcelable {
     public String getRoom() {
         return room;
     }
-
 
     public void setRoom(String room) {
         this.room = room;
