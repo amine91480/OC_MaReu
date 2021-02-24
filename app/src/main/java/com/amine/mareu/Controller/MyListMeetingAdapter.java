@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.amine.mareu.DI.DI;
 import com.amine.mareu.Model.Meeting;
+import com.amine.mareu.Model.Room;
 import com.amine.mareu.R;
 import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.MeetingItemBinding;
@@ -24,6 +25,7 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
     private MeetingItemBinding binding;
     private MeetingApiService mApiService;
     private List<Meeting> mMeetingList;
+    private List<Room> mRoomList;
 
     private String strMeetDat;
     private SimpleDateFormat createDate;
@@ -91,14 +93,13 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
         }
 
         public void setUpColorRoom(Meeting meeting) {
-       if (meeting.getRoom().equals("Réunion A")) {
+            if (meeting.getRoom().equals(mRoomList.get(0))) {
                 binding.icone.setColorFilter(R.color.purple_500);
-                Log.d("Meeting",  meeting.getRoom());
             }
-            if (meeting.getRoom().equals("Réunion B")) {
+            if (meeting.getRoom().equals(mRoomList.get(1))) {
                 binding.icone.setColorFilter(R.color.blueblue);
             }
-            if (meeting.getRoom().equals("Réunion C")) {
+            if (meeting.getRoom().equals(mRoomList.get(2))) {
                 binding.icone.setColorFilter(R.color.teal_700);
             }
 
