@@ -28,7 +28,9 @@ import android.widget.Toast;
 
 import com.amine.mareu.DI.DI;
 import com.amine.mareu.Model.Meeting;
+import com.amine.mareu.Model.Room;
 import com.amine.mareu.R;
+import com.amine.mareu.Service.DummyRoomGenerator;
 import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.ActivityAddNewReunionBinding;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -51,13 +53,15 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
     private ActivityAddNewReunionBinding binding;
     private MeetingApiService mApiService;
 
+    private List<Meeting> mMeetingList;
+    private List<Room> mRoomList;
+    private Meeting mMeeting;
+    private Room mRoom;
+
     // Element View
-    private String room;
     private DatePickerDialog mDateSetListener;
     private TimePickerDialog mTimePickerDialog;
     private Calendar mDateBegin, mDateFinish;
-    private List<Meeting> mMeetingList;
-    private Meeting mMeeting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +86,9 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
 
     // Spinner for choose the Room of the Meeting -> OK /*/
     public void spinnerOption() {
-        List<String> salle = new ArrayList<String>();
-        salle.add("Réunion A");
-        salle.add("Réunion B");
-        salle.add("Réunion C");
+        List<Room> mRoomList = (DummyRoomGenerator.DUMMY_ROOM);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, salle);
+        ArrayAdapter<Room> adapter = new ArrayAdapter<Room>(this, android.R.layout.simple_spinner_item, mRoomList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.salle.setAdapter(adapter);
         binding.salle.setOnItemSelectedListener(this);
@@ -95,8 +96,8 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String selectedItem = (String) parent.getItemAtPosition(position);
-        room = selectedItem;
+        String str = (String) parent.getItemAtPosition(position);
+        mRoom = mRoomList.get(position);
     }
 
     @Override
@@ -149,7 +150,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
 
         SimpleDateFormat createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()); /* Sert à rien pour l'instant */
 
-        mMeeting = new Meeting(id, mDateBegin.getTime(), mDateFinish.getTime(), room, subject, participant); /* -> Création d'une nouvelle Instance de Meeting avec les Params récolter */
+        mMeeting = new Meeting(id, mDateBegin.getTime(), mDateFinish.getTime(), mRoom, subject, participant); /* -> Création d'une nouvelle Instance de Meeting avec les Params récolter */
         checkReservation(mMeeting);
         addMeeting();
 
