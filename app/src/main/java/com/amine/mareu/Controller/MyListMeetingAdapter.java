@@ -1,10 +1,16 @@
 package com.amine.mareu.Controller;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amine.mareu.DI.DI;
@@ -19,13 +25,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static android.graphics.Color.colorSpace;
+import static android.graphics.Color.parseColor;
+
 
 public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdapter.MyListMeetingHolder> {
 
     private MeetingItemBinding binding;
     private MeetingApiService mApiService;
     private List<Meeting> mMeetingList;
-    private List<Room> mRoomList;
 
     private String strMeetDat;
     private SimpleDateFormat createDate;
@@ -49,7 +57,9 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
             @Override
             public void onClick(View v) {
                 mApiService.deleteMeeting(mMeetingList.get(position)); /* A test pour savoir si sa marche !*/
-                notifyDataSetChanged(); /* Permet de remettre les éléments en place quand un diparait */
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, mMeetingList.size());
+                /*notifyDataSetChanged(); *//* Permet de remettre les éléments en place quand un diparait */
             }
         });
         holder.mBinding.superItem.setOnClickListener(new View.OnClickListener() {
@@ -78,31 +88,16 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
         }
 
         void updateElement(Meeting meeting) {
-            setUpColorRoom(meeting);
             createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             strMeetDat = createDate.format(meeting.getDateBegin());
             strMeetDat = strMeetDat.substring(11, 16);
 
-
             binding.text.setText(String.valueOf(
-                    meeting.getRoom() + " - "
+                    meeting.getRoom().getRoom() + " - "
                             + strMeetDat + " - "
                             + meeting.getSubject()));
-
             binding.participation.setText(meeting.getParticipants());
-        }
-
-        public void setUpColorRoom(Meeting meeting) {
-            if (meeting.getRoom().equals(mRoomList.get(0))) {
-                binding.icone.setColorFilter(R.color.purple_500);
-            }
-            if (meeting.getRoom().equals(mRoomList.get(1))) {
-                binding.icone.setColorFilter(R.color.blueblue);
-            }
-            if (meeting.getRoom().equals(mRoomList.get(2))) {
-                binding.icone.setColorFilter(R.color.teal_700);
-            }
-
+            binding.icone.setColorFilter(Color.parseColor(meeting.getRoom().getColor()));
         }
     }
 }
