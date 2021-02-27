@@ -1,16 +1,17 @@
 package com.amine.mareu.Model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 public class Room {
 
     private String room;
-    private Integer color;
+    private String color;
 
-    public Room(String room, int color) {
+    public Room(String room, String color) {
         this.room = room;
         this.color = color;
+    }
+    @Override
+    public String toString() {
+        return getRoom(); // You can add anything else like maybe getDrinkType()
     }
 
     public String getRoom() {
@@ -21,11 +22,11 @@ public class Room {
         this.room = room;
     }
 
-    public Integer getColor() {
+    public String getColor() {
         return color;
     }
 
-    public void setColor(Integer color) {
+    public void setColor(String color) {
         this.color = color;
     }
 }
