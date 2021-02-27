@@ -1,13 +1,29 @@
 package com.amine.mareu.Service;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.amine.mareu.Model.Meeting;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+
 public abstract class DummyMeetingGenerator {
+
+    // ICi on va géré la 2.0 Meeting avec des vraies Date Mamène !
+   /* public static List<Meeting> getDummyMeeting(){
+        List<Meeting> test = new ArrayList<>();
+
+
+
+        return test;
+    }*/
 
     public static List<Meeting> DUMMY_MEETING = Arrays.asList(
             new Meeting(1, new Date(), new Date(), DummyRoomGenerator.generateRoom().get(0), "Android", "amine91480@hotmail.fr"),
