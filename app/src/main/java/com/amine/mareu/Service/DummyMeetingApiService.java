@@ -26,25 +26,25 @@ public class DummyMeetingApiService implements MeetingApiService {
     public boolean isReserved(Meeting meeting) {
         boolean isReserved = false;
         for (Meeting meet : meetings) {
-            if (meeting.getRoom().equals(meet.getRoom())) { // Vérifie si la salle est identique
+            if (meeting.getRoom().toString().equals(meet.getRoom().toString())) { // Vérifie si la salle est identique
 
                 // Vérifier si date de début de meeting n'est pas entre le date de début du meet et la date de fin de meet
                 if ((meeting.getDateBegin().after(meet.getDateBegin())) && (meeting.getDateBegin().before(meet.getDateAfter()))) {
                     Log.d("isReserve/API", "Date de debut et entre l'intervalle");
                     isReserved = true;
-                    break;
+                    return true;
                 }
                 // Vérifier si la date de fin de meeting n'est pas entre la date de début du meet et la date de fin du meet
                 if ((meeting.getDateAfter().after(meet.getDateBegin())) && (meeting.getDateAfter().before(meet.getDateAfter()))) {
                     Log.d("isReserve/API", "Date de fin et entre l'intervalle");
                     isReserved = true;
-                    break;
+                    return isReserved;
                 }
                 // Vérifier si la date du début de meeting n'est pas égal au meet
                 if (meeting.getDateBegin().equals(meet.getDateBegin())) {
                     Log.d("isReserve/API", "date identiaque");
                     isReserved = true;
-                    break;
+                    return true;
                 }
             }
         }
