@@ -5,7 +5,11 @@ import com.amine.mareu.Service.MeetingApiService;
 
 public class DI {
 
-    private static MeetingApiService service = new DummyMeetingApiService();
+    private static MeetingApiService service;
+
+    static {
+        service = new DummyMeetingApiService();
+    }
 
     public static MeetingApiService getMeetingApiService() {
         return service;
