@@ -2,7 +2,9 @@ package com.amine.mareu.Service;
 
 import com.amine.mareu.Model.Meeting;
 
+import java.time.Year;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -16,11 +18,12 @@ public class DummyMeetingGenerator {
     }
 
     public static ArrayList<Date> getRandomDate() {
+        int ajd = new Date().getYear();
         ArrayList<Date> randDate = new ArrayList<Date>();
-        randDate.add(new Date(2021, 02, 05, getRandomNumber(07, 19), 00, 00));
-        randDate.add(new Date(2021, 02, 05, getRandomNumber(07, 19), 00, 00));
-        randDate.add(new Date(2021, 02, 05, getRandomNumber(07, 19), 00, 00));
-        randDate.add(new Date(2021, 02, 05, getRandomNumber(07, 19), 00, 00));
+        randDate.add(new Date(ajd, 02, 05, getRandomNumber(07, 19), 00, 00));
+        randDate.add(new Date(ajd, 02, 05, getRandomNumber(07, 19), 00, 00));
+        randDate.add(new Date(ajd, 02, 05, getRandomNumber(07, 19), 00, 00));
+        randDate.add(new Date(ajd, 02, 05, getRandomNumber(07, 19), 00, 00));
         return randDate;
     }
 
