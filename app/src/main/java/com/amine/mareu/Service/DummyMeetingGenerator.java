@@ -17,10 +17,10 @@ public class DummyMeetingGenerator {
 
     public static ArrayList<Date> getRandomDate() {
         ArrayList<Date> randDate = new ArrayList<Date>();
-        randDate.add(new Date(2021, 00, 01, getRandomNumber(07, 19), 00, 00));
-        randDate.add(new Date(2021, 00, 01, getRandomNumber(07, 19), 00, 00));
-        randDate.add(new Date(2021, 00, 01, getRandomNumber(07, 19), 00, 00));
-        randDate.add(new Date(2021, 00, 01, getRandomNumber(07, 19), 00, 00));
+        randDate.add(new Date(2021, 02, 05, getRandomNumber(07, 19), 00, 00));
+        randDate.add(new Date(2021, 02, 05, getRandomNumber(07, 19), 00, 00));
+        randDate.add(new Date(2021, 02, 05, getRandomNumber(07, 19), 00, 00));
+        randDate.add(new Date(2021, 02, 05, getRandomNumber(07, 19), 00, 00));
         return randDate;
     }
 
