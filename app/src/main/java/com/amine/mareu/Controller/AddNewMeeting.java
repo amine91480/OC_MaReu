@@ -112,64 +112,70 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
         int mYear = mDateBegin.get(Calendar.YEAR);
         int mHour = mDateBegin.get(Calendar.HOUR);
         int mMinute = mDateBegin.get(Calendar.MINUTE);
-        binding.info.setOnClickListener(new View.OnClickListener() {
+        binding.info.setOnClickListener(onInfoClick(mDay, mMonth, mYear, mHour, mMinute));
+    }
+
+    private View.OnClickListener onInfoClick(int mDay, int mMonth, int mYear, int mHour, int mMinute) {
+        return new View.OnClickListener() {
             public void onClick(View v) {
-                mDateSetListener = new DatePickerDialog(AddNewMeeting.this, new DatePickerDialog.OnDateSetListener() {
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        mTimePickerDialog = new TimePickerDialog(AddNewMeeting.this, new TimePickerDialog.OnTimeSetListener() {
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                mDateBegin.set(year, month, dayOfMonth, hourOfDay, minute, 00);
-                                mDateFinish.set(year, month, dayOfMonth, hourOfDay + 1, minute, 00);
-                                binding.date.setText(DateFormat.getDateFormat(getApplicationContext()).format(mDateBegin.getTime()));
-                                binding.time.setText(DateFormat.getTimeFormat(getApplicationContext()).format(mDateBegin.getTime()));
-                                checkTheReservation(mDateBegin.getTime(), mDateFinish.getTime(), mRoom);
-                            }
-                        }, mHour, mMinute, true);
-                        mTimePickerDialog.show();
-                    }
-                }, mYear, mMonth, mDay);
+                mDateSetListener = new DatePickerDialog(AddNewMeeting.this, onDateSet(mHour, mMinute), mYear, mMonth, mDay);
                 mDateSetListener.show();
             }
-        });
+        };
+    }
+
+    private DatePickerDialog.OnDateSetListener onDateSet(int mHour, int mMinute) {
+        return new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                mTimePickerDialog = new TimePickerDialog(AddNewMeeting.this, new TimePickerDialog.OnTimeSetListener() {
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        mDateBegin.set(year, month, dayOfMonth, hourOfDay, minute, 00);
+                        mDateFinish.set(year, month, dayOfMonth, hourOfDay + 1, minute, 00);
+                        binding.date.setText(DateFormat.getDateFormat(getApplicationContext()).format(mDateBegin.getTime()));
+                        binding.time.setText(DateFormat.getTimeFormat(getApplicationContext()).format(mDateBegin.getTime()));
+                        checkTheReservation(mDateBegin.getTime(), mDateFinish.getTime(), mRoom);
+                    }
+                }, mHour, mMinute, true);
+                mTimePickerDialog.show();
+            }
+        };
     }
 
     // Take the String insert in the EditText after click in the Drawable and must check if is a good email to insert the email entry in the string
+    @SuppressLint("ClickableViewAccessibility")
     private void chooseYourParticipant() {
         mParticipantList = new ArrayList<>();
-        binding.participant.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                final int DRAWABLE_LEFT = 0;
-                final int DRAWABLE_TOP = 1;
-                final int DRAWABLE_RIGHT = 2;
-                final int DRAWABLE_BOTTOM = 3;
+        binding.participant.setOnTouchListener((v, event) -> {
+            final int DRAWABLE_LEFT = 0;
+            final int DRAWABLE_TOP = 1;
+            final int DRAWABLE_RIGHT = 2;
+            final int DRAWABLE_BOTTOM = 3;
 
-                String email = "";
-                //Préparation a effectuer une vérification des String participants via une expression régulière pour les mails !
-                String patrn = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}(.[a-z]{2,3})+$|^$";
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (binding.participant.getRight() - binding.participant.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        email = binding.participant.getText().toString();
-                        if (email.matches(patrn)) {
-                            binding.participant.setBackgroundColor(getResources().getColor(R.color.design_default_color_on_primary));
-                            mParticipantList.add(email);
-                            binding.participant.setText("");
-                        } else {
-                            binding.participant.setBackgroundColor(getResources().getColor(R.color.red));
-                        }
+            String email = "";
+            //Préparation a effectuer une vérification des String participants via une expression régulière pour les mails !
+            String patrn = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}(.[a-z]{2,3})+$|^$";
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getRawX() >= (binding.participant.getRight() - binding.participant.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                    email = binding.participant.getText().toString();
+                    if (email.matches(patrn)) {
+                        binding.participant.setBackgroundColor(getResources().getColor(R.color.design_default_color_on_primary));
+                        mParticipantList.add(email);
+                        binding.participant.setText("");
+                    } else {
+                        binding.participant.setBackgroundColor(getResources().getColor(R.color.red));
                     }
                 }
-                return false;
             }
+            return false;
         });
     }
 
     public void checkTheReservation(Date mDateBegin, Date mDateFinish, Room mRoom) {
-        if (mApiService.isReserved(mDateBegin, mDateFinish, mRoom) == true) {
+        if (mApiService.isReserved(mDateBegin, mDateFinish, mRoom)) {
             binding.time.setBackgroundColor(getResources().getColor(R.color.red));
             binding.addMeeting.setEnabled(false);  //Bouton désactiver
         }
-        if (mApiService.isReserved(mDateBegin, mDateFinish, mRoom) == false) {
+        if (!mApiService.isReserved(mDateBegin, mDateFinish, mRoom)) {
             binding.time.setBackgroundColor(getResources().getColor(R.color.blueblue));
             Toast.makeText(getApplicationContext(), "libre", LENGTH_SHORT).show();
             binding.addMeeting.setEnabled(true);  //Bouton activé
