@@ -2,12 +2,14 @@ package com.amine.mareu.Controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,13 +25,12 @@ import com.amine.mareu.Service.DummyRoomGenerator;
 import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.ActivityAddNewReunionBinding;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static android.widget.Toast.*;
-
 
 public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -39,13 +40,16 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
     // Element Model to created a NewInstance or Modify
     private List<Meeting> mMeetingList;
     private List<Room> mRoomList;
+    private List<String> mParticipantList;
+
+    // Element to Init the New Meeting//
     private Meeting mMeeting;
     private Room mRoom;
+    private Calendar mDateBegin, mDateFinish;
 
     // Element View
     private DatePickerDialog mDateSetListener;
     private TimePickerDialog mTimePickerDialog;
-    private Calendar mDateBegin, mDateFinish;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,16 +60,19 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
 
         setSupportActionBar(binding.toolbarNew); // Add the Support Tollbar -> I don't now if it's work
 
-        mApiService = DI.getMeetingApiService();
-        mMeetingList = mApiService.getMeetings();
-        mRoomList = DummyRoomGenerator.DUMMY_ROOM;
+        mApiService = DI.getMeetingApiService(); // Give the Service to use Method
+        mMeetingList = mApiService.getMeetings(); // ListOfMeeting
+        mRoomList = DummyRoomGenerator.DUMMY_ROOM; // ListOfRoom
+        mParticipantList = new ArrayList<>();
         receipData(); //Logic Work
     }
 
-
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void receipData() {
-        spinnerOption(); // Spinner for choose the Room of the Meeting -> OK
-        dialogDate(); // Open Dialogue Alert to choose a Date -> OK but the Time not Working :/
+        binding.addMeeting.setEnabled(false);
+        chooseYourRoom(); // Spinner for choose the Room of the Meeting -> OK
+        chooseYourDate(); // Open Dialogue Alert to choose a Date -> OK but the Time not Working :/
+        chooseYourParticipant();
         binding.toolbarNew.setNavigationIcon(getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24_add)); // Insert the Drawable on the Toolbar
         binding.toolbarNew.setNavigationOnClickListener(new View.OnClickListener() { // Insert the method Previous Button on the Drawable
             @Override
@@ -73,22 +80,22 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
                 onBackPressed();
             }
         });
+        createNewMeeting();
     }
 
 
-    public void spinnerOption() { // Spinner for choose the Room of the Meeting -> OK /*/
+    public void chooseYourRoom() { // Spinner for choose the Room of the Meeting -> OK /*/
         ArrayAdapter<Room> adapter = new ArrayAdapter<Room>(this, android.R.layout.simple_spinner_item, mRoomList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         binding.salle.setAdapter(adapter);
         binding.salle.setOnItemSelectedListener(this);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        /*String str = (String) parent.getItemAtPosition(position);*/
-        /*Toast.makeText(getApplicationContext(), str+"//"+position, Toast.LENGTH_LONG).show();*/
-        mRoom = mRoomList.get(position);
+        mRoom = mRoomList.get(position); // Give the position of the Element clicker
+        Log.d("TEST", mRoom.toString());
+        checkTheReservation(mDateBegin.getTime(), mDateFinish.getTime(), mRoom);
     }
 
     @Override
@@ -96,8 +103,8 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
         // Trouver un truck a mettre ici
     }
 
-    private void dialogDate() {
-        binding.addMeeting.setEnabled(false);
+    private void chooseYourDate() {
+        //binding.addMeeting.setEnabled(false); Ne fonctionne pas si InitMeeting n'est plus accesible ici
         mDateBegin = Calendar.getInstance();
         mDateFinish = Calendar.getInstance();
         int mDay = mDateBegin.get(Calendar.DAY_OF_MONTH);
@@ -115,9 +122,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
                                 mDateFinish.set(year, month, dayOfMonth, hourOfDay + 1, minute, 00);
                                 binding.date.setText(DateFormat.getDateFormat(getApplicationContext()).format(mDateBegin.getTime()));
                                 binding.time.setText(DateFormat.getTimeFormat(getApplicationContext()).format(mDateBegin.getTime()));
-                                Log.d("TimePicker/verifiData", "Lunch method to find if the Meeting have reserved a the same time");
-                                /* Vérifie si la HEURE DATE et Salle sont déjà réserver et bloque le bouton Crée*/
-                                newMeetingData(); // Rend les éléments propre pour crée une instance de l'objet Meeting
+                                checkTheReservation(mDateBegin.getTime(), mDateFinish.getTime(), mRoom);
                             }
                         }, mHour, mMinute, true);
                         mTimePickerDialog.show();
@@ -128,40 +133,67 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
         });
     }
 
-    private void newMeetingData() {
-        Integer id = mApiService.getMeetings().size(); /* Génére un Id */
-        String participant, subject; /* -> Params utile à la création d'une réunion */
+    // Take the String insert in the EditText after click in the Drawable and must check if is a good email to insert the email entry in the string
+    private void chooseYourParticipant() {
+        mParticipantList = new ArrayList<>();
+        binding.participant.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
 
-        participant = binding.participant.getText().toString();  /* -> Initilisation du Params */
-        subject = binding.subject.getText().toString(); /* -> Initilisation du Params */
-
-        SimpleDateFormat createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()); /* Sert à rien pour l'instant */
-
-        mMeeting = new Meeting(id, mDateBegin.getTime(), mDateFinish.getTime(), mRoom, subject, participant); /* -> Création d'une nouvelle Instance de Meeting avec les Params récolter */
-        checkReservation(mMeeting);
-
-        addMeeting();
-        //String patrn = "^([a-zA-Z0-9]+(([\.\-\_]?[a-zA-Z0-9]+)+)?)\@(([a-zA-Z0-9]+[\.\-\_])+[a-zA-Z]{2,4})$"; Préparation a effectuer une vérification des String participants via une expression régulière pour les mails !
+                String email = "";
+                //Préparation a effectuer une vérification des String participants via une expression régulière pour les mails !
+                String patrn = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}(.[a-z]{2,3})+$|^$";
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (binding.participant.getRight() - binding.participant.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        email = binding.participant.getText().toString();
+                        if (email.matches(patrn)) {
+                            binding.participant.setBackgroundColor(getResources().getColor(R.color.design_default_color_on_primary));
+                            mParticipantList.add(email);
+                            binding.participant.setText("");
+                        } else {
+                            binding.participant.setBackgroundColor(getResources().getColor(R.color.red));
+                        }
+                    }
+                }
+                return false;
+            }
+        });
     }
 
-    public void checkReservation(Meeting meeting) {
-        if (mApiService.isReserved(meeting) == true) {
-            binding.addMeeting.setEnabled(false); /* Bouton désactiver*/
+    public void checkTheReservation(Date mDateBegin, Date mDateFinish, Room mRoom) {
+        if (mApiService.isReserved(mDateBegin, mDateFinish, mRoom) == true) {
+            binding.time.setBackgroundColor(getResources().getColor(R.color.red));
+            binding.addMeeting.setEnabled(false);  //Bouton désactiver
         }
-        if (mApiService.isReserved(meeting) == false) {
+        if (mApiService.isReserved(mDateBegin, mDateFinish, mRoom) == false) {
+            binding.time.setBackgroundColor(getResources().getColor(R.color.blueblue));
             Toast.makeText(getApplicationContext(), "libre", LENGTH_SHORT).show();
-            binding.addMeeting.setEnabled(true); /* Bouton activé*/
+            binding.addMeeting.setEnabled(true);  //Bouton activé
         }
     }
 
-    private void addMeeting() { /*Method to Create a New Meeting with the Data(Room,Date/Time,Subject,Participant) */
+    private void createNewMeeting() {
         binding.addMeeting.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mApiService.createMeeting(mMeeting); /* -> API qui va vérifier si c'est réserver et crée le Meeting*/
+                Integer id = mApiService.getMeetings().size(); /* Génére un Id */
+                String subject = binding.subject.getText().toString(); /* -> Initilisation du Params */
+                String participants = "";
 
-                if (mMeetingList.contains(mMeeting)) { /*Si le nouveau Meeting et dans la liste des Meeting -> Redirige vers la RecyclerView*/
+                for (String s : mParticipantList) {
+                    participants += s + ", ";
+                }
+
+                mMeeting = new Meeting(id, mDateBegin.getTime(), mDateFinish.getTime(), mRoom, subject, participants); /* -> Création d'une nouvelle Instance de Meeting avec les Params récolter */
+                checkTheReservation(mDateBegin.getTime(), mDateFinish.getTime(), mRoom);
+
+                mApiService.createMeeting(mMeeting);  //-> API qui va vérifier si c'est réserver et crée le Meeting
+                if (mMeetingList.contains(mMeeting)) { //Si le nouveau Meeting et dans la liste des Meeting -> Redirige vers la RecyclerView
                     finish();
-                } else { /* Sinon Affiche un Toast message comme quoi la salle et l'heure et déjà pris :D*/
+                } else {  //Sinon Affiche un Toast message comme quoi la salle et l'heure et déjà pris :D
                     Toast.makeText(getApplicationContext(), "This Place is reserved a this time, Can't you change the date please ?", LENGTH_SHORT).show();
                 }
             }
