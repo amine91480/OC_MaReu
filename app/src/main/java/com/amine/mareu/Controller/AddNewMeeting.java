@@ -73,7 +73,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
         chooseYourRoom(); // Spinner for choose the Room of the Meeting -> OK
         chooseYourDate(); // Open Dialogue Alert to choose a Date -> OK but the Time not Working :/
         chooseYourParticipant();
-        binding.toolbarNew.setNavigationIcon(getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24_add)); // Insert the Drawable on the Toolbar
+        binding.toolbarNew.setNavigationIcon(getResources().getDrawable(R.drawable.ic_baseline_arrow_back)); // Insert the Drawable on the Toolbar
         binding.toolbarNew.setNavigationOnClickListener(new View.OnClickListener() { // Insert the method Previous Button on the Drawable
             @Override
             public void onClick(View v) {
@@ -87,13 +87,16 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
     public void chooseYourRoom() { // Spinner for choose the Room of the Meeting -> OK /*/
         ArrayAdapter<Room> adapter = new ArrayAdapter<Room>(this, android.R.layout.simple_spinner_item, mRoomList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        binding.salle.setAdapter(adapter);
-        binding.salle.setOnItemSelectedListener(this);
+        /*binding.salle.setAdapter(adapter);
+        binding.salle.setOnItemSelectedListener(this);*/
+        binding.autoCompleteRoom.setAdapter((adapter));
+        binding.autoCompleteRoom.setOnItemSelectedListener(this);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         mRoom = mRoomList.get(position); // Give the position of the Element clicker
+
         Log.d("TEST", mRoom.toString());
         checkTheReservation(mDateBegin.getTime(), mDateFinish.getTime(), mRoom);
     }
