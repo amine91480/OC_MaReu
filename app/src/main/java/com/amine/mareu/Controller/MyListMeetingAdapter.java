@@ -1,32 +1,20 @@
 package com.amine.mareu.Controller;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amine.mareu.DI.DI;
 import com.amine.mareu.Model.Meeting;
-import com.amine.mareu.Model.Room;
-import com.amine.mareu.R;
 import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.MeetingItemBinding;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import static android.graphics.Color.colorSpace;
-import static android.graphics.Color.parseColor;
 
 
 public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdapter.MyListMeetingHolder> {
