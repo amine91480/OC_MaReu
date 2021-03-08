@@ -1,8 +1,5 @@
 package com.amine.mareu.Model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.Date;
 
 public class Meeting {
