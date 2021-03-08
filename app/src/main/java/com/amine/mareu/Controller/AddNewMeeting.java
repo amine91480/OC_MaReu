@@ -1,12 +1,15 @@
 package com.amine.mareu.Controller;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -46,11 +49,13 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
     private Meeting mMeeting;
     private Room mRoom;
     private Calendar mDateBegin, mDateFinish;
+    private String mParticipants;
 
     // Element View
     private DatePickerDialog mDateSetListener;
     private TimePickerDialog mTimePickerDialog;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +72,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
         receipData(); //Logic Work
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void receipData() {
         binding.addMeeting.setEnabled(false);
         chooseYourRoom(); // Spinner for choose the Room of the Meeting -> OK
@@ -86,28 +91,16 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
 
     public void chooseYourRoom() { // Spinner for choose the Room of the Meeting -> OK /*/
         ArrayAdapter<Room> adapter = new ArrayAdapter<Room>(this, android.R.layout.simple_spinner_item, mRoomList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         /*binding.salle.setAdapter(adapter);
         binding.salle.setOnItemSelectedListener(this);*/
+        binding.autoCompleteRoom.setText(adapter.getItem(0).toString(), false);
+        mRoom = mRoomList.get(0); // Securité pour que la salle soit toujours séléctionner sur le première Item
         binding.autoCompleteRoom.setAdapter((adapter));
-        binding.autoCompleteRoom.setOnItemSelectedListener(this);
+        binding.autoCompleteRoom.setOnItemClickListener((parent, view, position, id) -> mRoom = mRoomList.get(position));
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        mRoom = mRoomList.get(position); // Give the position of the Element clicker
-
-        Log.d("TEST", mRoom.toString());
-        checkTheReservation(mDateBegin.getTime(), mDateFinish.getTime(), mRoom);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Trouver un truck a mettre ici
-    }
 
     private void chooseYourDate() {
-        //binding.addMeeting.setEnabled(false); Ne fonctionne pas si InitMeeting n'est plus accesible ici
         mDateBegin = Calendar.getInstance();
         mDateFinish = Calendar.getInstance();
         int mDay = mDateBegin.get(Calendar.DAY_OF_MONTH);
@@ -145,6 +138,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
     }
 
     // Take the String insert in the EditText after click in the Drawable and must check if is a good email to insert the email entry in the string
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("ClickableViewAccessibility")
     private void chooseYourParticipant() {
         mParticipantList = new ArrayList<>();
@@ -157,15 +151,42 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
             String email = "";
             //Préparation a effectuer une vérification des String participants via une expression régulière pour les mails !
             String patrn = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}(.[a-z]{2,3})+$|^$";
+
+            email = binding.participant.getText().toString();
+            String finalEmail = email;
+
+            // Ici on prépare la Vus suivant l'enttréz de l'utilisateur via le bindind et MAtérial Design
+      /*      binding.participant.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    binding.labelParticipant.setError("L'adresse mail n'est pas valide...");
+                    binding.labelParticipant.setErrorEnabled(true);
+                    if (finalEmail.matches(patrn)) {
+                        binding.labelParticipant.setErrorEnabled(false);
+                    }
+                }
+            });*/
+
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (binding.participant.getRight() - binding.participant.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                    email = binding.participant.getText().toString();
                     if (email.matches(patrn)) {
-                        binding.participant.setBackgroundColor(getResources().getColor(R.color.design_default_color_on_primary));
                         mParticipantList.add(email);
                         binding.participant.setText("");
-                    } else {
-                        binding.participant.setBackgroundColor(getResources().getColor(R.color.red));
+                        // Sert a afficher les adresse mail renseigner mais c'est pas très jolie, a améliorer !!
+                        /*binding.email.setVisibility(View.VISIBLE);
+                        String mParticipants = "";
+                        for (String s : mParticipantList) {
+                            mParticipants += s + ", ";
+                        }
+                            binding.email.setText(mParticipants);*/
                     }
                 }
             }
@@ -190,13 +211,9 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
             public void onClick(View v) {
                 Integer id = mApiService.getMeetings().size(); /* Génére un Id */
                 String subject = binding.subject.getText().toString(); /* -> Initilisation du Params */
-                String participants = "";
 
-                for (String s : mParticipantList) {
-                    participants += s + ", ";
-                }
 
-                mMeeting = new Meeting(id, mDateBegin.getTime(), mDateFinish.getTime(), mRoom, subject, participants); /* -> Création d'une nouvelle Instance de Meeting avec les Params récolter */
+                mMeeting = new Meeting(id, mDateBegin.getTime(), mDateFinish.getTime(), mRoom, subject, mParticipants); /* -> Création d'une nouvelle Instance de Meeting avec les Params récolter */
                 checkTheReservation(mDateBegin.getTime(), mDateFinish.getTime(), mRoom);
 
                 mApiService.createMeeting(mMeeting);  //-> API qui va vérifier si c'est réserver et crée le Meeting
@@ -207,5 +224,15 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
                 }
             }
         });
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        mRoom = mRoomList.get(position);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        mRoom = mRoomList.get(1);
     }
 }
