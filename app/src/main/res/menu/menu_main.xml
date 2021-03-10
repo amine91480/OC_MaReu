@@ -7,4 +7,10 @@
         android:icon="@drawable/ic_baseline_filter_list_24"
         android:title="Filtre"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_search"
+        android:title="Search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
 </menu>
