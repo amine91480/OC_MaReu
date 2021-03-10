@@ -1,10 +1,16 @@
 package com.amine.mareu.Controller;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amine.mareu.DI.DI;
@@ -13,27 +19,34 @@ import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.MeetingItemBinding;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
 
-public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdapter.MyListMeetingHolder> {
+public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdapter.MyListMeetingHolder> implements Filterable {
 
     private MeetingItemBinding binding;
     private MeetingApiService mApiService;
     private List<Meeting> mMeetingList;
+    private List<Meeting> mMeetingListAll;
 
     private String strMeetDat;
     private SimpleDateFormat createDate;
 
-    public MyListMeetingAdapter(List<Meeting> items) {
+    private Context mContext;
+
+    public MyListMeetingAdapter(List<Meeting> items, Context context) {
         this.mMeetingList = items;
+        this.mContext = context;
+        mMeetingListAll = new ArrayList<>();
+        mMeetingListAll.addAll(mMeetingList);
     }
 
     @Override
     public MyListMeetingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        binding = MeetingItemBinding.inflate(inflater, parent, false);
+        binding = MeetingItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         mApiService = DI.getMeetingApiService();
         return new MyListMeetingHolder(binding);
     }
@@ -51,12 +64,13 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
             }
         });
         holder.mBinding.superItem.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 //Intent intent = new Intent(v.getContext(), ShowMeetingActivity.class);
                 //intent.putExtra("meeting", (Parcelable) mMeetingList);
                 //v.getContext().startActivity(intent);
-                System.out.println("OKAY");
+                mMeetingList.stream().forEach(element -> System.out.println(element.getRoom()));
             }
         });
     }
@@ -65,6 +79,40 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
     public int getItemCount() {
         return mMeetingList.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    Filter filter = new Filter() {
+        // Run on Background thread
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Meeting> filteredMeeting = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredMeeting.addAll(mMeetingListAll);
+            } else {
+                for (Meeting meeting : mMeetingListAll) {
+                    if (meeting.getRoom().toString().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                        filteredMeeting.add(meeting);
+                        Log.d("getFilter/ifFound", "FOUND THIS " + meeting.getRoom());
+                    }
+                }
+            }
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredMeeting;
+            return filterResults;
+        }
+
+        //Run on a UI thread
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            mMeetingList.clear();
+            mMeetingList.addAll((Collection<? extends Meeting>) results.values);
+        }
+    };
 
     public class MyListMeetingHolder extends RecyclerView.ViewHolder {
 
