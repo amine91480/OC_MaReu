@@ -1,31 +1,44 @@
 package com.amine.mareu;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import com.amine.mareu.Controller.AddNewMeeting;
-import com.amine.mareu.Controller.FilterDialogue;
 
+import com.amine.mareu.Controller.MyListMeetingAdapter;
+import com.amine.mareu.DI.DI;
+import com.amine.mareu.Model.Meeting;
+import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.ActivityMainBinding;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.MenuInflater;
-import android.view.View;
-
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
     //ViewBindind
     private ActivityMainBinding binding;
+    private Context mContext;
+
+    private MeetingApiService mApiService;
+    private List<Meeting> mMeetingList;
+    private List<Meeting> mMeetingListCopy;
+
+    private RecyclerView mRecyclerView;
+    private MyListMeetingAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,52 +46,51 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
-        setContentView(view.getRootView());
+        setContentView(view);
+        mContext = getApplicationContext();
 
         setSupportActionBar(binding.toolbar);
+        setupData();
 
+        binding.myRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        binding.myRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mAdapter = new MyListMeetingAdapter(mMeetingList, mContext);
+        binding.myRecyclerView.setAdapter(mAdapter);
 
         binding.fab.setColorFilter(Color.WHITE);
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), AddNewMeeting.class);
-                v.getContext().startActivity(intent);
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), AddNewMeeting.class);
+                view.getContext().startActivity(intent);
             }
         });
+    }
+
+    private void setupData() {
+        mApiService = DI.getMeetingApiService();
+        mMeetingList = mApiService.getMeetings();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         return true;
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case R.id.button_menu:
-                Toast.makeText(this, "It's Action setting", Toast.LENGTH_LONG).show();
-                String option = "It's Action setting";
-                FilterDialogue filterDialogue = new FilterDialogue(MainActivity.this);
-                filterDialogue.setTitle(option);
-                filterDialogue.build();
-                return true;
-            default:
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void dialog(String string) {
-        AlertDialog.Builder myAlert = new AlertDialog.Builder(MainActivity.this);
-        myAlert.setTitle(string);
-        myAlert.show();
-    }
-
 }
 
