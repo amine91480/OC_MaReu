@@ -10,12 +10,13 @@ public interface MeetingApiService {
 
     List<Meeting> getMeetings();
 
+    List<Room> getRooms();
+
     void createMeeting(Meeting meeting);
 
     void deleteMeeting(Meeting meeting);
 
     boolean isReserved(Date debut, Date fin, Room room);
-
     /*List<String> checkIfEmailIsOK(String str);*/
 
 }
