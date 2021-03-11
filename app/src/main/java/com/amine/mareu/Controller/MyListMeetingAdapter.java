@@ -110,7 +110,9 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             mMeetingList.clear();
+            notifyItemRangeRemoved(0, mMeetingList.size());
             mMeetingList.addAll((Collection<? extends Meeting>) results.values);
+            notifyDataSetChanged();
         }
     };
 
