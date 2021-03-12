@@ -94,8 +94,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                mAdapter = new MyListMeetingAdapter(mMeetingList, getApplicationContext());
+                //Erreur -> Rend la bonne liste mais affiche les anciens éléments
                 mAdapter.getFilter().filter(newText);
+                mAdapter.notifyDataSetChanged();
                 return false;
             }
         });
@@ -112,6 +113,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_search:
                 binding.newFilter.setVisibility(View.GONE);
                 selectedRoom = null;
+                mAdapter = new MyListMeetingAdapter(mMeetingList, this);
+                binding.myRecyclerView.setAdapter(mAdapter);
                 return true;
         }
 
@@ -124,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<Meeting> filtredRoom = new ArrayList<Meeting>();
 
-        if (selectedRoom.isEmpty()) {
+        if (selectedRoom == null || selectedRoom.length() == 00) {
             Log.d("Room", "Render the List Begin ");
             mAdapter = new MyListMeetingAdapter(mMeetingList, mContext);
             binding.myRecyclerView.setAdapter(mAdapter);
