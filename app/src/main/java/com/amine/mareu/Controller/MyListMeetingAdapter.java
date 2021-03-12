@@ -32,6 +32,8 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
     private List<Meeting> mMeetingList;
     private List<Meeting> mMeetingListAll;
 
+    private MyListMeetingAdapter mAdapter;
+
     private String strMeetDat;
     private SimpleDateFormat createDate;
 
@@ -89,7 +91,7 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
         // Run on Background thread
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<Meeting> filteredMeeting = new ArrayList<>();
+            ArrayList<Meeting> filteredMeeting = new ArrayList<Meeting>();
 
             if (constraint == null || constraint.length() == 0) {
                 filteredMeeting.addAll(mMeetingListAll);
@@ -97,7 +99,7 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
                 for (Meeting meeting : mMeetingListAll) {
                     if (meeting.getRoom().toString().toLowerCase().contains(constraint.toString().toLowerCase())) {
                         filteredMeeting.add(meeting);
-                        Log.d("getFilter/ifFound", "FOUND THIS " + meeting.getRoom());
+                        Log.d("getFilter/ifFound", "FOUND THIS " + meeting.getRoom() + meeting.getId());
                     }
                 }
             }
@@ -110,9 +112,8 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             mMeetingList.clear();
-            notifyItemRangeRemoved(0, mMeetingList.size());
             mMeetingList.addAll((Collection<? extends Meeting>) results.values);
-            notifyDataSetChanged();
+            mAdapter = new MyListMeetingAdapter(mMeetingList, mContext);
         }
     };
 
