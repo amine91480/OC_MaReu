@@ -1,17 +1,18 @@
 package com.amine.mareu.Model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Meeting {
 
     private Integer id;
-    private Date dateBegin;
-    private Date dateFinish;
+    private SimpleDateFormat dateBegin;
+    private SimpleDateFormat dateFinish;
     private Room room;
     private String subject;
     private String participants;
 
-    public Meeting(Integer id, Date dateBegin, Date dateFinish, Room room, String subject, String partcipants) {
+    public Meeting(Integer id, SimpleDateFormat dateBegin, SimpleDateFormat dateFinish, Room room, String subject, String partcipants) {
         this.id = id;
         this.dateBegin = dateBegin;
         this.dateFinish = dateFinish;
@@ -61,7 +62,7 @@ public class Meeting {
         this.participants = participants;
     }
 
-    public Date getDateBegin() {
+    public SimpleDateFormat getDateBegin() {
         return dateBegin;
     }
 
@@ -69,7 +70,7 @@ public class Meeting {
         this.dateBegin = dateBegin;
     }
 
-    public Date getDateAfter() {
+    public SimpleDateFormat getDateAfter() {
         return dateFinish;
     }
 

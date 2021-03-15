@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MyListMeetingAdapter mAdapter;
 
-    private String selectedRoom;
+    private Room selectedRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem item = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) item.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 mAdapter.notifyDataSetChanged();
                 return false;
             }
-        });
+        });*/
         return true;
     }
 
@@ -117,47 +117,38 @@ public class MainActivity extends AppCompatActivity {
                 binding.myRecyclerView.setAdapter(mAdapter);
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    private void filtredRoom(String selected) {
+    private void filtredRoom(Room room) {
         Log.d("Room", "Filtre Test !: ");
-        selectedRoom = selected;
+        selectedRoom = room;
 
         ArrayList<Meeting> filtredRoom = new ArrayList<Meeting>();
 
-        if (selectedRoom == null || selectedRoom.length() == 00) {
-            Log.d("Room", "Render the List Begin ");
-            mAdapter = new MyListMeetingAdapter(mMeetingList, mContext);
-            binding.myRecyclerView.setAdapter(mAdapter);
-        }
-        for (Meeting meeting : mMeetingList) {
-            if (meeting.getRoom().toString().toLowerCase().contains(selectedRoom.toLowerCase())) {
-                filtredRoom.add(meeting);
-            }
+            filtredRoom = mApiService.chooseYourRoom(selectedRoom);
             mAdapter = new MyListMeetingAdapter(filtredRoom, mContext);
             binding.myRecyclerView.setAdapter(mAdapter);
-        }
+
     }
 
     public void RoomAFilterChoose(View view) {
         Log.d("Room", "Touched: " + mRoomList.get(0).toString());
-        filtredRoom(mRoomList.get(0).toString());
+        filtredRoom(mRoomList.get(0));
     }
 
     public void RoomBFilterChoose(View view) {
         Log.d("Room", "Touched: " + mRoomList.get(1));
-        filtredRoom(mRoomList.get(1).toString());
+        filtredRoom(mRoomList.get(1));
     }
 
     public void RoomCFilterChoose(View view) {
         Log.d("Room", "Touched: " + mRoomList.get(2));
-        filtredRoom(mRoomList.get(2).toString());
+        filtredRoom(mRoomList.get(2));
     }
 
     public void RoomDFilterChoose(View view) {
         Log.d("Room", "Touched: ");
-        filtredRoom(mRoomList.get(3).toString());
+        filtredRoom(mRoomList.get(3));
     }
 }

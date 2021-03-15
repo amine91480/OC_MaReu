@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdapter.MyListMeetingHolder> implements Filterable {
+public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdapter.MyListMeetingHolder> {
 
     private MeetingItemBinding binding;
     private MeetingApiService mApiService;
@@ -82,7 +82,7 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
         return mMeetingList.size();
     }
 
-    @Override
+    /*@Override
     public Filter getFilter() {
         return filter;
     }
@@ -112,10 +112,11 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             mMeetingList.clear();
-            mMeetingList.addAll((Collection<? extends Meeting>) results.values);
+            mMeetingList.addAll(new ArrayList((Collection) results.values));
+            //mMeetingList.addAll((Collection<? extends Meeting>) results.values);
             mAdapter = new MyListMeetingAdapter(mMeetingList, mContext);
         }
-    };
+    };*/
 
     public class MyListMeetingHolder extends RecyclerView.ViewHolder {
 

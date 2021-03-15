@@ -5,6 +5,7 @@ import android.util.Log;
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.Model.Room;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,9 +26,26 @@ public class DummyMeetingApiService implements MeetingApiService {
 
     @Override
     public void createMeeting(Meeting meeting) {
-        if (isReserved(meeting.getDateBegin(), meeting.getDateAfter(), meeting.getRoom()) == false) {
+        if (!isReserved(meeting.getDateBegin(), meeting.getDateAfter(), meeting.getRoom())) {
             meetings.add(meeting);
         }
+    }
+
+    @Override
+    public void deleteMeeting(Meeting meeting) {
+        meetings.remove(meeting);
+    }
+
+    @Override
+    public ArrayList<Meeting> chooseYourRoom(Room room) { // Filtre
+        ArrayList<Meeting> filtredRoom = new ArrayList<Meeting>();
+
+        for (Meeting meeting : meetings) {
+            if (meeting.getRoom().getName().contains(room.getName())) {
+                filtredRoom.add(meeting);
+            }
+        }
+        return filtredRoom;
     }
 
     @Override
@@ -59,10 +77,4 @@ public class DummyMeetingApiService implements MeetingApiService {
         }
         return isReserved;
     }
-
-    @Override
-    public void deleteMeeting(Meeting meeting) {
-        meetings.remove(meeting);
-    }
-
 }

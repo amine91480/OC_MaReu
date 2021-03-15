@@ -6,12 +6,21 @@
         android:id="@+id/button_menu"
         android:icon="@drawable/ic_baseline_filter_list_24"
         android:title="Filtre"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom" >
+        <menu>
+            <item
+                android:id="@+id/action_search"
+                android:icon="@drawable/ic_search"
+                android:title="Search"
+                app:actionViewClass="androidx.appcompat.widget.SearchView"
+                app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search"
-        android:title="Search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="always|collapseActionView" />
+            <item
+                android:id="@+id/filterRoom"
+                android:icon="@drawable/ic_baseline_room"
+                android:title="Room"
+                app:showAsAction="never" />
+
+        </menu>
+    </item>
 </menu>

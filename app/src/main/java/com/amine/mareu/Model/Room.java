@@ -2,24 +2,20 @@ package com.amine.mareu.Model;
 
 public class Room {
 
-    private String room;
+    private String name;
     private String color;
 
-    public Room(String room, String color) {
-        this.room = room;
+    public Room(String name, String color) {
+        this.name = name;
         this.color = color;
     }
-    @Override
-    public String toString() {
-        return getRoom(); // You can add anything else like maybe getDrinkType()
+
+    public String getName() {
+        return name;
     }
 
-    public String getRoom() {
-        return room;
-    }
-
-    public void setRoom(String room) {
-        this.room = room;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getColor() {

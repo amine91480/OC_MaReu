@@ -3,6 +3,7 @@ package com.amine.mareu.Service;
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.Model.Room;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,8 @@ public interface MeetingApiService {
     List<Meeting> getMeetings();
 
     List<Room> getRooms();
+
+    ArrayList<Meeting> chooseYourRoom(Room room);
 
     void createMeeting(Meeting meeting);
 
