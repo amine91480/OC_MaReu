@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_gravity="center"
+    android:orientation="vertical"
     tools:context=".Controller.AddNewMeeting">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -33,28 +33,27 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:hint="Subject of Meeting"
+        app:layout_constraintBottom_toTopOf="@+id/label_subject"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/label_subject"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
         app:startIconDrawable="@drawable/ic_baseline_location">
 
-        <AutoCompleteTextView
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/autoComplete_room"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_weight="1"
             android:enabled="false"
             android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/label_subject"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -63,16 +62,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/label_autoComplete_room"
-        app:startIconContentDescription="Je sais pas"
         app:startIconDrawable="@drawable/ic_baseline_assignment">
 
-        <AutoCompleteTextView
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/subject"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
             android:gravity="center"
-            android:inputType="text"
-            android:maxLines="1" />
+            android:inputType="text" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -108,19 +108,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/label_participant"
-        app:startIconDrawable="@drawable/ic_baseline_subject"
-       >
+        app:startIconDrawable="@drawable/ic_baseline_subject">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
         </com.google.android.material.textfield.TextInputEditText>
-
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -156,14 +154,13 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/addMeeting"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+        android:text="Crée"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="Crée"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
