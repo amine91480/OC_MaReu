@@ -56,7 +56,6 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
             }
         });
         holder.mBinding.superItem.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 //Intent intent = new Intent(v.getContext(), ShowMeetingActivity.class);
@@ -71,42 +70,6 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
     public int getItemCount() {
         return mMeetingList.size();
     }
-
-    /*@Override
-    public Filter getFilter() {
-        return filter;
-    }
-
-    Filter filter = new Filter() {
-        // Run on Background thread
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            ArrayList<Meeting> filteredMeeting = new ArrayList<Meeting>();
-
-            if (constraint == null || constraint.length() == 0) {
-                filteredMeeting.addAll(mMeetingListAll);
-            } else {
-                for (Meeting meeting : mMeetingListAll) {
-                    if (meeting.getRoom().toString().toLowerCase().contains(constraint.toString().toLowerCase())) {
-                        filteredMeeting.add(meeting);
-                        Log.d("getFilter/ifFound", "FOUND THIS " + meeting.getRoom() + meeting.getId());
-                    }
-                }
-            }
-            FilterResults filterResults = new FilterResults();
-            filterResults.values = filteredMeeting;
-            return filterResults;
-        }
-
-        //Run on a UI thread
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            mMeetingList.clear();
-            mMeetingList.addAll(new ArrayList((Collection) results.values));
-            //mMeetingList.addAll((Collection<? extends Meeting>) results.values);
-            mAdapter = new MyListMeetingAdapter(mMeetingList, mContext);
-        }
-    };*/
 
     public class MyListMeetingHolder extends RecyclerView.ViewHolder {
 

@@ -9,6 +9,7 @@ import com.amine.mareu.Controller.AddNewMeeting;
 
 import com.amine.mareu.Controller.MyListMeetingAdapter;
 import com.amine.mareu.DI.DI;
+import com.amine.mareu.Dialogue.FilterDialogueFragment;
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.Model.Room;
 import com.amine.mareu.Service.MeetingApiService;
@@ -18,13 +19,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         mAdapter = new MyListMeetingAdapter(mMeetingList, mContext);
         binding.myRecyclerView.setAdapter(mAdapter);
@@ -89,70 +88,26 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem item = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) item.getActionView();
-        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //Erreur -> Rend la bonne liste mais affiche les anciens éléments
-                mAdapter.getFilter().filter(newText);
-                mAdapter.notifyDataSetChanged();
-                return false;
-            }
-        });*/
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.button_menu:
-                Toast.makeText(getApplicationContext(), "Watch this super New Item", Toast.LENGTH_SHORT);
-                binding.newFilter.setVisibility(View.VISIBLE);
-                return true;
-            case R.id.action_search:
-                binding.newFilter.setVisibility(View.GONE);
-                selectedRoom = null;
-                mAdapter = new MyListMeetingAdapter(mMeetingList, this);
-                binding.myRecyclerView.setAdapter(mAdapter);
+             /*   FilterDialogueFragment filterDialogue = new FilterDialogueFragment(MainActivity.this);
+                filterDialogue.startFilterDialogue();*/
+                openDialogue();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void filtredRoom(Room room) {
-        Log.d("Room", "Filtre Test !: ");
-        selectedRoom = room;
-
-        ArrayList<Meeting> filtredRoom = new ArrayList<Meeting>();
-        filtredRoom = mApiService.chooseYourRoom(selectedRoom);
-        mAdapter = new MyListMeetingAdapter(filtredRoom, mContext);
-        binding.myRecyclerView.setAdapter(mAdapter);
-
+    public void openDialogue() {
+        FilterDialogueFragment filterDialogueFragment = new FilterDialogueFragment();
+        filterDialogueFragment.show(getSupportFragmentManager(), "Go");
     }
 
-    public void RoomAFilterChoose(View view) {
-        Log.d("Room", "Touched: " + mRoomList.get(0).toString());
-        filtredRoom(mRoomList.get(0));
-    }
 
-    public void RoomBFilterChoose(View view) {
-        Log.d("Room", "Touched: " + mRoomList.get(1));
-        filtredRoom(mRoomList.get(1));
-    }
-
-    public void RoomCFilterChoose(View view) {
-        Log.d("Room", "Touched: " + mRoomList.get(2));
-        filtredRoom(mRoomList.get(2));
-    }
-
-    public void RoomDFilterChoose(View view) {
-        Log.d("Room", "Touched: ");
-        filtredRoom(mRoomList.get(3));
-    }
 }
