@@ -25,8 +25,17 @@ public class DummyMeetingApiService implements MeetingApiService {
     }
 
     @Override
-    public void createMeeting(Meeting meeting) {
-        if (!isReserved(meeting.getDateBegin(), meeting.getDateAfter(), meeting.getRoom())) {
+    public List<String> getListNameRooms() { // Render the List of Room Name -> Use to AutoCompleteView
+        List<String> mRoomName = new ArrayList<>();
+        for (Room room : getRooms()) {
+            mRoomName.add(room.getName());
+        }
+        return mRoomName;
+    }
+
+    @Override
+    public void createMeeting(Meeting meeting) { // Create a New Meeting(check if the reservation is correct)
+        if (!checkTheFuturReservation(meeting.getDateBegin(), meeting.getDateAfter(), meeting.getRoom())) {
             meetings.add(meeting);
         }
     }
@@ -37,9 +46,8 @@ public class DummyMeetingApiService implements MeetingApiService {
     }
 
     @Override
-    public ArrayList<Meeting> chooseYourRoom(Room room) { // Filtre
+    public ArrayList<Meeting> roomChoseToFilter(Room room) { // Take a Room and return a List of every Meeting in this Room
         ArrayList<Meeting> filtredRoom = new ArrayList<Meeting>();
-
         for (Meeting meeting : meetings) {
             if (meeting.getRoom().getName().contains(room.getName())) {
                 filtredRoom.add(meeting);
@@ -49,7 +57,8 @@ public class DummyMeetingApiService implements MeetingApiService {
     }
 
     @Override
-    public boolean isReserved(LocalDateTime dateBegin, LocalDateTime dateFinish, Room room) {
+    public boolean checkTheFuturReservation(LocalDateTime dateBegin, LocalDateTime dateFinish, Room room) {
+        // Check if the reservation is correct with Date and Room and return True or False
         boolean isReserved = false;
         for (Meeting meet : meetings) {
             if (room.toString().equals(meet.getRoom().toString())) { // Vérifie si la salle est identique
@@ -75,6 +84,6 @@ public class DummyMeetingApiService implements MeetingApiService {
                 }
             }
         }
-        return isReserved;
+        return isReserved; // Return Boolean
     }
 }
