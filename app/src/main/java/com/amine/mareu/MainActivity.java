@@ -76,8 +76,13 @@ public class MainActivity extends AppCompatActivity {
         mApiService = DI.getMeetingApiService();
         mMeetingList = mApiService.getMeetings();
         mRoomList = mApiService.getRooms();
-        mMeetingListCopy = new ArrayList<>();
-        mMeetingListCopy.addAll(mMeetingList);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAdapter = new MyListMeetingAdapter(mMeetingList, mContext);
+        binding.myRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -125,10 +130,9 @@ public class MainActivity extends AppCompatActivity {
         selectedRoom = room;
 
         ArrayList<Meeting> filtredRoom = new ArrayList<Meeting>();
-
-            filtredRoom = mApiService.chooseYourRoom(selectedRoom);
-            mAdapter = new MyListMeetingAdapter(filtredRoom, mContext);
-            binding.myRecyclerView.setAdapter(mAdapter);
+        filtredRoom = mApiService.chooseYourRoom(selectedRoom);
+        mAdapter = new MyListMeetingAdapter(filtredRoom, mContext);
+        binding.myRecyclerView.setAdapter(mAdapter);
 
     }
 

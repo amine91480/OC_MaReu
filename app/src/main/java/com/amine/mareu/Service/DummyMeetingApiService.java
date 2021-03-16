@@ -5,8 +5,8 @@ import android.util.Log;
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.Model.Room;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class DummyMeetingApiService implements MeetingApiService {
@@ -49,20 +49,20 @@ public class DummyMeetingApiService implements MeetingApiService {
     }
 
     @Override
-    public boolean isReserved(Date dateBegin, Date dateFinish, Room room) {
+    public boolean isReserved(LocalDateTime dateBegin, LocalDateTime dateFinish, Room room) {
         boolean isReserved = false;
         for (Meeting meet : meetings) {
             if (room.toString().equals(meet.getRoom().toString())) { // Vérifie si la salle est identique
                 Log.d("isReserve/API", meet.getId().toString() + " " + meet.getRoom().toString() + " " + meet.getDateBegin());
 
                 // Vérifier si date de début de meeting n'est pas entre le date de début du meet et la date de fin de meet
-                if ((dateBegin.after(meet.getDateBegin())) && (dateBegin.before(meet.getDateAfter()))) {
+                if ((dateBegin.isAfter(meet.getDateBegin())) && (dateBegin.isBefore(meet.getDateAfter()))) {
                     Log.d("isReserve/API", "Date de debut et entre l'intervalle");
                     isReserved = true;
                     return isReserved;
                 }
                 // Vérifier si la date de fin de meeting n'est pas entre la date de début du meet et la date de fin du meet
-                if ((dateFinish.after(meet.getDateBegin())) && (dateFinish.before(meet.getDateAfter()))) {
+                if ((dateFinish.isAfter(meet.getDateBegin())) && (dateFinish.isBefore(meet.getDateAfter()))) {
                     Log.d("isReserve/API", "Date de fin et entre l'intervalle");
                     isReserved = true;
                     return isReserved;

@@ -1,18 +1,21 @@
 package com.amine.mareu.Model;
 
+import android.icu.text.DateFormat;
+
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Meeting {
 
     private Integer id;
-    private SimpleDateFormat dateBegin;
-    private SimpleDateFormat dateFinish;
+    private LocalDateTime dateBegin;
+    private LocalDateTime dateFinish;
     private Room room;
     private String subject;
     private String participants;
 
-    public Meeting(Integer id, SimpleDateFormat dateBegin, SimpleDateFormat dateFinish, Room room, String subject, String partcipants) {
+    public Meeting(Integer id, LocalDateTime dateBegin, LocalDateTime dateFinish, Room room, String subject, String partcipants) {
         this.id = id;
         this.dateBegin = dateBegin;
         this.dateFinish = dateFinish;
@@ -62,7 +65,7 @@ public class Meeting {
         this.participants = participants;
     }
 
-    public SimpleDateFormat getDateBegin() {
+    public LocalDateTime getDateBegin() {
         return dateBegin;
     }
 
@@ -70,7 +73,7 @@ public class Meeting {
         this.dateBegin = dateBegin;
     }
 
-    public SimpleDateFormat getDateAfter() {
+    public LocalDateTime getDateAfter() {
         return dateFinish;
     }
 

@@ -7,8 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,12 +16,9 @@ import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.MeetingItemBinding;
 
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
-
 
 public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdapter.MyListMeetingHolder> {
 
@@ -31,11 +26,6 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
     private MeetingApiService mApiService;
     private List<Meeting> mMeetingList;
     private List<Meeting> mMeetingListAll;
-
-    private MyListMeetingAdapter mAdapter;
-
-    private String strMeetDat;
-    private SimpleDateFormat createDate;
 
     private Context mContext;
 
@@ -128,14 +118,11 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
         }
 
         void updateElement(Meeting meeting) {
-            createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-            strMeetDat = createDate.format(meeting.getDateBegin());
-            strMeetDat = strMeetDat.substring(11, 16);
-
-            binding.text.setText(String.valueOf(
-                    meeting.getRoom().getRoom() + " - "
-                            + strMeetDat + " - "
-                            + meeting.getSubject()));
+            DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm");
+            String data = meeting.getRoom().getName() + " - " +
+                    meeting.getDateBegin().format(formatTime) + " - " +
+                    meeting.getSubject();
+            binding.text.setText(data);
             binding.participation.setText(meeting.getParticipants());
             binding.icone.setColorFilter(Color.parseColor(meeting.getRoom().getColor()));
         }
