@@ -90,7 +90,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
         createNewMeeting();
     }
 
-    //// A decouvrir
+    //// ->  A decouvrir
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { // N'ai pas apeller
         mRoom = mRoomList.get(position);
@@ -100,6 +100,7 @@ public class AddNewMeeting extends AppCompatActivity implements AdapterView.OnIt
     public void onNothingSelected(AdapterView<?> parent) { // N'ai pas apeller
         mRoom = mRoomList.get(0);
     }
+    //// <--  A decouvrir
 
     public void chooseYourRoom() { // Spinner for choose the Room of the Meeting -> OK
         mRoom = mRoomList.get(0);// Securité pour que la salle soit toujours séléctionner sur le première Item
