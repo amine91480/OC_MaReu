@@ -1,9 +1,5 @@
 package com.amine.mareu.Service;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import com.amine.mareu.Model.Meeting;
 
 import java.time.LocalDateTime;
@@ -15,7 +11,7 @@ import static com.amine.mareu.Service.DummyRoomGenerator.*;
 public class DummyMeetingGenerator {
 
     public static List<String> getRandomEmail() {
-        ArrayList<String> randEmail = new ArrayList<String>();
+        List<String> randEmail = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             randEmail.add("amine91480@hotmail.fr");
             randEmail.add("flegard91@hotmail.fr");
@@ -29,23 +25,25 @@ public class DummyMeetingGenerator {
         return (int) ((Math.random() * (max - min)) + min);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public static ArrayList<LocalDateTime> getRandomDate() {
-        ArrayList<LocalDateTime> randDate = new ArrayList<LocalDateTime>();
-        for (int i = 0; i < 5; i++) {
-            randDate.add(LocalDateTime.of(2021, 03, 15, getRandomNumber(07, 16), 00, 00));
+        ArrayList<LocalDateTime> randomDate = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            randomDate.add(LocalDateTime.of(2021, 2, 16, getRandomNumber(7, 16), 0, 0));
         }
-        return randDate;
+        for (int i = 0; i < 3; i++) {
+            randomDate.add(LocalDateTime.of(2021, 2, 17, getRandomNumber(7, 16), 0, 0));
+        }
+        return randomDate;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public static List<Meeting> getDummyMeeting() {
-        Integer i = 0;
-        List<Meeting> newMeetingTest = new ArrayList<Meeting>();
-
-        for (i = 0; i < getRandomDate().size(); i++) {
-            newMeetingTest.add(new Meeting(i, getRandomDate().get(i), getRandomDate().get(i).plusHours(1), generateRoom().get(getRandomNumber(0, generateRoom().size())), "Android", getRandomEmail().get(getRandomNumber(0, getRandomEmail().size()))));
+        List<Meeting> listMeetingTest = new ArrayList<>();
+        LocalDateTime date, datePlusOne;
+        for (int i = 0; i < getRandomDate().size(); i++) {
+            date = getRandomDate().get(i);
+            datePlusOne = date.plusHours(1);
+            listMeetingTest.add(new Meeting(i, date, datePlusOne, generateRoom().get(getRandomNumber(0, generateRoom().size())), "Android", getRandomEmail().get(getRandomNumber(0, getRandomEmail().size()))));
         }
-        return newMeetingTest;
+        return listMeetingTest;
     }
 }
