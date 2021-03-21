@@ -11,47 +11,39 @@ import com.amine.mareu.Controller.MyListMeetingAdapter;
 import com.amine.mareu.DI.DI;
 import com.amine.mareu.Dialogue.FilterDialogueFragment;
 import com.amine.mareu.Model.Meeting;
-import com.amine.mareu.Model.Room;
 import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.ActivityMainBinding;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FilterDialogueFragment.AlertDialogueListener {
 
-    //ViewBindind
-    private ActivityMainBinding binding;
-    private Context mContext;
+    private Context mContext; // Context ofApplication(getApplicationContext())
 
-    private MeetingApiService mApiService;
+    private ActivityMainBinding binding; //ViewBindind
+
     private List<Meeting> mMeetingList;
-    private List<Meeting> mMeetingListCopy;
-    private List<Room> mRoomList;
 
     private MyListMeetingAdapter mAdapter;
-
-    private Room selectedRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mContext = getApplicationContext();
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        mContext = getApplicationContext();
 
         setSupportActionBar(binding.toolbar);
         setupData();
@@ -62,19 +54,16 @@ public class MainActivity extends AppCompatActivity {
         binding.myRecyclerView.setAdapter(mAdapter);
 
         binding.fab.setColorFilter(Color.WHITE);
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), AddNewMeeting.class);
-                view.getContext().startActivity(intent);
-            }
+        binding.fab.setOnClickListener(view1 -> {
+            Intent intent = new Intent(view1.getContext(), AddNewMeeting.class);
+            view1.getContext().startActivity(intent);
         });
     }
 
     private void setupData() {
-        mApiService = DI.getMeetingApiService();
-        mMeetingList = mApiService.getMeetings();
-        mRoomList = mApiService.getRooms();
+        // On the top -> Field can be converted to a local variable
+        MeetingApiService apiService = DI.getMeetingApiService();
+        mMeetingList = apiService.getMeetings();
     }
 
     @Override
@@ -94,12 +83,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.button_menu:
-             /*   FilterDialogueFragment filterDialogue = new FilterDialogueFragment(MainActivity.this);
+        if (item.getItemId() == R.id.button_menu) {/*   FilterDialogueFragment filterDialogue = new FilterDialogueFragment(MainActivity.this);
                 filterDialogue.startFilterDialogue();*/
-                openDialogue();
-                return true;
+            openDialogue();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -110,4 +97,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    @Override
+    public void returnData(List<Meeting> meetings) {
+        //Log.d("OK", String.valueOf(meetings.size()));
+        mAdapter = new MyListMeetingAdapter(meetings, mContext);
+        binding.myRecyclerView.setAdapter(mAdapter);
+    }
 }
