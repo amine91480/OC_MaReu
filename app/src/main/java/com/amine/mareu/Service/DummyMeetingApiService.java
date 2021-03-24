@@ -61,13 +61,13 @@ public class DummyMeetingApiService implements MeetingApiService {
 
     @Override
     public List<Meeting> roomChooseToFilter(Room room) { // Take a Room and return a List of every Meeting in this Room
-        List<Meeting> filtredMeetingByRoom = new ArrayList<>();
+        List<Meeting> filteredMeetingByRoom = new ArrayList<>();
         for (Meeting meeting : meetings) {
             if (meeting.getRoom().getName().contains(room.getName())) {
-                filtredMeetingByRoom.add(meeting);
+                filteredMeetingByRoom.add(meeting);
             }
         }
-        return filtredMeetingByRoom;
+        return filteredMeetingByRoom;
     }
 
     @Override
@@ -103,7 +103,7 @@ public class DummyMeetingApiService implements MeetingApiService {
                 }
                 // Vérifier si la date du début de meeting n'est pas égal au meet
                 if (dateBegin.equals(meet.getDateBegin())) {
-                    Log.d("isReserve/API", "date identiaque");
+                    Log.d("isReserve/API", "date identique");
                     isReserved = true;
                     break;
                 }
