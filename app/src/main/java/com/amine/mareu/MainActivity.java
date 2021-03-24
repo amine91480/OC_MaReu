@@ -1,6 +1,5 @@
 package com.amine.mareu;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -27,8 +26,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements FilterDialogueFragment.AlertDialogueListener {
 
-    private Context mContext; // Context ofApplication(getApplicationContext())
-
     private ActivityMainBinding binding; //ViewBindind
 
     private List<Meeting> mMeetingList;
@@ -39,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mContext = getApplicationContext();
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
@@ -48,9 +43,9 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
         setSupportActionBar(binding.toolbar);
         setupData();
 
-        binding.myRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        binding.myRecyclerView.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
         binding.myRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        mAdapter = new MyListMeetingAdapter(mMeetingList, mContext);
+        mAdapter = new MyListMeetingAdapter(mMeetingList);
         binding.myRecyclerView.setAdapter(mAdapter);
 
         binding.fab.setColorFilter(Color.WHITE);
@@ -69,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
     @Override
     public void onResume() {
         super.onResume();
-        mAdapter = new MyListMeetingAdapter(mMeetingList, mContext);
+        mAdapter = new MyListMeetingAdapter(mMeetingList);
         binding.myRecyclerView.setAdapter(mAdapter);
     }
 
@@ -83,15 +78,14 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.button_menu) {/*   FilterDialogueFragment filterDialogue = new FilterDialogueFragment(MainActivity.this);
-                filterDialogue.startFilterDialogue();*/
-            openDialogue();
+        if (item.getItemId() == R.id.button_menu) {
+            openDialogue(); // Call method to init and Lunch openDialog
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void openDialogue() {
+    public void openDialogue() { // Instancie notre FilterDialogueFragment et l'apelle
         FilterDialogueFragment filterDialogueFragment = new FilterDialogueFragment();
         filterDialogueFragment.show(getSupportFragmentManager(), "Go");
     }
@@ -99,13 +93,14 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
-
+        // TODO  Search -> it's used for what ?
     }
 
     @Override
     public void returnData(List<Meeting> meetings) {
+        // Call ReturnData on AlertFiltered to receip the list of Meeting Filtred and return this on the Adapter
         //Log.d("OK", String.valueOf(meetings.size()));
-        mAdapter = new MyListMeetingAdapter(meetings, mContext);
+        mAdapter = new MyListMeetingAdapter(meetings);
         binding.myRecyclerView.setAdapter(mAdapter);
     }
 }
