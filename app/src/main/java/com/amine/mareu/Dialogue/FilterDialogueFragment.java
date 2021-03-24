@@ -77,6 +77,7 @@ public class FilterDialogueFragment extends AppCompatDialogFragment {
     }
 
     private void takeRoomToFilter() { // Work -> Initialise mRoom
+        mRoom = mRooms.get(0); //Choose the First Room if the user don't choose
         // It's a AutoCompleteTextView to see the List of View -> OK but don't take the value of the item taken
         ArrayAdapter<String> autoCompleteTextViewRoom =
                 new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, mRoomsName);
