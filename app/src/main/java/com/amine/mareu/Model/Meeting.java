@@ -1,15 +1,11 @@
 package com.amine.mareu.Model;
 
-import android.icu.text.DateFormat;
-
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Meeting {
 
     private Integer id;
-    private LocalDateTime dateBegin;
+    private final LocalDateTime dateBegin;
     private LocalDateTime dateFinish;
     private Room room;
     private String subject;
@@ -24,13 +20,9 @@ public class Meeting {
         this.participants = partcipants;
     }
 
-    public boolean isCompleted() {
-        if (id != null && room != null && dateBegin != null && dateFinish != null && subject != null && participants != null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    public boolean isCompleted() {
+//        return id != null && room != null && dateBegin != null && dateFinish != null && subject != null && participants != null;
+//    } // TODO this method is good for check if all attribut is received -> Search where to use it
 
 
     public Integer getId() {
@@ -70,7 +62,6 @@ public class Meeting {
     }
 
     public void setDateBegin() {
-        this.dateBegin = dateBegin;
     }
 
     public LocalDateTime getDateAfter() {
