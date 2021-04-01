@@ -5,18 +5,32 @@ import android.util.Log;
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.Model.Room;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DummyMeetingApiService implements MeetingApiService {
 
-    private List<Meeting> meetings = DummyMeetingGenerator.getDummyMeeting();
-    private List<Room> rooms = DummyRoomGenerator.generateRoom();
+    private final List<Meeting> meetings = DummyMeetingGenerator.getDummyMeeting();
+    private final List<Room> rooms = DummyRoomGenerator.generateRoom();
 
     @Override
     public List<Meeting> getMeetings() {
         return meetings;
+    }
+
+    @Override
+    public List<Meeting> getFilteredMeeting(Room room, LocalDate date) {
+        List<Meeting> filteredMeetingByRoom = roomChooseToFilter(room);
+        List<Meeting> filteredMeetingByDate = new ArrayList<>();
+        for (Meeting meeting : filteredMeetingByRoom) {
+            if (date.isEqual(meeting.getDateBegin().toLocalDate())) {
+                filteredMeetingByDate.add(meeting);
+            }
+        }
+        return filteredMeetingByDate;
+
     }
 
     @Override
@@ -46,14 +60,25 @@ public class DummyMeetingApiService implements MeetingApiService {
     }
 
     @Override
-    public ArrayList<Meeting> roomChoseToFilter(Room room) { // Take a Room and return a List of every Meeting in this Room
-        ArrayList<Meeting> filtredRoom = new ArrayList<Meeting>();
+    public List<Meeting> roomChooseToFilter(Room room) { // Take a Room and return a List of every Meeting in this Room
+        List<Meeting> filteredMeetingByRoom = new ArrayList<>();
         for (Meeting meeting : meetings) {
             if (meeting.getRoom().getName().contains(room.getName())) {
-                filtredRoom.add(meeting);
+                filteredMeetingByRoom.add(meeting);
             }
         }
-        return filtredRoom;
+        return filteredMeetingByRoom;
+    }
+
+    @Override
+    public List<Meeting> dateChooseToFilter(LocalDate date) {
+        List<Meeting> filteredMeetingByDate = new ArrayList<>();
+        for (Meeting meeting : meetings) {
+            if (date.isEqual(meeting.getDateBegin().toLocalDate())) {
+                filteredMeetingByDate.add(meeting);
+            }
+        }
+        return filteredMeetingByDate;
     }
 
     @Override
@@ -68,19 +93,19 @@ public class DummyMeetingApiService implements MeetingApiService {
                 if ((dateBegin.isAfter(meet.getDateBegin())) && (dateBegin.isBefore(meet.getDateAfter()))) {
                     Log.d("isReserve/API", "Date de debut et entre l'intervalle");
                     isReserved = true;
-                    return isReserved;
+                    break;
                 }
                 // Vérifier si la date de fin de meeting n'est pas entre la date de début du meet et la date de fin du meet
                 if ((dateFinish.isAfter(meet.getDateBegin())) && (dateFinish.isBefore(meet.getDateAfter()))) {
                     Log.d("isReserve/API", "Date de fin et entre l'intervalle");
                     isReserved = true;
-                    return isReserved;
+                    break;
                 }
                 // Vérifier si la date du début de meeting n'est pas égal au meet
                 if (dateBegin.equals(meet.getDateBegin())) {
-                    Log.d("isReserve/API", "date identiaque");
+                    Log.d("isReserve/API", "date identique");
                     isReserved = true;
-                    return isReserved;
+                    break;
                 }
             }
         }

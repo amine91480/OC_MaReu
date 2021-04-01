@@ -1,14 +1,11 @@
 package com.amine.mareu.Controller;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.RequiresApi;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amine.mareu.DI.DI;
@@ -17,27 +14,21 @@ import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.MeetingItemBinding;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdapter.MyListMeetingHolder> {
 
     private MeetingItemBinding binding;
     private MeetingApiService mApiService;
-    private List<Meeting> mMeetingList;
-    private List<Meeting> mMeetingListAll;
+    private final List<Meeting> mMeetingList;
 
-    private Context mContext;
-
-    public MyListMeetingAdapter(List<Meeting> items, Context context) {
+    public MyListMeetingAdapter(List<Meeting> items) {
         this.mMeetingList = items;
-        this.mContext = context;
-        mMeetingListAll = new ArrayList<>();
-        mMeetingListAll.addAll(mMeetingList);
     }
 
+    @NonNull
     @Override
-    public MyListMeetingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyListMeetingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         binding = MeetingItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         mApiService = DI.getMeetingApiService();
         return new MyListMeetingHolder(binding);
@@ -46,22 +37,18 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
     @Override
     public void onBindViewHolder(MyListMeetingHolder holder, int position) {
         holder.updateElement(mMeetingList.get(position));
-        holder.mBinding.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mApiService.deleteMeeting(mMeetingList.get(position)); /* A test pour savoir si sa marche !*/
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, mMeetingList.size());
-                /*notifyDataSetChanged(); *//* Permet de remettre les éléments en place quand un diparait */
-            }
+        holder.mBinding.delete.setOnClickListener((View v) -> {
+            mApiService.deleteMeeting(mMeetingList.get(position)); /* A test pour savoir si sa marche !*/
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, mMeetingList.size());
+            /*notifyDataSetChanged(); *//* Permet de remettre les éléments en place quand un diparait */
         });
-        holder.mBinding.superItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent intent = new Intent(v.getContext(), ShowMeetingActivity.class);
-                //intent.putExtra("meeting", (Parcelable) mMeetingList);
-                //v.getContext().startActivity(intent);
-                mMeetingList.stream().forEach(element -> System.out.println(element.getRoom()));
+        holder.mBinding.superItem.setOnClickListener((View v) -> {
+            //Intent intent = new Intent(v.getContext(), ShowMeetingActivity.class);
+            //intent.putExtra("meeting", (Parcelable) mMeetingList);
+            //v.getContext().startActivity(intent);
+            for (Meeting element : mMeetingList) {
+                System.out.println(element.getRoom());
             }
         });
     }
@@ -73,7 +60,7 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
 
     public class MyListMeetingHolder extends RecyclerView.ViewHolder {
 
-        private MeetingItemBinding mBinding;
+        private final MeetingItemBinding mBinding;
 
         MyListMeetingHolder(MeetingItemBinding mBinding) {
             super(mBinding.getRoot());
