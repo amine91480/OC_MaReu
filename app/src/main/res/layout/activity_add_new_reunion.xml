@@ -33,30 +33,31 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:hint="Subject of Meeting"
+        android:layout_marginLeft="@dimen/padd"
+        android:layout_marginRight="@dimen/padd"
+        android:hint="@string/label_room"
         app:layout_constraintBottom_toTopOf="@+id/label_subject"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/label_subject"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
         app:startIconDrawable="@drawable/ic_baseline_location">
 
-        <androidx.appcompat.widget.AppCompatSpinner
+        <AutoCompleteTextView
             android:id="@+id/autoComplete_room"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:enabled="false"
-            android:inputType="none" />
+            android:layout_height="match_parent"
+            android:inputType="none"
+            tools:ignore="LabelFor" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/label_subject"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/padd"
         android:hint="@string/label_subject"
         app:layout_constraintBottom_toTopOf="@+id/info"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,11 +67,9 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/subject"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
-            android:gravity="center"
             android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -81,7 +80,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/padd"
         android:hint="@string/label_email"
         app:layout_constraintBottom_toTopOf="@+id/addMeeting"
         app:layout_constraintEnd_toEndOf="parent"
@@ -103,7 +102,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/padd"
         app:layout_constraintBottom_toTopOf="@+id/addMeeting"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -141,12 +140,12 @@
         app:layout_constraintBottom_toTopOf="@+id/info"
         app:layout_constraintEnd_toEndOf="parent" />
 
-
     <Button
         android:id="@+id/info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clique ici pour choisir une date/heure"
+        android:layout_margin="@dimen/padd"
+        android:text="@string/button_date"
         app:layout_constraintBottom_toTopOf="@+id/addMeeting"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -157,10 +156,13 @@
         style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Crée"
+        android:layout_margin="@dimen/padd"
+        android:text="@string/update"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_email" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,9 @@
     <string name="label_email">Adresse email des participants</string>
     <string name="label_date">Date et heure du Meeting</string>
     <string name="label_room">Salle du Meeting</string>
+    <string name="button_date">Choisir une date</string>
+    <string name="update">Creation</string>
+
 
     <!-- Meeting_ItemComponent -->
     <string name="contentDescription" />
