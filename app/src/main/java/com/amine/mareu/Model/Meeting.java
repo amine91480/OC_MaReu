@@ -1,12 +1,15 @@
 package com.amine.mareu.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.time.LocalDateTime;
 
-public class Meeting {
+public class Meeting implements Parcelable {
 
     private Integer id;
     private final LocalDateTime dateBegin;
-    private LocalDateTime dateFinish;
+    private final LocalDateTime dateFinish;
     private Room room;
     private String subject;
     private String participants;
@@ -20,9 +23,34 @@ public class Meeting {
         this.participants = partcipants;
     }
 
-//    public boolean isCompleted() {
-//        return id != null && room != null && dateBegin != null && dateFinish != null && subject != null && participants != null;
-//    } // TODO this method is good for check if all attribut is received -> Search where to use it
+    protected Meeting(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        dateBegin = (LocalDateTime) in.readSerializable();
+        dateFinish = (LocalDateTime) in.readSerializable();
+        room = in.readParcelable(Room.class.getClassLoader());
+        subject = in.readString();
+        participants = in.readString();
+    }
+
+    public static final Creator<Meeting> CREATOR = new Creator<Meeting>() {
+        @Override
+        public Meeting createFromParcel(Parcel in) {
+            return new Meeting(in);
+        }
+
+        @Override
+        public Meeting[] newArray(int size) {
+            return new Meeting[size];
+        }
+    };
+
+    public boolean isCompleted() {
+        return id != null && room != null && dateBegin != null && dateFinish != null && subject != null && participants != null;
+    } // TODO this method is good for check if all attribut is received -> Search where to use it
 
 
     public Integer getId() {
@@ -61,15 +89,27 @@ public class Meeting {
         return dateBegin;
     }
 
-    public void setDateBegin() {
-    }
-
     public LocalDateTime getDateAfter() {
         return dateFinish;
     }
 
-    public void setDateAfter() {
-        this.dateFinish = dateFinish;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
+        dest.writeSerializable(dateBegin);
+        dest.writeSerializable(dateFinish);
+        dest.writeParcelable(room, flags);
+        dest.writeString(subject);
+        dest.writeString(participants);
+    }
 }

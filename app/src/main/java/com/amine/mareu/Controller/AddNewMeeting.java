@@ -3,6 +3,8 @@ package com.amine.mareu.Controller;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.amine.mareu.DI.DI;
@@ -37,17 +40,16 @@ public class AddNewMeeting extends AppCompatActivity {
     private MeetingApiService mApiService; // Service to import the method/logic
 
     // Model Object to created a NewInstance or Modify
-    private List<Meeting> mMeetingList;
+    //private List<Meeting> mMeetingList; // Pas utilie pour l'instant
     private List<Room> mRoomList;
-    private List<String> mRoomListName; // Contain the name Room of all room
     private List<String> mParticipantList; // Contain all Email insert on the InputText
 
     // Element to Init the New Meeting//
-    private Meeting mMeeting; // The Meeting to add
     private Room mRoom; // Room choose by the User
     private LocalDateTime mDateBegin, mDateFinish; // Date/Time choose by the User
     private String mParticipants; // All Email insert by the User split by 's'
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,10 +60,23 @@ public class AddNewMeeting extends AppCompatActivity {
         setSupportActionBar(binding.toolbarNew); // Add the Support Tollbar -> I don't now if it's work
 
         mApiService = DI.getMeetingApiService(); // Give the Service to use Method
-        mMeetingList = mApiService.getMeetings(); // ListOfMeeting
+        // ---------------------------->
+        // On instancie le mMeetingList, on lui donne le resultat de la list Meeting dans le Service
+        // On Instancie et récupère la List Meeting envoyer par Main à cette activity
+        // On compare les deux liste par leurs longueur si elle ne sont pas vide, si elle sont differents, on Reset la liste du Service pour a remplacer par la List envoyer par Main (gère la rotation d'ecran)
+        List<Meeting> mMeetingList = mApiService.getMeetings();
+        List<Meeting> mMeetingListToMain = getIntent().getParcelableArrayListExtra("meetingList");
+        if (mMeetingList.isEmpty() || mMeetingListToMain.isEmpty()) {
+            System.out.println("C'est vide ");
+        } else {
+            if (mMeetingList.size() != mMeetingListToMain.size()) {
+                mApiService.setClearListMeeting();
+                mMeetingList.forEach(meeting -> mApiService.createMeeting(meeting));
+            }
+        }
+        // <----------------------------
+
         mRoomList = DummyRoomGenerator.DUMMY_ROOM; // ListOfRoom
-        mRoomListName = mApiService.getListNameRooms();
-        mParticipantList = new ArrayList<>();
         receiveData(); //Logic Work
     }
 
@@ -76,36 +91,12 @@ public class AddNewMeeting extends AppCompatActivity {
         createNewMeeting();
     }
 
-    /*
-    //// -> Est implemnter automatiquemebt par la Classe Mer AddMeeting
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { // N'ai pas apeller
-        mRoom = mRoomList.get(position);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) { // N'ai pas apeller
-        mRoom = mRoomList.get(0);
-    }
-    //// <--  Trouver
-     */
-
     public void chooseYourRoom() { // Spinner for choose the Room of the Meeting -> OK
         mRoom = mRoomList.get(0);// Securité pour que la salle soit toujours séléctionner sur le première Item
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, mRoomListName);
+                android.R.layout.simple_spinner_item, mApiService.getListNameRooms());
         binding.autoCompleteRoom.setAdapter(spinnerArrayAdapter);
-        /*AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mRoom = mRoomList.get(position);
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        };*/
         binding.autoCompleteRoom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -118,7 +109,6 @@ public class AddNewMeeting extends AppCompatActivity {
             }
         });
     }
-//// A decouvrir
 
     private void chooseYourDate() {
         mDateBegin = LocalDateTime.now();
@@ -209,8 +199,7 @@ public class AddNewMeeting extends AppCompatActivity {
         if (mApiService.checkTheFuturReservation(mDateBegin, mDateFinish, mRoom)) {
             binding.time.setBackgroundColor(getResources().getColor(R.color.red));
             binding.addMeeting.setEnabled(false);  //Bouton désactiver
-        }
-        if (!mApiService.checkTheFuturReservation(mDateBegin, mDateFinish, mRoom)) {
+        } else {
             binding.time.setBackgroundColor(getResources().getColor(R.color.blueblue));
             Toast.makeText(getApplicationContext(), "libre", LENGTH_SHORT).show();
             binding.addMeeting.setEnabled(true);  //Bouton activé
@@ -219,21 +208,25 @@ public class AddNewMeeting extends AppCompatActivity {
 
     private void createNewMeeting() {
         binding.addMeeting.setOnClickListener(v -> {
-            // -> Take the last Id of Meeting and add 1 for the new Meeting
-            Integer id = mApiService.getMeetings().size() + 1;
-            // -> Take the subject of the Meeting, can't be null assignement
+            // ---------------------------->
+            // -> On vérifie si la liste est vide, si oui l'id et 0 sinon c'est size + 1
+            int id;
+            if (mApiService.getMeetings().isEmpty()) {
+                id = 0;
+            } else {
+                id = mApiService.getMeetings().size() + 1;
+            }
             String subject = Objects.requireNonNull(binding.subject.getText()).toString();
 
-            // -> Initilise a New Meeting in mMeeting with all data taken by the user
-            mMeeting = new Meeting(id, mDateBegin, mDateFinish, mRoom, subject, mParticipants);
-            // For test Log.d("Toz", mMeeting.getId() + " " + mMeeting.getDateAfter() + " " + mMeeting.getDateAfter() + " " + mMeeting.getRoom() + " " + mMeeting.getParticipants());
-            checkTheReservation(mDateBegin, mDateFinish, mRoom);
-
-            mApiService.createMeeting(mMeeting);  //-> API qui va vérifier si c'est réserver et crée le Meeting
-            if (mMeetingList.contains(mMeeting)) { //Si le nouveau Meeting et dans la liste des Meeting -> Redirige vers la RecyclerView
+            // TODO -> Ici On va vérifier si les attributs de Meeting sont bien présent puis si c'est le cas on envoie le nouveau Meeting avec ces attributs a Main via setResult
+            if (new Meeting(id, mDateBegin, mDateFinish, mRoom, subject, mParticipants).isCompleted()) { // On vérifie si tout les attribues sont présent
+                Intent intent = new Intent();
+                intent.putExtra("newMeeting", new Meeting(id, mDateBegin, mDateFinish, mRoom, subject, mParticipants));
+                setResult(1, intent);
                 finish();
-            } else {  //Sinon Affiche un Toast message comme quoi la salle et l'heure et déjà pris :D
-                Toast.makeText(getApplicationContext(), "This Place is reserved a this time, Can't you change the date please ?", LENGTH_SHORT).show();
+            } else {
+                // TODO Trouver une gestion des cas si tout n'est pas correctement si il manque des attribut !!a
+                System.out.println("Toz");
             }
         });
     }

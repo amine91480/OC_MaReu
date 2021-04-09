@@ -111,13 +111,7 @@ public class FilterDialogueFragment extends AppCompatDialogFragment {
             mDate = LocalDate.of(year, month, dayOfMonth);
             mBinding.textDate.setText(mDate.format(formatterDate));
             Log.d("OK", date + " " + mDate + " " + mDateSetListener.getDatePicker().getDayOfMonth());
-            filteredMeetingWithDate(mDate);
         };
-    }
-
-    private void filteredMeetingWithDate(LocalDate date) {
-        List<Meeting> meetingListFiltredByDate = mApiService.dateChooseToFilter(date);
-        Log.d("OK", String.valueOf(meetingListFiltredByDate));
     }
 
     public interface AlertDialogueListener {
