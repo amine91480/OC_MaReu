@@ -18,6 +18,8 @@ public interface MeetingApiService {
 
     List<String> getListNameRooms(); // Render the List of Room Name(Use to AutoCompleteView)
 
+    List<Meeting> setClearListMeeting();
+
     void createMeeting(Meeting meeting); // Create a New Meeting to add on the List Meeting
 
     void deleteMeeting(Meeting meeting); // Deleate the Meeting to the List
