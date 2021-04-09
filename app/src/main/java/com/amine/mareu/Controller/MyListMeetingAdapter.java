@@ -20,7 +20,7 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
 
     private MeetingItemBinding binding;
     private MeetingApiService mApiService;
-    private final List<Meeting> mMeetingList;
+    private List<Meeting> mMeetingList;
 
     public MyListMeetingAdapter(List<Meeting> items) {
         this.mMeetingList = items;
