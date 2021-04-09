@@ -63,12 +63,16 @@ public class AddNewMeeting extends AppCompatActivity {
         // ---------------------------->
         // On instancie le mMeetingList, on lui donne le resultat de la list Meeting dans le Service
         // On Instancie et récupère la List Meeting envoyer par Main à cette activity
-        // On compare les deux liste par leurs longueur, si elle sont differents, on Reset la liste du Service pour a remplacer par la List envoyer par Main (gère la rotation d'ecran)
+        // On compare les deux liste par leurs longueur si elle ne sont pas vide, si elle sont differents, on Reset la liste du Service pour a remplacer par la List envoyer par Main (gère la rotation d'ecran)
         List<Meeting> mMeetingList = mApiService.getMeetings();
         List<Meeting> mMeetingListToMain = getIntent().getParcelableArrayListExtra("meetingList");
-        if (mMeetingList.size() != mMeetingListToMain.size()) {
-            mApiService.setClearListMeeting();
-            mMeetingList.forEach(meeting -> mApiService.createMeeting(meeting));
+        if (mMeetingList.isEmpty() || mMeetingListToMain.isEmpty()) {
+            System.out.println("C'est vide ");
+        } else {
+            if (mMeetingList.size() != mMeetingListToMain.size()) {
+                mApiService.setClearListMeeting();
+                mMeetingList.forEach(meeting -> mApiService.createMeeting(meeting));
+            }
         }
         // <----------------------------
 
