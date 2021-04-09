@@ -1,3 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Dimensions for AddNewMeeting -->
+    <dimen name="padd">32dp</dimen>
+    <!-- Dimensions for AddNewMeeting -->
 </resources>
