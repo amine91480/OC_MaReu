@@ -6,7 +6,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,7 +40,7 @@ public class AddNewMeeting extends AppCompatActivity {
     private MeetingApiService mApiService; // Service to import the method/logic
 
     // Model Object to created a NewInstance or Modify
-    private List<Meeting> mMeetingList; // Pas utilie pour l'instant
+    //private List<Meeting> mMeetingList; // Pas utilie pour l'instant
     private List<Room> mRoomList;
     private List<String> mParticipantList; // Contain all Email insert on the InputText
 
@@ -61,17 +60,14 @@ public class AddNewMeeting extends AppCompatActivity {
         setSupportActionBar(binding.toolbarNew); // Add the Support Tollbar -> I don't now if it's work
 
         mApiService = DI.getMeetingApiService(); // Give the Service to use Method
-
-        // TODO -> Ici on va récupérer le getExtra envoyer par Main et le comparé à la List dans le Service pour voir si il sont identique
-        mMeetingList = mApiService.getMeetings();
-        // On Récupère la List envoyer par Main ->
+        // ---------------------------->
+        // On instancie le mMeetingList, on lui donne le resultat de la list Meeting dans le Service
+        // On Instancie et récupère la List Meeting envoyer par Main à cette activity
+        // On compare les deux liste par leurs longueur, si elle sont differents, on Reset la liste du Service pour a remplacer par la List envoyer par Main (gère la rotation d'ecran)
+        List<Meeting> mMeetingList = mApiService.getMeetings();
         List<Meeting> mMeetingListToMain = getIntent().getParcelableArrayListExtra("meetingList");
-
-        if (mMeetingList.size() != mMeetingListToMain.size()) { //Si elle est identique c'est cool c'est qu'il n'y a pas eu de rotation de l'écran et tout :D
-            // Ici on va supprimer les Meeting dans le Service puis ajouter ceux qui on était envoyer par Main
-            // Clear la liste présente dans le Service
+        if (mMeetingList.size() != mMeetingListToMain.size()) {
             mApiService.setClearListMeeting();
-            // Ajouter les Meeting envoyer par Main a cette AActivité dans le Service
             mMeetingList.forEach(meeting -> mApiService.createMeeting(meeting));
         }
         // <----------------------------
@@ -208,24 +204,24 @@ public class AddNewMeeting extends AppCompatActivity {
 
     private void createNewMeeting() {
         binding.addMeeting.setOnClickListener(v -> {
-            // -> Take the last Id of Meeting and add 1 for the new Meeting
+            // ---------------------------->
+            // -> On vérifie si la liste est vide, si oui l'id et 0 sinon c'est size + 1
             int id;
-            if (mApiService.getMeetings().isEmpty()) { // A tester si sa veux dire que la list est vide
+            if (mApiService.getMeetings().isEmpty()) {
                 id = 0;
             } else {
                 id = mApiService.getMeetings().size() + 1;
             }
-            // -> Take the subject of the Meeting, can't be null assignement
             String subject = Objects.requireNonNull(binding.subject.getText()).toString();
 
             // TODO -> Ici On va vérifier si les attributs de Meeting sont bien présent puis si c'est le cas on envoie le nouveau Meeting avec ces attributs a Main via setResult
-            if (new Meeting(id, mDateBegin, mDateFinish, mRoom, subject, mParticipants).isCompleted()) {
+            if (new Meeting(id, mDateBegin, mDateFinish, mRoom, subject, mParticipants).isCompleted()) { // On vérifie si tout les attribues sont présent
                 Intent intent = new Intent();
                 intent.putExtra("newMeeting", new Meeting(id, mDateBegin, mDateFinish, mRoom, subject, mParticipants));
                 setResult(1, intent);
                 finish();
             } else {
-                // TODO Trouver une gestion des cas si tout n'est pas correctement si il manque des attribut !!
+                // TODO Trouver une gestion des cas si tout n'est pas correctement si il manque des attribut !!a
                 System.out.println("Toz");
             }
         });

@@ -55,9 +55,9 @@ public class DummyMeetingApiService implements MeetingApiService {
 
     @Override
     public void createMeeting(Meeting meeting) { // Create a New Meeting(check if the reservation is correct)
-//        if (!checkTheFuturReservation(meeting.getDateBegin(), meeting.getDateAfter(), meeting.getRoom())) {
+        if (!checkTheFuturReservation(meeting.getDateBegin(), meeting.getDateAfter(), meeting.getRoom())) {
             meetings.add(meeting);
-        //}
+        }
     }
 
     @Override
@@ -90,11 +90,9 @@ public class DummyMeetingApiService implements MeetingApiService {
     @Override
     public boolean checkTheFuturReservation(LocalDateTime dateBegin, LocalDateTime dateFinish, Room room) {
         // Check if the reservation is correct with Date and Room and return True or False
-        boolean isReserved = false;
-            if (meetings.size() == 0 ){
-                isReserved = false;
-                return false;
-            }
+        if (meetings.size() == 0) {
+            return false;
+        }
         for (Meeting meet : meetings) {
 
             if (room.getName().equals(meet.getRoom().getName())) { // Vérifie si la salle est identique
@@ -102,24 +100,20 @@ public class DummyMeetingApiService implements MeetingApiService {
                 // Vérifier si date de début de meeting n'est pas entre le date de début du meet et la date de fin de meet
                 if ((dateBegin.isAfter(meet.getDateBegin())) && (dateBegin.isBefore(meet.getDateAfter()))) {
                     Log.d("isReserve/API", "Date de debut et entre l'intervalle");
-                    isReserved = true;
                     return true;
-
                 }
                 // Vérifier si la date de fin de meeting n'est pas entre la date de début du meet et la date de fin du meet
                 if ((dateFinish.isAfter(meet.getDateBegin())) && (dateFinish.isBefore(meet.getDateAfter()))) {
                     Log.d("isReserve/API", "Date de fin et entre l'intervalle");
-                    isReserved = true;
                     return true;
                 }
                 // Vérifier si la date du début de meeting n'est pas égal au meet
                 if (dateBegin.equals(meet.getDateBegin())) {
                     Log.d("isReserve/API", "date identique");
-                    isReserved = true;
                     return true;
                 }
             }
         }
-        return isReserved; // Return Boolean
+        return false;
     }
 }

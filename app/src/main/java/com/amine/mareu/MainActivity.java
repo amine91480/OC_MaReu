@@ -56,9 +56,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
         binding.fab.setColorFilter(Color.WHITE);
         binding.fab.setOnClickListener(view1 -> {
             Intent intent = new Intent(view1.getContext(), AddNewMeeting.class);
-            if (mMeetingList == null) {
-                //
-            } else {
+            if (mMeetingList.size() != 0) {
                 intent.putParcelableArrayListExtra("meetingList", (ArrayList<? extends Parcelable>) mMeetingList);
             }
             startActivityForResult(intent, 1);
@@ -114,15 +112,14 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // TODO -> ICI on va Récuperer le Meeting qui va être instancier dans AddMeeting :D
-        // TODO -> Poser le OnResume pour mettre à jour la liste des Meetings une fois qu'elle est crée :D
-
-        if (data != null && requestCode == resultCode) {// Récupère la data si elle n'est pas vide
-           Meeting addNewMeeting = data.getExtras().getParcelable("newMeeting");
-                mApiService.createMeeting(addNewMeeting);
-                mMeetingList = mApiService.getMeetings();
-                onResume();
+        // TODO -> Effectuer une vérification sur requestCode et ResultCode pour être sur que le retour et conforme
+        if (data != null) {// Récupère la data si elle n'est pas vide
+            Meeting addNewMeeting = data.getExtras().getParcelable("newMeeting");
+            mApiService.createMeeting(addNewMeeting);
+            mMeetingList = mApiService.getMeetings();
+            onResume();
         } else {
+            // TODO -> Gestion d'erreur, Que faire si le data rendu est pas bonne ou non conforme
             System.out.println("Toz le Data reçu et pas bon ");
         }
     }
