@@ -13,14 +13,17 @@ import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.ActivityMainBinding;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
     private ActivityMainBinding binding; //ViewBindind
 
     private List<Meeting> mMeetingList;
+
+    private MeetingApiService mApiService;
 
     private MyListMeetingAdapter mAdapter;
 
@@ -51,14 +56,18 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
         binding.fab.setColorFilter(Color.WHITE);
         binding.fab.setOnClickListener(view1 -> {
             Intent intent = new Intent(view1.getContext(), AddNewMeeting.class);
-            view1.getContext().startActivity(intent);
+            if (mMeetingList == null) {
+                //
+            } else {
+                intent.putParcelableArrayListExtra("meetingList", (ArrayList<? extends Parcelable>) mMeetingList);
+            }
+            startActivityForResult(intent, 1);
         });
     }
 
     private void setupData() {
-        // On the top -> Field can be converted to a local variable
-        MeetingApiService apiService = DI.getMeetingApiService();
-        mMeetingList = apiService.getMeetings();
+        mApiService = DI.getMeetingApiService();
+        mMeetingList = new ArrayList<>();
     }
 
     @Override
@@ -70,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -99,8 +107,23 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
     @Override
     public void returnData(List<Meeting> meetings) {
         // Call ReturnData on AlertFiltered to receip the list of Meeting Filtred and return this on the Adapter
-        //Log.d("OK", String.valueOf(meetings.size()));
         mAdapter = new MyListMeetingAdapter(meetings);
         binding.myRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // TODO -> ICI on va Récuperer le Meeting qui va être instancier dans AddMeeting :D
+        // TODO -> Poser le OnResume pour mettre à jour la liste des Meetings une fois qu'elle est crée :D
+
+        if (data != null && requestCode == resultCode) {// Récupère la data si elle n'est pas vide
+           Meeting addNewMeeting = data.getExtras().getParcelable("newMeeting");
+                mApiService.createMeeting(addNewMeeting);
+                mMeetingList = mApiService.getMeetings();
+                onResume();
+        } else {
+            System.out.println("Toz le Data reçu et pas bon ");
+        }
     }
 }
