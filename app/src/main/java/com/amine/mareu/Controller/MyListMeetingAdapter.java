@@ -7,10 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.amine.mareu.DI.DI;
 import com.amine.mareu.Model.Meeting;
-import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.MeetingItemBinding;
 
 import java.time.format.DateTimeFormatter;
@@ -19,8 +16,7 @@ import java.util.List;
 public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdapter.MyListMeetingHolder> {
 
     private MeetingItemBinding binding;
-    private MeetingApiService mApiService;
-    private List<Meeting> mMeetingList;
+    private final List<Meeting> mMeetingList;
 
     public MyListMeetingAdapter(List<Meeting> items) {
         this.mMeetingList = items;
@@ -30,7 +26,6 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
     @Override
     public MyListMeetingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         binding = MeetingItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        mApiService = DI.getMeetingApiService();
         return new MyListMeetingHolder(binding);
     }
 
@@ -38,18 +33,15 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
     public void onBindViewHolder(MyListMeetingHolder holder, int position) {
         holder.updateElement(mMeetingList.get(position));
         holder.mBinding.delete.setOnClickListener((View v) -> {
-            mApiService.deleteMeeting(mMeetingList.get(position)); /* A test pour savoir si sa marche !*/
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, mMeetingList.size());
+            //mApiService.deleteMeeting(mee);
             /*notifyDataSetChanged(); *//* Permet de remettre les éléments en place quand un diparait */
         });
         holder.mBinding.superItem.setOnClickListener((View v) -> {
             //Intent intent = new Intent(v.getContext(), ShowMeetingActivity.class);
             //intent.putExtra("meeting", (Parcelable) mMeetingList);
             //v.getContext().startActivity(intent);
-            for (Meeting element : mMeetingList) {
-                System.out.println(element.getRoom());
-            }
         });
     }
 

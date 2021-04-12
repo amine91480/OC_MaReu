@@ -46,10 +46,13 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
         setContentView(view);
 
         setSupportActionBar(binding.toolbar);
-        setupData();
+
 
         binding.myRecyclerView.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
         binding.myRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+        mApiService = DI.getMeetingApiService();
+        mMeetingList = mApiService.getMeetings();
         mAdapter = new MyListMeetingAdapter(mMeetingList);
         binding.myRecyclerView.setAdapter(mAdapter);
 
@@ -63,16 +66,15 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
         });
     }
 
-    private void setupData() {
+    /*private void setupData() {
         mApiService = DI.getMeetingApiService();
         mMeetingList = new ArrayList<>();
-    }
+    }*/
 
     @Override
     public void onResume() {
         super.onResume();
-        mAdapter = new MyListMeetingAdapter(mMeetingList);
-        binding.myRecyclerView.setAdapter(mAdapter);
+
     }
 
     @Override

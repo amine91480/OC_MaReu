@@ -5,14 +5,10 @@ import com.amine.mareu.Service.MeetingApiService;
 
 public class DI {
 
-    private static final MeetingApiService service;
-
-    static {
-        service = new DummyMeetingApiService();
-    }
 
     public static MeetingApiService getMeetingApiService() {
-        return service;
+        return new DummyMeetingApiService();
     }
+    // Render a new Instance of Meeting at the MainActivity, it's the only One instance of Service.
 
 }

@@ -10,17 +10,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.amine.mareu.DI.DI;
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.Model.Room;
 import com.amine.mareu.R;
 import com.amine.mareu.Service.DummyRoomGenerator;
-import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.ActivityAddNewReunionBinding;
 
 import java.time.LocalDateTime;
@@ -29,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static android.widget.Toast.LENGTH_SHORT;
 
 public class AddNewMeeting extends AppCompatActivity {
 
@@ -37,7 +33,6 @@ public class AddNewMeeting extends AppCompatActivity {
     private DatePickerDialog mDateSetListener;
     private TimePickerDialog mTimePickerDialog;
 
-    private MeetingApiService mApiService; // Service to import the method/logic
 
     // Model Object to created a NewInstance or Modify
     //private List<Meeting> mMeetingList; // Pas utilie pour l'instant
@@ -59,23 +54,6 @@ public class AddNewMeeting extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbarNew); // Add the Support Tollbar -> I don't now if it's work
 
-        mApiService = DI.getMeetingApiService(); // Give the Service to use Method
-        // ---------------------------->
-        // On instancie le mMeetingList, on lui donne le resultat de la list Meeting dans le Service
-        // On Instancie et récupère la List Meeting envoyer par Main à cette activity
-        // On compare les deux liste par leurs longueur si elle ne sont pas vide, si elle sont differents, on Reset la liste du Service pour a remplacer par la List envoyer par Main (gère la rotation d'ecran)
-        List<Meeting> mMeetingList = mApiService.getMeetings();
-        List<Meeting> mMeetingListToMain = getIntent().getParcelableArrayListExtra("meetingList");
-        if (mMeetingList.isEmpty() || mMeetingListToMain.isEmpty()) {
-            System.out.println("C'est vide ");
-        } else {
-            if (mMeetingList.size() != mMeetingListToMain.size()) {
-                mApiService.setClearListMeeting();
-                mMeetingList.forEach(meeting -> mApiService.createMeeting(meeting));
-            }
-        }
-        // <----------------------------
-
         mRoomList = DummyRoomGenerator.DUMMY_ROOM; // ListOfRoom
         receiveData(); //Logic Work
     }
@@ -91,10 +69,17 @@ public class AddNewMeeting extends AppCompatActivity {
         createNewMeeting();
     }
 
+    public List<String> getListNameRooms() { // Render the List of Room Name -> Use to AutoCompleteView
+        List<String> mRoomName = new ArrayList<>();
+        for (Room room : mRoomList) {
+            mRoomName.add(room.getName());
+        }
+        return mRoomName;
+    }
+
     public void chooseYourRoom() { // Spinner for choose the Room of the Meeting -> OK
         mRoom = mRoomList.get(0);// Securité pour que la salle soit toujours séléctionner sur le première Item
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, mApiService.getListNameRooms());
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getListNameRooms());
         binding.autoCompleteRoom.setAdapter(spinnerArrayAdapter);
 
         binding.autoCompleteRoom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -136,7 +121,6 @@ public class AddNewMeeting extends AppCompatActivity {
                 mDateFinish = mDateBegin.plusHours(1);
                 binding.date.setText(mDateBegin.format(formatterDate));
                 binding.time.setText(mDateBegin.format(formatTime));
-                checkTheReservation(mDateBegin, mDateFinish, mRoom);
             }, mHour, mMinute, true);
             mTimePickerDialog.show();
         };
@@ -195,39 +179,17 @@ public class AddNewMeeting extends AppCompatActivity {
         });
     }
 
-    public void checkTheReservation(LocalDateTime mDateBegin, LocalDateTime mDateFinish, Room mRoom) {
-        if (mApiService.checkTheFuturReservation(mDateBegin, mDateFinish, mRoom)) {
-            binding.time.setBackgroundColor(getResources().getColor(R.color.red));
-            binding.addMeeting.setEnabled(false);  //Bouton désactiver
-        } else {
-            binding.time.setBackgroundColor(getResources().getColor(R.color.blueblue));
-            Toast.makeText(getApplicationContext(), "libre", LENGTH_SHORT).show();
-            binding.addMeeting.setEnabled(true);  //Bouton activé
-        }
-    }
-
     private void createNewMeeting() {
         binding.addMeeting.setOnClickListener(v -> {
             // ---------------------------->
             // -> On vérifie si la liste est vide, si oui l'id et 0 sinon c'est size + 1
-            int id;
-            if (mApiService.getMeetings().isEmpty()) {
-                id = 0;
-            } else {
-                id = mApiService.getMeetings().size() + 1;
-            }
+            int id = 0;
             String subject = Objects.requireNonNull(binding.subject.getText()).toString();
 
-            // TODO -> Ici On va vérifier si les attributs de Meeting sont bien présent puis si c'est le cas on envoie le nouveau Meeting avec ces attributs a Main via setResult
-            if (new Meeting(id, mDateBegin, mDateFinish, mRoom, subject, mParticipants).isCompleted()) { // On vérifie si tout les attribues sont présent
-                Intent intent = new Intent();
-                intent.putExtra("newMeeting", new Meeting(id, mDateBegin, mDateFinish, mRoom, subject, mParticipants));
-                setResult(1, intent);
-                finish();
-            } else {
-                // TODO Trouver une gestion des cas si tout n'est pas correctement si il manque des attribut !!a
-                System.out.println("Toz");
-            }
+            Intent intent = new Intent();
+            intent.putExtra("newMeeting", new Meeting(id, mDateBegin, mDateFinish, mRoom, subject, mParticipants));
+            setResult(1, intent);
+            finish();
         });
     }
 
