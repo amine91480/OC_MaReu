@@ -18,111 +18,101 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements FilterDialogueFragment.AlertDialogueListener {
 
-    private ActivityMainBinding binding; //ViewBindind
+  private ActivityMainBinding binding; //ViewBindind
 
-    private List<Meeting> mMeetingList;
+  private List<Meeting> mMeetingList;
 
-    private MeetingApiService mApiService;
+  private final MeetingApiService mApiService = DI.getMeetingApiService();
 
-    private MyListMeetingAdapter mAdapter;
+  private MyListMeetingAdapter mAdapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
+    binding = ActivityMainBinding.inflate(getLayoutInflater()); View view = binding.getRoot();
+    setContentView(view);
 
-        setSupportActionBar(binding.toolbar);
+    setSupportActionBar(binding.toolbar);
 
 
-        binding.myRecyclerView.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
-        binding.myRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+    binding.myRecyclerView.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
+    binding.myRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        mApiService = DI.getMeetingApiService();
+    mMeetingList = mApiService.getMeetings(); mAdapter = new MyListMeetingAdapter(mMeetingList);
+    binding.myRecyclerView.setAdapter(mAdapter);
+
+    binding.fab.setColorFilter(Color.WHITE); binding.fab.setOnClickListener(view1 -> {
+      Intent intent = new Intent(view1.getContext(), AddNewMeeting.class);
+      startActivityForResult(intent, 1);
+    });
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_main, menu); return true;
+  }
+
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    if ( item.getItemId() == R.id.button_menu ) {
+      openDialogue(); // Call method to init and Lunch openDialog
+      return true;
+    } return super.onOptionsItemSelected(item);
+  }
+
+  public void openDialogue() { // Instancie notre FilterDialogueFragment et l'apelle
+    FilterDialogueFragment filterDialogueFragment = new FilterDialogueFragment();
+    filterDialogueFragment.show(getSupportFragmentManager(), "Go");
+  }
+
+
+  @Override
+  public void onPointerCaptureChanged(boolean hasCapture) {
+    // TODO  Search -> it's used for what ?
+  }
+
+  @Override
+  public void returnData(List<Meeting> meetings) {
+    // Call ReturnData on AlertFiltered to receip the list of Meeting Filtred and return this on the Adapter
+    mAdapter = new MyListMeetingAdapter(meetings); binding.myRecyclerView.setAdapter(mAdapter);
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    // TODO -> Effectuer une vérification sur requestCode et ResultCode pour être sur que le retour et conforme
+    if ( data != null ) {// Récupère la data si elle n'est pas vide
+      Meeting addNewMeeting = data.getExtras().getParcelable("newMeeting");
+      if ( addNewMeeting.isCompleted() && (! mApiService.checkTheFuturReservation(addNewMeeting.getDateBegin(), addNewMeeting.getDateAfter(), addNewMeeting.getRoom())) ) {
+        addNewMeeting.setId(mMeetingList.size() + 1); mApiService.createMeeting(addNewMeeting);
         mMeetingList = mApiService.getMeetings();
-        mAdapter = new MyListMeetingAdapter(mMeetingList);
-        binding.myRecyclerView.setAdapter(mAdapter);
+      } else {
+        Toast.makeText(getApplicationContext(), "Votre Réservation ne peux pas être effectuer", Toast.LENGTH_SHORT).show();
+        System.out.println("Votre Réservation ne peux pas être effectuer");
+      }
+    } else {
+      Toast.makeText(getApplicationContext(), "Error System", Toast.LENGTH_SHORT).show();
+      System.out.println("Error System");
+    } mAdapter = new MyListMeetingAdapter(mMeetingList);
+    binding.myRecyclerView.setAdapter(mAdapter);
+  }
 
-        binding.fab.setColorFilter(Color.WHITE);
-        binding.fab.setOnClickListener(view1 -> {
-            Intent intent = new Intent(view1.getContext(), AddNewMeeting.class);
-            if (mMeetingList.size() != 0) {
-                intent.putParcelableArrayListExtra("meetingList", (ArrayList<? extends Parcelable>) mMeetingList);
-            }
-            startActivityForResult(intent, 1);
-        });
-    }
-
-    /*private void setupData() {
-        mApiService = DI.getMeetingApiService();
-        mMeetingList = new ArrayList<>();
-    }*/
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.button_menu) {
-            openDialogue(); // Call method to init and Lunch openDialog
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void openDialogue() { // Instancie notre FilterDialogueFragment et l'apelle
-        FilterDialogueFragment filterDialogueFragment = new FilterDialogueFragment();
-        filterDialogueFragment.show(getSupportFragmentManager(), "Go");
-    }
-
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-        // TODO  Search -> it's used for what ?
-    }
-
-    @Override
-    public void returnData(List<Meeting> meetings) {
-        // Call ReturnData on AlertFiltered to receip the list of Meeting Filtred and return this on the Adapter
-        mAdapter = new MyListMeetingAdapter(meetings);
-        binding.myRecyclerView.setAdapter(mAdapter);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // TODO -> Effectuer une vérification sur requestCode et ResultCode pour être sur que le retour et conforme
-        if (data != null) {// Récupère la data si elle n'est pas vide
-            Meeting addNewMeeting = data.getExtras().getParcelable("newMeeting");
-            mApiService.createMeeting(addNewMeeting);
-            mMeetingList = mApiService.getMeetings();
-            onResume();
-        } else {
-            // TODO -> Gestion d'erreur, Que faire si le data rendu est pas bonne ou non conforme
-            System.out.println("Toz le Data reçu et pas bon ");
-        }
-    }
 }
