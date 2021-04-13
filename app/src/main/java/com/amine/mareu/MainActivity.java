@@ -111,7 +111,8 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
     } else {
       Toast.makeText(getApplicationContext(), "Error System", Toast.LENGTH_SHORT).show();
       System.out.println("Error System");
-    } mAdapter = new MyListMeetingAdapter(mMeetingList);
+    }
+    mAdapter = new MyListMeetingAdapter(mMeetingList);
     binding.myRecyclerView.setAdapter(mAdapter);
   }
 

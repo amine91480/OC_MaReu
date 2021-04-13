@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.databinding.MeetingItemBinding;
 
@@ -33,12 +34,10 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
   public void onBindViewHolder(MyListMeetingHolder holder, int position) {
     holder.updateElement(mMeetingList.get(position));
     holder.mBinding.delete.setOnClickListener((View v) -> {
-      // TODO La supression ne fonctionne pas - Trouver une solution pour envoyer l'information à MainActivity pour suppriumer le Meeting
-      notifyItemRemoved(position);
+      // TODO Pourquoi suite à la suppresiion du meeting, la liste de mMeetingList de MainActivity esta ussi mis à jour ?
+      mMeetingList.remove(position); notifyItemRemoved(position);
       notifyItemRangeChanged(position, mMeetingList.size());
-      notifyDataSetChanged();
-    });
-    holder.mBinding.superItem.setOnClickListener((View v) -> {
+    }); holder.mBinding.superItem.setOnClickListener((View v) -> {
       //Intent intent = new Intent(v.getContext(), ShowMeetingActivity.class);
       //intent.putExtra("meeting", (Parcelable) mMeetingList);
       //v.getContext().startActivity(intent);
@@ -55,17 +54,13 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
     private final MeetingItemBinding mBinding;
 
     MyListMeetingHolder(MeetingItemBinding mBinding) {
-      super(mBinding.getRoot());
-      this.mBinding = mBinding;
+      super(mBinding.getRoot()); this.mBinding = mBinding;
     }
 
     void updateElement(Meeting meeting) {
       DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm");
-      String data = meeting.getRoom().getName() + " - " +
-          meeting.getDateBegin().format(formatTime) + " - " +
-          meeting.getSubject();
-      binding.text.setText(data);
-      binding.participation.setText(meeting.getParticipants());
+      String data = meeting.getRoom().getName() + " - " + meeting.getDateBegin().format(formatTime) + " - " + meeting.getSubject();
+      binding.text.setText(data); binding.participation.setText(meeting.getParticipants());
       binding.icone.setColorFilter(Color.parseColor(meeting.getRoom().getColor()));
     }
   }
