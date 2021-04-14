@@ -10,6 +10,7 @@ import com.amine.mareu.Controller.MyListMeetingAdapter;
 import com.amine.mareu.DI.DI;
 import com.amine.mareu.Dialogue.FilterDialogueFragment;
 import com.amine.mareu.Model.Meeting;
+import com.amine.mareu.Model.Room;
 import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.ActivityMainBinding;
 
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -44,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
     setContentView(view);
 
     setSupportActionBar(binding.toolbar);
-
 
     binding.myRecyclerView.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
     binding.myRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -90,9 +91,20 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
   }
 
   @Override
-  public void returnData(List<Meeting> meetings) {
+  public void returnData(LocalDate date, Room room) {
+    List<Meeting> mFilterListMeeting ;
+    mFilterListMeeting = mApiService.getFilteredMeeting(room, date);
+    mAdapter = new MyListMeetingAdapter(mFilterListMeeting);
+    binding.myRecyclerView.setAdapter(mAdapter);
+
+    binding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back);
+    binding.toolbar.setNavigationOnClickListener(e -> {
+      mAdapter = new MyListMeetingAdapter(mMeetingList);
+      binding.myRecyclerView.setAdapter(mAdapter); binding.toolbar.setNavigationIcon(null);
+    });
+
     // Call ReturnData on AlertFiltered to receip the list of Meeting Filtred and return this on the Adapter
-    mAdapter = new MyListMeetingAdapter(meetings); binding.myRecyclerView.setAdapter(mAdapter);
+    //mAdapter = new MyListMeetingAdapter(meetings); binding.myRecyclerView.setAdapter(mAdapter);
   }
 
   @Override
@@ -111,8 +123,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
     } else {
       Toast.makeText(getApplicationContext(), "Error System", Toast.LENGTH_SHORT).show();
       System.out.println("Error System");
-    }
-    mAdapter = new MyListMeetingAdapter(mMeetingList);
+    } mAdapter = new MyListMeetingAdapter(mMeetingList);
     binding.myRecyclerView.setAdapter(mAdapter);
   }
 

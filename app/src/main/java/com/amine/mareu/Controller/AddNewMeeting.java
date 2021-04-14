@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,7 +19,6 @@ import com.amine.mareu.Service.DummyRoomGenerator;
 import com.amine.mareu.databinding.ActivityAddNewReunionBinding;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -47,8 +47,6 @@ public class AddNewMeeting extends AppCompatActivity {
     binding = ActivityAddNewReunionBinding.inflate(getLayoutInflater()); //ViewBinding
     View view = binding.getRoot(); setContentView(view); // Return the View by BindingView
 
-    //setSupportActionBar(binding.toolbarNew); // Add the Support Tollbar -> I don't now if it's work
-
     mRoomList = DummyRoomGenerator.DUMMY_ROOM; // ListOfRoom
     receiveData(); //Logic Work
   }
@@ -56,11 +54,10 @@ public class AddNewMeeting extends AppCompatActivity {
   private void receiveData() {
     chooseYourDate(); // Open Dialogue Alert to choose a Date -> OK but the Time not Working :/
     chooseYourRoom(); // Spinner for choose the Room of the Meeting -> OK
-    chooseYourParticipant();
+    chooseYourParticipant(); // TODO -> This methode is not finish -> TO Finish
     binding.toolbarNew.setNavigationIcon(R.drawable.ic_baseline_arrow_back); // Insert the Drawable on the Toolbar
-    binding.toolbarNew.setNavigationOnClickListener(v -> onBackPressed());
-    // Insert the Drawable icone on the Toolbar and lambda to setAction Previous Button
-    createNewMeeting();
+    binding.toolbarNew.setNavigationOnClickListener(v -> onBackPressed()); // Insert the Drawable icone on the Toolbar and lambda to setAction Previous Button
+    createNewMeeting(); // Method to send setResult to Main for the creation of Meeting
   }
 
   public List<String> getListNameRooms() { // Render the List of Room Name -> Use to AutoCompleteView
@@ -72,14 +69,17 @@ public class AddNewMeeting extends AppCompatActivity {
   public void chooseYourRoom() { // Spinner for choose the Room of the Meeting -> OK
     mRoom = mRoomList.get(0);// Securité pour que la salle soit toujours séléctionner sur le première Item
     ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getListNameRooms());
+    binding.autoCompleteRoom.setText(mRoomList.get(0).getName()); // Insert the first Room of the list default value view
     binding.autoCompleteRoom.setAdapter(spinnerArrayAdapter);
     binding.autoCompleteRoom.setOnItemClickListener((parent, view, position, id) -> mRoom = mRoomList.get(position));
   }
 
   private void chooseYourDate() {
-    mDateBegin = LocalDateTime.now(); int mYear = mDateBegin.getYear();
-    int mMonth = mDateBegin.getMonthValue(); int mDay = mDateBegin.getDayOfMonth();
-    int mHour = mDateBegin.getHour(); int mMinute = mDateBegin.getMinute();
+    mDateBegin = LocalDateTime.now();
+    int mYear = mDateBegin.getYear();
+    int mMonth = mDateBegin.getMonthValue() - 1; // PB -> DataPicker Month begin to 0 not 1, sub 1 to the month
+    int mDay = mDateBegin.getDayOfMonth(); int mHour = mDateBegin.getHour();
+    int mMinute = mDateBegin.getMinute();
     binding.info.setOnClickListener(onInfoClick(mYear, mMonth, mDay, mHour, mMinute));
   }
 
@@ -91,14 +91,16 @@ public class AddNewMeeting extends AppCompatActivity {
   }
 
   private DatePickerDialog.OnDateSetListener onDateSet(int mHour, int mMinute) {
-    return (view, year, month, dayOfMonth) -> {
+    return (DatePicker view, int year, int month, int dayOfMonth) -> {
       mTimePickerDialog = new TimePickerDialog(AddNewMeeting.this, (view1, hourOfDay, minute) -> {
-        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm");
-        mDateBegin = LocalDateTime.of(year, month, dayOfMonth, hourOfDay, minute);
+       /* DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm");*/
+        // We Take add 1 to the month because DataPicker begin to 0 and LocalDate to 1
+        mDateBegin = LocalDateTime.of(year, month + 1, dayOfMonth, hourOfDay, minute);
         mDateFinish = mDateBegin.plusHours(1);
-        binding.date.setText(mDateBegin.format(formatterDate));
-        binding.time.setText(mDateBegin.format(formatTime));
+        binding.date.setText(mDateBegin.toLocalDate().toString());
+        binding.time.setText(mDateBegin.toLocalTime().toString());
+        //
       }, mHour, mMinute, true); mTimePickerDialog.show();
     };
   }

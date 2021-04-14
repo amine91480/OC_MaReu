@@ -23,15 +23,23 @@ public class DummyMeetingApiService implements MeetingApiService {
   // TODO -> A revoir !
   @Override
   public List<Meeting> getFilteredMeeting(Room room, LocalDate date) {
-    List<Meeting> filteredMeetingByRoom = roomChooseToFilter(room);
-    List<Meeting> filteredMeetingByDate = new ArrayList<>();
-    for (Meeting meeting : filteredMeetingByRoom) {
-      // ICI le Meeting n'est pas visible :O
-      if (date.isEqual(meeting.getDateBegin().toLocalDate())) {
-        filteredMeetingByDate.add(meeting);
-      }
+    List<Meeting> filteredMeeting = new ArrayList<>();
+    if ( room == null && date == null ) { // If both is null we return a new List
+      return new ArrayList<>();
     }
-    return filteredMeetingByDate;
+    if ( date == null && room != null) { // If date is null we check and take all Metting with the Room choose
+      return roomChooseToFilter(room);
+    }
+    if ( room == null && date != null) { // If room is null we check and take all Metting with the Date choose
+      return dateChooseToFilter(date);
+    } else { // Else Room and Date is Choose we check and take all Meeting with this param's
+      for ( Meeting meeting : roomChooseToFilter(room) ) {
+        if ( date.equals(meeting.getDateAfter().toLocalDate()) ) {
+          filteredMeeting.add(meeting);
+        }
+      }
+      return filteredMeeting;
+    }
   }
 
   @Override
@@ -81,7 +89,7 @@ public class DummyMeetingApiService implements MeetingApiService {
   public List<Meeting> dateChooseToFilter(LocalDate date) {
     List<Meeting> filteredMeetingByDate = new ArrayList<>();
     for (Meeting meeting : meetings) {
-      if (date.isEqual(meeting.getDateBegin().toLocalDate())) {
+      if (date.equals(meeting.getDateAfter().toLocalDate())) {
         filteredMeetingByDate.add(meeting);
       }
     }
