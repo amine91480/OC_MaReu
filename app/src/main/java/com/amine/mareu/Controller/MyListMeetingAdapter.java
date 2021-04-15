@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.amine.mareu.DI.DI;
 import com.amine.mareu.Model.Meeting;
-import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.MeetingItemBinding;
 
 import java.time.format.DateTimeFormatter;
@@ -18,63 +16,52 @@ import java.util.List;
 
 public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdapter.MyListMeetingHolder> {
 
-    private MeetingItemBinding binding;
-    private MeetingApiService mApiService;
-    private List<Meeting> mMeetingList;
+  private MeetingItemBinding binding;
+  private final List<Meeting> mMeetingList;
 
-    public MyListMeetingAdapter(List<Meeting> items) {
-        this.mMeetingList = items;
+  public MyListMeetingAdapter(List<Meeting> items) {
+    this.mMeetingList = items;
+  }
+
+  @NonNull
+  @Override
+  public MyListMeetingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    binding = MeetingItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+    return new MyListMeetingHolder(binding);
+  }
+
+  @Override
+  public void onBindViewHolder(MyListMeetingHolder holder, int position) {
+    holder.updateElement(mMeetingList.get(position));
+    holder.mBinding.delete.setOnClickListener((View v) -> {
+      // TODO Pourquoi suite à la suppresiion du meeting, la liste de mMeetingList de MainActivity esta ussi mis à jour ?
+      mMeetingList.remove(position); notifyItemRemoved(position);
+      notifyItemRangeChanged(position, mMeetingList.size());
+    }); holder.mBinding.superItem.setOnClickListener((View v) -> {
+      //Intent intent = new Intent(v.getContext(), ShowMeetingActivity.class);
+      //intent.putExtra("meeting", (Parcelable) mMeetingList);
+      //v.getContext().startActivity(intent);
+    });
+  }
+
+  @Override
+  public int getItemCount() {
+    return mMeetingList.size();
+  }
+
+  public class MyListMeetingHolder extends RecyclerView.ViewHolder {
+
+    private final MeetingItemBinding mBinding;
+
+    MyListMeetingHolder(MeetingItemBinding mBinding) {
+      super(mBinding.getRoot()); this.mBinding = mBinding;
     }
 
-    @NonNull
-    @Override
-    public MyListMeetingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        binding = MeetingItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        mApiService = DI.getMeetingApiService();
-        return new MyListMeetingHolder(binding);
+    void updateElement(Meeting meeting) {
+      DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm");
+      String data = meeting.getRoom().getName() + " - " + meeting.getDateBegin().format(formatTime) + " - " + meeting.getSubject();
+      binding.text.setText(data); binding.participation.setText(meeting.getParticipants());
+      binding.icone.setColorFilter(Color.parseColor(meeting.getRoom().getColor()));
     }
-
-    @Override
-    public void onBindViewHolder(MyListMeetingHolder holder, int position) {
-        holder.updateElement(mMeetingList.get(position));
-        holder.mBinding.delete.setOnClickListener((View v) -> {
-            mApiService.deleteMeeting(mMeetingList.get(position)); /* A test pour savoir si sa marche !*/
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, mMeetingList.size());
-            /*notifyDataSetChanged(); *//* Permet de remettre les éléments en place quand un diparait */
-        });
-        holder.mBinding.superItem.setOnClickListener((View v) -> {
-            //Intent intent = new Intent(v.getContext(), ShowMeetingActivity.class);
-            //intent.putExtra("meeting", (Parcelable) mMeetingList);
-            //v.getContext().startActivity(intent);
-            for (Meeting element : mMeetingList) {
-                System.out.println(element.getRoom());
-            }
-        });
-    }
-
-    @Override
-    public int getItemCount() {
-        return mMeetingList.size();
-    }
-
-    public class MyListMeetingHolder extends RecyclerView.ViewHolder {
-
-        private final MeetingItemBinding mBinding;
-
-        MyListMeetingHolder(MeetingItemBinding mBinding) {
-            super(mBinding.getRoot());
-            this.mBinding = mBinding;
-        }
-
-        void updateElement(Meeting meeting) {
-            DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm");
-            String data = meeting.getRoom().getName() + " - " +
-                    meeting.getDateBegin().format(formatTime) + " - " +
-                    meeting.getSubject();
-            binding.text.setText(data);
-            binding.participation.setText(meeting.getParticipants());
-            binding.icone.setColorFilter(Color.parseColor(meeting.getRoom().getColor()));
-        }
-    }
+  }
 }
