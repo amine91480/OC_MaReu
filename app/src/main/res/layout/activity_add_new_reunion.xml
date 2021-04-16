@@ -13,9 +13,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:theme="@style/Theme.MaReu.AppBarOverlay"
+    app:layout_constraintBottom_toTopOf="@+id/label_autoComplete_room"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_chainStyle="spread_inside">
 
     <androidx.appcompat.widget.Toolbar
       android:id="@+id/toolbar_new"
@@ -33,12 +35,12 @@
     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/padd"
-    android:layout_marginRight="@dimen/padd"
+    android:layout_margin="@dimen/padd"
     android:hint="@string/label_room"
     app:layout_constraintBottom_toTopOf="@+id/label_subject"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="@+id/label_subject"
+    app:layout_constraintHorizontal_bias="0.5"
+    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
     app:startIconDrawable="@drawable/ic_baseline_location">
 
@@ -46,7 +48,7 @@
       android:id="@+id/autoComplete_room"
       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_height="wrap_content"
       android:gravity="center"
       android:inputType="none"
       tools:ignore="LabelFor" />
@@ -59,8 +61,9 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/padd"
     android:hint="@string/label_subject"
-    app:layout_constraintBottom_toTopOf="@+id/info"
+    app:layout_constraintBottom_toTopOf="@+id/label_info"
     app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.5"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/label_autoComplete_room"
     app:startIconDrawable="@drawable/ic_baseline_assignment">
@@ -74,34 +77,28 @@
 
   </com.google.android.material.textfield.TextInputLayout>
 
-  <!--<TextView
-    android:id="@+id/date"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text=""
-    app:layout_constraintBottom_toTopOf="@+id/info"
-    app:layout_constraintStart_toStartOf="parent"
 
-    tools:ignore="MissingConstraints" />
-
-  <TextView
-    android:id="@+id/time"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text=""
-    app:layout_constraintBottom_toTopOf="@+id/info"
-    app:layout_constraintEnd_toEndOf="parent" />-->
-
-  <Button
-    android:id="@+id/info"
-    android:layout_width="wrap_content"
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/label_info"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/padd"
-    android:text="@string/button_date"
-    app:layout_constraintBottom_toTopOf="@+id/addMeeting"
+    android:hint="DataPicker"
+    app:layout_constraintBottom_toTopOf="@+id/label_participant"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintTop_toBottomOf="@+id/label_subject"
+    app:startIconDrawable="@drawable/ic_baseline_time">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/info"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:backgroundTint="@color/white"
+      android:inputType="text" />
+
+  </com.google.android.material.textfield.TextInputLayout>
 
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/label_participant"
@@ -111,10 +108,10 @@
     android:layout_margin="@dimen/padd"
     android:hint="@string/label_email"
     app:endIconMode="custom"
-    app:layout_constraintBottom_toTopOf="@+id/label_email"
+    app:layout_constraintBottom_toTopOf="@+id/addMeeting"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/info"
+    app:layout_constraintTop_toBottomOf="@+id/label_info"
     app:layout_constraintVertical_chainStyle="packed"
     app:startIconDrawable="@drawable/ic_baseline_subject">
 
@@ -127,43 +124,27 @@
 
   </com.google.android.material.textfield.TextInputLayout>
 
-  <com.google.android.material.card.MaterialCardView
-    android:id="@+id/label_email"
-    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_margin="@dimen/padd"
-    app:layout_constraintBottom_toTopOf="@+id/addMeeting"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/label_participant">
+  <!-- <com.google.android.material.card.MaterialCardView
+     android:id="@+id/label_email"
+     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_margin="@dimen/padd"
+     app:layout_constraintBottom_toTopOf="@+id/addMeeting"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.5"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/label_participant">
 
-    <TextView
-      android:id="@+id/email"
-      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-      android:layout_width="74dp"
-      android:layout_height="wrap_content"
-      tools:ignore="MissingConstraints" />
 
-    <TextView
-      android:id="@+id/date"
-      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-      android:layout_width="81dp"
-      android:layout_height="wrap_content"
-      android:text=""
-      tools:ignore="MissingConstraints" />
-
-    <TextView
-      android:id="@+id/time"
-      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-      android:layout_width="72dp"
-      android:layout_height="wrap_content"
-      android:text=""
-      tools:ignore="MissingConstraints" />
-
-  </com.google.android.material.card.MaterialCardView>
-
+     <com.google.android.material.textfield.TextInputEditText
+       android:id="@+id/email"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:inputType="textEmailAddress"
+       android:maxLines="1" />
+   </com.google.android.material.card.MaterialCardView>
+   -->
 
   <com.google.android.material.button.MaterialButton
     android:id="@+id/addMeeting"
@@ -171,13 +152,12 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/padd"
-    android:layout_marginBottom="159dp"
     android:text="@string/update"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.498"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/label_email" />
+    app:layout_constraintTop_toBottomOf="@+id/label_participant" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

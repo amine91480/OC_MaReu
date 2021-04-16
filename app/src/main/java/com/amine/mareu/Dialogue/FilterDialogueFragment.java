@@ -14,15 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
-import com.amine.mareu.DI.DI;
-import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.Model.Room;
 import com.amine.mareu.Service.DummyRoomGenerator;
-import com.amine.mareu.Service.MeetingApiService;
 import com.amine.mareu.databinding.FilterDialogueBinding;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,15 +40,12 @@ public class FilterDialogueFragment extends AppCompatDialogFragment {
 
   private AlertDialogueListener mListener;
 
-  private List<Meeting> megaFiltre;
-
 
   @NonNull
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
     //mApiService = DI.getMeetingApiService(); // Method API can use her
-    mRooms = DummyRoomGenerator.DUMMY_ROOM;
-    mRoomsName = getListNameRooms();
+    mRooms = DummyRoomGenerator.DUMMY_ROOM; mRoomsName = getListNameRooms();
 
     mBinding = FilterDialogueBinding.inflate(getLayoutInflater()); // Use BindingView to render the view XML
 
@@ -92,16 +85,14 @@ public class FilterDialogueFragment extends AppCompatDialogFragment {
     mBinding.autoCompleteFilterRoom.setAdapter(autoCompleteTextViewRoom);
     mBinding.autoCompleteFilterRoom.setOnItemClickListener((AdapterView<?> adapterView, View view, int position, long id) -> {
       mRoom = mRooms.get(position); mBinding.textRoom.setText(mRoom.getName());
+      mBinding.progressBar.setVisibility(View.GONE);
     });
   }
 
   private void initDatePicker() {
-    mDate = LocalDate.now();
-    System.out.println(mDate.toString());
-    int mYear = mDate.getYear();
+    mDate = LocalDate.now(); System.out.println(mDate.toString()); int mYear = mDate.getYear();
     int mMonth = mDate.getMonthValue() - 1; // PB -> DataPicker Month begin to 0 not 1, sub 1 to the month
-    int mDay = mDate.getDayOfMonth();
-    mDate = null; // For Filtred just by Room :D
+    int mDay = mDate.getDayOfMonth(); mDate = null; // For Filtred just by Room :D
     mBinding.buttonToDate.setOnClickListener(onInfoClick(mYear, mMonth, mDay));
   }
 
@@ -121,6 +112,7 @@ public class FilterDialogueFragment extends AppCompatDialogFragment {
       mDate = LocalDate.of(year, month + 1, dayOfMonth);
       mBinding.textDate.setText(mDate.format(formatterDate));
       Log.d("OK", date + " " + mDate + " " + mDateSetListener.getDatePicker().getDayOfMonth());
+      mBinding.progressBar.setVisibility(View.GONE);
     };
   }
 

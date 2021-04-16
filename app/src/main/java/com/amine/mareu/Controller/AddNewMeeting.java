@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.amine.mareu.Model.Meeting;
@@ -18,8 +17,6 @@ import com.amine.mareu.Model.Room;
 import com.amine.mareu.R;
 import com.amine.mareu.Service.DummyRoomGenerator;
 import com.amine.mareu.databinding.ActivityAddNewReunionBinding;
-import com.google.android.material.textfield.TextInputLayout;
-import com.google.android.material.textfield.TextInputLayout.OnEditTextAttachedListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -93,6 +90,7 @@ public class AddNewMeeting extends AppCompatActivity {
     };
   }
 
+  @SuppressLint("SetTextI18n")
   private DatePickerDialog.OnDateSetListener onDateSet(int mHour, int mMinute) {
     return (DatePicker view, int year, int month, int dayOfMonth) -> {
       mTimePickerDialog = new TimePickerDialog(AddNewMeeting.this, (view1, hourOfDay, minute) -> {
@@ -101,8 +99,9 @@ public class AddNewMeeting extends AppCompatActivity {
         // We Take add 1 to the month because DataPicker begin to 0 and LocalDate to 1
         mDateBegin = LocalDateTime.of(year, month + 1, dayOfMonth, hourOfDay, minute);
         mDateFinish = mDateBegin.plusHours(1);
-        binding.date.setText(mDateBegin.toLocalDate().toString());
-        binding.time.setText(mDateBegin.toLocalTime().toString());
+        binding.info.setText(mDateBegin.toLocalDate().toString()+" "+mDateBegin.toLocalTime().toString());
+        //binding.labelInfo.setStartIconDrawable(R.drawable.ic_baseline_time);
+        //binding.info.setText(mDateBegin.toLocalTime().toString());
         //
       }, mHour, mMinute, true); mTimePickerDialog.show();
     };
@@ -162,7 +161,7 @@ public class AddNewMeeting extends AppCompatActivity {
             // Sert a afficher les adresse mail renseigner mais c'est pas très jolie, a améliorer !!
             mParticipants = String.join(" ; ", mParticipantList); // A verifier !
 
-            binding.email.setText(mParticipants);
+            /*binding.email.setText(mParticipants);*/
           }
         }
       } return false;

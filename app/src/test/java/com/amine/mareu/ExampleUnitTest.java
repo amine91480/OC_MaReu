@@ -1,5 +1,9 @@
 package com.amine.mareu;
 
+import com.amine.mareu.DI.DI;
+import com.amine.mareu.Service.MeetingApiService;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
