@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.amine.mareu.Model.Meeting;
@@ -17,6 +18,8 @@ import com.amine.mareu.Model.Room;
 import com.amine.mareu.R;
 import com.amine.mareu.Service.DummyRoomGenerator;
 import com.amine.mareu.databinding.ActivityAddNewReunionBinding;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textfield.TextInputLayout.OnEditTextAttachedListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -106,7 +109,7 @@ public class AddNewMeeting extends AppCompatActivity {
   }
 
   // Take the String insert in the EditText after click in the Drawable and must check if is a good email to insert the email entry in the string
-  @SuppressLint({ "ClickableViewAccessibility", "NewApi" })
+  @SuppressLint({ "ClickableViewAccessibility", "NewApi", "ResourceAsColor", "WrongConstant" })
   private void chooseYourParticipant() {
     mParticipantList = new ArrayList<>();
     Objects.requireNonNull(binding.participant).setOnTouchListener((v, event) -> {
@@ -117,7 +120,17 @@ public class AddNewMeeting extends AppCompatActivity {
       String patrn = "^([\\w-.]+){1,64}@([\\w&&[^_]]+){2,255}(.[a-z]{2,3})+$|^$";
 
       email = Objects.requireNonNull(binding.participant.getText()).toString(); // Require not null
-      //String finalEmail = email;
+
+      binding.labelParticipant.addOnEditTextAttachedListener(textInputLayout -> {
+        if ( (!email.matches(patrn)) || (email.isEmpty()) ) {
+          binding.labelParticipant.setError("L'adresse mail n'est pas valide...");
+          //binding.labelParticipant.setEndIconDrawable(R.drawable.ic_check);
+          binding.labelParticipant.setErrorEnabled(true);
+        } else {
+          binding.labelParticipant.setErrorEnabled(false);
+          binding.labelParticipant.setEndIconDrawable(R.drawable.ic_check);
+        }
+      });
 
       // Ici on prépare la Vus suivant l'enttréz de l'utilisateur via le bindind et MAtérial Design
       /*      binding.participant.addTextChangedListener(new TextWatcher() {
@@ -142,14 +155,14 @@ public class AddNewMeeting extends AppCompatActivity {
       if ( event.getAction() == MotionEvent.ACTION_UP ) {
         if ( event.getRawX() >= (binding.participant.getRight() - binding.participant.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()) ) {
           if ( email.matches(patrn) ) {
-            mParticipantList.add(email); binding.participant.setText("");
+            // --> TODO Test
+            mParticipantList.add(email+ ", ");
+            binding.participant.setText("");
+            // --> TODO Test
             // Sert a afficher les adresse mail renseigner mais c'est pas très jolie, a améliorer !!
-            //binding.email.setVisibility(View.VISIBLE);
-            mParticipants = String.join("", mParticipantList); // A verifier !
-            //for (String s : mParticipantList) {
-            //    mParticipants += s + ", ";
-            //}
-            //binding.email.setText(mParticipants);
+            mParticipants = String.join(" ; ", mParticipantList); // A verifier !
+
+            binding.email.setText(mParticipants);
           }
         }
       } return false;
