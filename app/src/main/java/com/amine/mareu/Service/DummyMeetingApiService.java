@@ -64,9 +64,9 @@ public class DummyMeetingApiService implements MeetingApiService {
 
   @Override
   public void createMeeting(Meeting meeting) { // Create a New Meeting(check if the reservation is correct)
-    if (!checkTheFuturReservation(meeting.getDateBegin(), meeting.getDateAfter(), meeting.getRoom()) && (!meetings.contains(meeting))) {
+    //if (!checkTheFuturReservation(meeting.getDateBegin(), meeting.getDateAfter(), meeting.getRoom()) && (!meetings.contains(meeting))) {
       meetings.add(meeting);
-    }
+    //}
   }
 
   @Override
@@ -108,17 +108,17 @@ public class DummyMeetingApiService implements MeetingApiService {
 
         // Vérifier si date de début de meeting n'est pas entre le date de début du meet et la date de fin de meet
         if ((dateBegin.isAfter(meet.getDateBegin())) && (dateBegin.isBefore(meet.getDateAfter()))) {
-          Log.d("isReserve/API", "Date de debut et entre l'intervalle");
+          //Log.d("isReserve/API", "Date de debut et entre l'intervalle");
           return true;
         }
         // Vérifier si la date de fin de meeting n'est pas entre la date de début du meet et la date de fin du meet
         if ((dateFinish.isAfter(meet.getDateBegin())) && (dateFinish.isBefore(meet.getDateAfter()))) {
-          Log.d("isReserve/API", "Date de fin et entre l'intervalle");
+          //Log.d("isReserve/API", "Date de fin et entre l'intervalle");
           return true;
         }
         // Vérifier si la date du début de meeting n'est pas égal au meet
         if (dateBegin.equals(meet.getDateBegin())) {
-          Log.d("isReserve/API", "date identique");
+          //Log.d("isReserve/API", "date identique");
           return true;
         }
       }
