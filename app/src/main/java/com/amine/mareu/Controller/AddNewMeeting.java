@@ -131,37 +131,12 @@ public class AddNewMeeting extends AppCompatActivity {
         }
       });
 
-      // Ici on prépare la Vus suivant l'enttréz de l'utilisateur via le bindind et MAtérial Design
-      /*      binding.participant.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    binding.labelParticipant.setError("L'adresse mail n'est pas valide...");
-                    binding.labelParticipant.setErrorEnabled(true);
-                    if (finalEmail.matches(patrn)) {
-                        binding.labelParticipant.setErrorEnabled(false);
-                    }
-                }
-            });*/
-
       if ( event.getAction() == MotionEvent.ACTION_UP ) {
         if ( event.getRawX() >= (binding.participant.getRight() - binding.participant.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()) ) {
           if ( email.matches(patrn) ) {
-            // --> TODO Test
-            mParticipantList.add(email+ ", ");
+            mParticipantList.add(email);
             binding.participant.setText("");
-            // --> TODO Test
-            // Sert a afficher les adresse mail renseigner mais c'est pas très jolie, a améliorer !!
             mParticipants = String.join(" ; ", mParticipantList); // A verifier !
-
-            /*binding.email.setText(mParticipants);*/
           }
         }
       } return false;

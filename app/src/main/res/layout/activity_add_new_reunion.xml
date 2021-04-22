@@ -74,7 +74,6 @@
       android:layout_height="wrap_content"
       android:backgroundTint="@color/white"
       android:inputType="text" />
-
   </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -85,6 +84,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/padd"
     android:hint="DataPicker"
+    android:inputType="none"
     app:layout_constraintBottom_toTopOf="@+id/label_participant"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +96,8 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:backgroundTint="@color/white"
-      android:inputType="text" />
+      android:focusable="false"
+      />
 
   </com.google.android.material.textfield.TextInputLayout>
 
@@ -123,28 +124,6 @@
       android:maxLines="1" />
 
   </com.google.android.material.textfield.TextInputLayout>
-
-  <!-- <com.google.android.material.card.MaterialCardView
-     android:id="@+id/label_email"
-     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:layout_margin="@dimen/padd"
-     app:layout_constraintBottom_toTopOf="@+id/addMeeting"
-     app:layout_constraintEnd_toEndOf="parent"
-     app:layout_constraintHorizontal_bias="0.5"
-     app:layout_constraintStart_toStartOf="parent"
-     app:layout_constraintTop_toBottomOf="@+id/label_participant">
-
-
-     <com.google.android.material.textfield.TextInputEditText
-       android:id="@+id/email"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:inputType="textEmailAddress"
-       android:maxLines="1" />
-   </com.google.android.material.card.MaterialCardView>
-   -->
 
   <com.google.android.material.button.MaterialButton
     android:id="@+id/addMeeting"

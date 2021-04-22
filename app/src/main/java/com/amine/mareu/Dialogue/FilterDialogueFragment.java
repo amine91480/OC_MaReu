@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -40,7 +39,6 @@ public class FilterDialogueFragment extends AppCompatDialogFragment {
 
   private AlertDialogueListener mListener;
 
-
   @NonNull
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -75,21 +73,16 @@ public class FilterDialogueFragment extends AppCompatDialogFragment {
     initDatePicker(); //-> OK
   }
 
-  private void takeRoomToFilter() { // Work -> Initialise mRoom
-    /*// TEST
-    mRoom = mRooms.get(0); //Choose the First Room if the user don't choose
-    mBinding.autoCompleteFilterRoom.setText(mRoomsName.get(0));
-    // TEST */
+  private void takeRoomToFilter() { // WORK
     // It's a AutoCompleteTextView to see the List of View -> OK but don't take the value of the item taken
     ArrayAdapter<String> autoCompleteTextViewRoom = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, mRoomsName);
     mBinding.autoCompleteFilterRoom.setAdapter(autoCompleteTextViewRoom);
     mBinding.autoCompleteFilterRoom.setOnItemClickListener((AdapterView<?> adapterView, View view, int position, long id) -> {
-      mRoom = mRooms.get(position); mBinding.textRoom.setText(mRoom.getName());
-      mBinding.progressBar.setVisibility(View.GONE);
+      mRoom = mRooms.get(position); viewResult(); mBinding.progressBar.setVisibility(View.GONE);
     });
   }
 
-  private void initDatePicker() {
+  private void initDatePicker() {  // WORK
     mDate = LocalDate.now(); System.out.println(mDate.toString()); int mYear = mDate.getYear();
     int mMonth = mDate.getMonthValue() - 1; // PB -> DataPicker Month begin to 0 not 1, sub 1 to the month
     int mDay = mDate.getDayOfMonth(); mDate = null; // For Filtred just by Room :D
@@ -98,25 +91,35 @@ public class FilterDialogueFragment extends AppCompatDialogFragment {
 
   private View.OnClickListener onInfoClick(int mYear, int mMonth, int mDay) {
     return (View v) -> {
-      mDateSetListener = new DatePickerDialog(getContext(), onDateSet(mYear, mMonth, mDay), mYear, mMonth, mDay);
+      mDateSetListener = new DatePickerDialog(getContext(), onDateSet(), mYear, mMonth, mDay);
       mDateSetListener.show();
     };
   }
 
-  private DatePickerDialog.OnDateSetListener onDateSet(int mYear, int mMonth, int mDay) {
+  private DatePickerDialog.OnDateSetListener onDateSet() {
     return (DatePicker view, int year, int month, int dayOfMonth) -> {
-      DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-      String date = mYear + " " + mMonth + " " + mDay;
-      //DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm");
-      // We Take add 1 to the month because DataPicker begin to 0 and LocalDate to 1
       mDate = LocalDate.of(year, month + 1, dayOfMonth);
-      mBinding.textDate.setText(mDate.format(formatterDate));
-      Log.d("OK", date + " " + mDate + " " + mDateSetListener.getDatePicker().getDayOfMonth());
-      mBinding.progressBar.setVisibility(View.GONE);
+      mBinding.progressBar.setVisibility(View.GONE); viewResult();
+      //Log.d("OK", date + " " + mDate + " " + mDateSetListener.getDatePicker().getDayOfMonth());
     };
   }
 
-  public interface AlertDialogueListener {
+  public void viewResult() { // WORK
+    DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    String result;
+    if ( mRoom == null && mDate == null ) {
+      result = ""; mBinding.result.setText(result);
+    } if ( mRoom == null && ! (mDate == null) ) {
+      result = mDate.format(formatterDate); mBinding.result.setText(result);
+    } if ( mDate == null && ! (mRoom == null) ) {
+      result = mRoom.getName(); mBinding.result.setText(result);
+    } if ( ! (mRoom == null) && ! (mDate == null) ) {
+      result = mRoom.getName() + " le " + mDate.format(formatterDate);
+      mBinding.result.setText(result);
+    }
+  }
+
+  public interface AlertDialogueListener { // WORK
     void returnData(LocalDate date, Room room);
   }
 
@@ -125,7 +128,7 @@ public class FilterDialogueFragment extends AppCompatDialogFragment {
     super.onAttach(context); try {
       mListener = ( AlertDialogueListener ) context;
     } catch ( ClassCastException e ) {
-      throw new ClassCastException(context.toString() + "Je ne sais pas...");
+      throw new ClassCastException(context.toString() + "Une erreur c'est produit...");
     }
   }
 }

@@ -10,6 +10,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/padd"
+    android:hint="label_filter_room"
     app:layout_constraintBottom_toTopOf="@+id/progressBar"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.5"
@@ -21,7 +22,6 @@
       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:hint="Choose Room"
       android:inputType="none" />
 
   </com.google.android.material.textfield.TextInputLayout>
@@ -30,7 +30,7 @@
     android:id="@+id/button_to_date"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Date"
+    android:hint="Choisir une date"
     app:layout_constraintBottom_toTopOf="@+id/progressBar"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.5"
@@ -48,6 +48,31 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/label_filter_room" />
 
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/label_result"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/padd"
+    android:hint="@string/label_result"
+    app:endIconMode="custom"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/progressBar"
+    app:layout_constraintVertical_chainStyle="packed">
+    <!--app:startIconDrawable="@drawable/ic_baseline_subject"-->
+
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/result"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inputType="text"
+      android:focusable="false"
+      />
+
+  </com.google.android.material.textfield.TextInputLayout>
 
   <TextView
     android:id="@+id/textRoom"

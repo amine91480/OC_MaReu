@@ -14,6 +14,11 @@
     <string name="button_date">Choisir une date</string>
     <string name="update">Creation</string>
 
+    <!-- FilterDialogueFragmentComponent -->
+    <string name="label_result">Element à rechercher</string>
+    <string name="label_filter_room">Choose Room</string>
+    <string name="button_to_date">Choisir une date</string>
+
 
     <!-- Meeting_ItemComponent -->
     <string name="contentDescription" />
