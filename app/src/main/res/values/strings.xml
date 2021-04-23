@@ -1,25 +1,34 @@
 <resources>
-    <string name="app_name">Ma réu</string>
-    <string name="add_new_meeting">Add New Meeting</string>
-    <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+  <!-- String for Application && MainActivity-->
+  <string name="app_name">Ma réu</string>
+  <string name="add_new_meeting">Add New Meeting</string>
+  <string name="action_settings">Settings</string>
+  <!-- contentDescription -->
+  <string name="toolbar">Container Toolbar</string>
+  <string name="fab_add">Lunch AddNewMeetingActivity</string>
+  <!-- Menu on Toolbar -->
+  <string name="btn_filter">Filter</string>
 
-    <!-- AddNewMeetingComposent -->
-    <string name="label_subject">Sujet du Meeting</string>
-    <string name="label_email">Email du participant</string>
-    <string name="label_date">Date et heure du Meeting</string>
-    <string name="label_room">Salle du Meeting</string>
-    <string name="button_date">Choisir une date</string>
-    <string name="update">Creation</string>
+  <!-- AddNewMeetingComposent -->
+  <string name="label_subject">Subject of Meeting</string>
+  <string name="label_email">Participants email</string>
+  <string name="label_date">Date and Hour of Meeting</string>
+  <string name="label_room">Meeting Room</string>
+  <string name="button_date">Select Date</string>
+  <string name="update">Creation</string>
 
-    <!-- FilterDialogueFragmentComponent -->
-    <string name="label_result">Element à rechercher</string>
-    <string name="label_filter_room">Choose Room</string>
-    <string name="button_to_date">Choisir une date</string>
+  <!-- FilterDialogueFragmentComponent -->
+  <string name="label_result">Search by</string>
+  <string name="label_filter_room">Choose Room</string>
+  <string name="button_to_date">Select Date</string>
+
+  <!-- Meeting_ItemComponent -->
+  <!-- contentDescription -->
+  <string name="contentDescription" />
 
 
-    <!-- Meeting_ItemComponent -->
-    <string name="contentDescription" />
+  <!-- Meeting Item -->
+  <string name="image"> "Image" </string>
+  <string name="trash"> "Trash" </string>
+
 </resources>

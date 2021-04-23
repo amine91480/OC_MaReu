@@ -90,7 +90,7 @@ public class AddNewMeeting extends AppCompatActivity {
     };
   }
 
-  @SuppressLint("SetTextI18n")
+
   private DatePickerDialog.OnDateSetListener onDateSet(int mHour, int mMinute) {
     return (DatePicker view, int year, int month, int dayOfMonth) -> {
       mTimePickerDialog = new TimePickerDialog(AddNewMeeting.this, (view1, hourOfDay, minute) -> {
@@ -99,7 +99,8 @@ public class AddNewMeeting extends AppCompatActivity {
         // We Take add 1 to the month because DataPicker begin to 0 and LocalDate to 1
         mDateBegin = LocalDateTime.of(year, month + 1, dayOfMonth, hourOfDay, minute);
         mDateFinish = mDateBegin.plusHours(1);
-        binding.info.setText(mDateBegin.toLocalDate().toString()+" "+mDateBegin.toLocalTime().toString());
+        final String theReturnDate = mDateBegin.toLocalDate().toString()+" "+mDateBegin.toLocalTime().toString();
+        binding.info.setText(theReturnDate);
         //binding.labelInfo.setStartIconDrawable(R.drawable.ic_baseline_time);
         //binding.info.setText(mDateBegin.toLocalTime().toString());
         //
@@ -122,7 +123,7 @@ public class AddNewMeeting extends AppCompatActivity {
 
       binding.labelParticipant.addOnEditTextAttachedListener(textInputLayout -> {
         if ( (!email.matches(patrn)) || (email.isEmpty()) ) {
-          binding.labelParticipant.setError("L'adresse mail n'est pas valide...");
+          binding.labelParticipant.setError("The email address is invalid...");
           //binding.labelParticipant.setEndIconDrawable(R.drawable.ic_check);
           binding.labelParticipant.setErrorEnabled(true);
         } else {
@@ -136,7 +137,7 @@ public class AddNewMeeting extends AppCompatActivity {
           if ( email.matches(patrn) ) {
             mParticipantList.add(email);
             binding.participant.setText("");
-            mParticipants = String.join(" ; ", mParticipantList); // A verifier !
+            mParticipants = String.join(" ; ", mParticipantList);
           }
         }
       } return false;

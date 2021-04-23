@@ -1,8 +1,22 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
 
-    <!-- Dimensions for AddNewMeeting -->
-    <!-- For Padding -->
-     <dimen name="padd">32dp</dimen>
-     <!-- Dimensions for AddNewMeeting -->
+  <!-- String for Application && MainActivity-->
+  <dimen name="fab_margin">16dp</dimen>
+
+  <!-- Dimensions for AddNewMeetingComposent -->
+
+  <!-- Dimensions for FilterDialogueFragmentComponent -->
+  <dimen name="dim_1">32dp</dimen>
+
+  <!-- Dimensions for MeetingItemComponent -->
+  <!-- IMG -->
+  <dimen name="img">80dp</dimen>
+  <dimen name="img_p">15dp</dimen>
+  <!-- TextView -->
+  <dimen name="tps">10dp</dimen>
+  <dimen name="ts_1">14sp</dimen>
+  <dimen name="ts_2">18sp</dimen>
+  <dimen name="min_width">0sp</dimen>
+  <dimen name="max_width">18sp</dimen>
+
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
@@ -9,8 +10,8 @@
     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/padd"
-    android:hint="label_filter_room"
+    android:layout_margin="@dimen/dim_1"
+    android:hint="@string/label_filter_room"
     app:layout_constraintBottom_toTopOf="@+id/progressBar"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.5"
@@ -22,7 +23,8 @@
       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:inputType="none" />
+      android:inputType="none"
+      tools:ignore="LabelFor" />
 
   </com.google.android.material.textfield.TextInputLayout>
 
@@ -30,7 +32,7 @@
     android:id="@+id/button_to_date"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:hint="Choisir une date"
+    android:hint="@string/button_date"
     app:layout_constraintBottom_toTopOf="@+id/progressBar"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.5"
@@ -42,9 +44,8 @@
     style="?android:attr/progressBarStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:layout_constraintBottom_toTopOf="@+id/textRoom"
+    app:layout_constraintBottom_toTopOf="@+id/label_result"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.5"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/label_filter_room" />
 
@@ -53,7 +54,7 @@
     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/padd"
+    android:layout_margin="@dimen/dim_1"
     android:hint="@string/label_result"
     app:endIconMode="custom"
     app:layout_constraintBottom_toBottomOf="parent"
@@ -63,38 +64,14 @@
     app:layout_constraintVertical_chainStyle="packed">
     <!--app:startIconDrawable="@drawable/ic_baseline_subject"-->
 
-
     <com.google.android.material.textfield.TextInputEditText
       android:id="@+id/result"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:inputType="text"
       android:focusable="false"
-      />
+      android:inputType="text" />
 
   </com.google.android.material.textfield.TextInputLayout>
 
-  <TextView
-    android:id="@+id/textRoom"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text=""
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/progressBar" />
-
-  <TextView
-    android:id="@+id/textDate"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="356dp"
-    android:text=""
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
