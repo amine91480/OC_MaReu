@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- String for Application && MainActivity-->
+  <dimen name="fab_margin">16dp</dimen>
+
+  <!-- Dimensions for FilterDialogueFragmentComponent -->
+  <dimen name="dim_1">48dp</dimen>
+
+  <!-- Dimensions for MeetingItemComponent -->
+  <!-- IMG -->
+  <dimen name="img">100dp</dimen>
+  <dimen name="img_p">16dp</dimen>
+  <!-- TextView -->
+  <dimen name="tps">16dp</dimen>
+  <dimen name="ts_1">18sp</dimen>
+  <dimen name="ts_2">24sp</dimen>
+  <dimen name="min_width">0dp</dimen>
+  <dimen name="max_width">2dp</dimen>
+</resources>

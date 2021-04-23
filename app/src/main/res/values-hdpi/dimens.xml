@@ -1,7 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
   <!-- String for Application && MainActivity-->
-  <dimen name="fab_margin">16dp</dimen>
+  <dimen name="fab_margin">8dp</dimen>
 
   <!-- Dimensions for FilterDialogueFragmentComponent && AddNewMeetingComposent-->
   <dimen name="dim_1">32dp</dimen>
@@ -12,9 +12,8 @@
   <dimen name="img_p">8dp</dimen>
   <!-- TextView -->
   <dimen name="tps">8dp</dimen>
-  <dimen name="ts_1">14sp</dimen>
-  <dimen name="ts_2">18sp</dimen>
+  <dimen name="ts_1">12sp</dimen>
+  <dimen name="ts_2">16sp</dimen>
   <dimen name="min_width">0dp</dimen>
   <dimen name="max_width">18dp</dimen>
-
 </resources>

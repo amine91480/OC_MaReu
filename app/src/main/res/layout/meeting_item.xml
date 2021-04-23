@@ -21,7 +21,6 @@
     android:layout_width="@dimen/min_width"
     android:layout_height="wrap_content"
     android:ellipsize="end"
-    android:maxWidth="@dimen/max_width"
     android:paddingStart="@dimen/tps"
     android:singleLine="true"
     android:textSize="@dimen/ts_2"

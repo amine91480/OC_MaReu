@@ -41,15 +41,11 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
     binding = ActivityMainBinding.inflate(getLayoutInflater()); View view = binding.getRoot();
     setContentView(view);
-
     setSupportActionBar(binding.toolbar);
-
     binding.myRecyclerView.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
     binding.myRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-
     mMeetingList = mApiService.getMeetings(); mAdapter = new MyListMeetingAdapter(mMeetingList);
     binding.myRecyclerView.setAdapter(mAdapter);
 
@@ -117,8 +113,7 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
         addNewMeeting.setId(mMeetingList.size() + 1); mApiService.createMeeting(addNewMeeting);
         mMeetingList = mApiService.getMeetings();
       } else {
-        Toast.makeText(getApplicationContext(), "Votre Réservation ne peux pas être effectuer", Toast.LENGTH_SHORT).show();
-        System.out.println("Votre Réservation ne peux pas être effectuer");
+        Toast.makeText(getApplicationContext(), "Your Reservation cannot be made", Toast.LENGTH_SHORT).show();
       }
     } else {
       Toast.makeText(getApplicationContext(), "Error System", Toast.LENGTH_SHORT).show();

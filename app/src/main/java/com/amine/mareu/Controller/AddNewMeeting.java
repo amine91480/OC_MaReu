@@ -54,7 +54,7 @@ public class AddNewMeeting extends AppCompatActivity {
   private void receiveData() {
     chooseYourDate(); // Open Dialogue Alert to choose a Date -> OK but the Time not Working :/
     chooseYourRoom(); // Spinner for choose the Room of the Meeting -> OK
-    chooseYourParticipant(); // TODO -> This methode is not finish -> TO Finish
+    chooseYourParticipant(); //
     binding.toolbarNew.setNavigationIcon(R.drawable.ic_baseline_arrow_back); // Insert the Drawable on the Toolbar
     binding.toolbarNew.setNavigationOnClickListener(v -> onBackPressed()); // Insert the Drawable icone on the Toolbar and lambda to setAction Previous Button
     createNewMeeting(); // Method to send setResult to Main for the creation of Meeting
@@ -94,16 +94,11 @@ public class AddNewMeeting extends AppCompatActivity {
   private DatePickerDialog.OnDateSetListener onDateSet(int mHour, int mMinute) {
     return (DatePicker view, int year, int month, int dayOfMonth) -> {
       mTimePickerDialog = new TimePickerDialog(AddNewMeeting.this, (view1, hourOfDay, minute) -> {
-       /* DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm");*/
         // We Take add 1 to the month because DataPicker begin to 0 and LocalDate to 1
         mDateBegin = LocalDateTime.of(year, month + 1, dayOfMonth, hourOfDay, minute);
         mDateFinish = mDateBegin.plusHours(1);
         final String theReturnDate = mDateBegin.toLocalDate().toString()+" "+mDateBegin.toLocalTime().toString();
         binding.info.setText(theReturnDate);
-        //binding.labelInfo.setStartIconDrawable(R.drawable.ic_baseline_time);
-        //binding.info.setText(mDateBegin.toLocalTime().toString());
-        //
       }, mHour, mMinute, true); mTimePickerDialog.show();
     };
   }
@@ -147,8 +142,7 @@ public class AddNewMeeting extends AppCompatActivity {
   private void createNewMeeting() {
     binding.addMeeting.setOnClickListener(v -> {
       // -> We take all data send by the user to send this to MainActivity for the Creation and closed the Activity
-      String subject = Objects.requireNonNull(binding.subject.getText()).toString();
-
+      String subject = binding.subject.getText().toString();
       Intent intent = new Intent();
       intent.putExtra("newMeeting", new Meeting(0, mDateBegin, mDateFinish, mRoom, subject, mParticipants));
       setResult(1, intent); finish();
