@@ -28,6 +28,7 @@
       android:background="?attr/colorPrimary"
       android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
       app:title="@string/add_new_meeting" />
+
   </com.google.android.material.appbar.AppBarLayout>
 
   <com.google.android.material.textfield.TextInputLayout
@@ -112,7 +113,6 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/label_info"
-    app:layout_constraintVertical_chainStyle="packed"
     app:startIconDrawable="@drawable/ic_baseline_subject">
 
     <com.google.android.material.textfield.TextInputEditText
@@ -126,9 +126,10 @@
 
   <com.google.android.material.button.MaterialButton
     android:id="@+id/addMeeting"
-    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dim_1"
     android:text="@string/update"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"

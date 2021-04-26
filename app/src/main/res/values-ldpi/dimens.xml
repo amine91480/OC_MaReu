@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--// FOR 240DPI < 320DPI 5,1 400x800 -->
+<!--// FOR 120DPI < 160DPI -->
 <resources>
   <!-- String for Application && MainActivity-->
-  <dimen name="fab_margin">8dip</dimen>
+  <dimen name="fab_margin">16dip</dimen>
   <!-- Dimensions for FilterDialogueFragmentComponent && AddNewMeetingComposent-->
   <dimen name="dim_1">8dip</dimen>
   <!-- Dimensions for MeetingItemComponent -->
   <!-- IMG -->
   <dimen name="img">46dip</dimen>
-  <dimen name="img_p">6dip</dimen>
+  <dimen name="img_p">4dip</dimen>
   <!-- TextView -->
   <dimen name="tps">2dip</dimen>
   <dimen name="textview_first">12sp</dimen>
