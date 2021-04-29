@@ -4,7 +4,7 @@
     tools:context="com.amine.mareu.MainActivity">
     <item
         android:id="@+id/button_menu"
-        android:icon="@drawable/ic_baseline_filter_list"
+        android:icon="@drawable/ic_filter_list"
         android:title="@string/btn_filter"
         app:showAsAction="ifRoom" >
     </item>

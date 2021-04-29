@@ -24,13 +24,13 @@ public class Meeting implements Parcelable {
   }
 
   protected Meeting(Parcel in) {
-    if (in.readByte() == 0) {
+    if ( in.readByte() == 0 ) {
       id = null;
     } else {
       id = in.readInt();
     }
-    dateBegin = (LocalDateTime) in.readSerializable();
-    dateFinish = (LocalDateTime) in.readSerializable();
+    dateBegin = ( LocalDateTime ) in.readSerializable();
+    dateFinish = ( LocalDateTime ) in.readSerializable();
     room = in.readParcelable(Room.class.getClassLoader());
     subject = in.readString();
     participants = in.readString();
@@ -49,8 +49,11 @@ public class Meeting implements Parcelable {
   };
 
   public boolean isCompleted() {
-    return id != null && room != null && dateBegin != null && dateFinish != null && subject != null && participants != null;
-  } // TODO this method is good for check if all attribut is received -> Search where to use it
+    if ( id == null || room == null || dateBegin == null || dateFinish == null || subject == null || participants == null ) {
+      return false;
+    }
+    return true;
+  }
 
 
   public Integer getId() {
@@ -100,10 +103,10 @@ public class Meeting implements Parcelable {
 
   @Override
   public void writeToParcel(Parcel dest, int flags) {
-    if (id == null) {
-      dest.writeByte((byte) 0);
+    if ( id == null ) {
+      dest.writeByte(( byte ) 0);
     } else {
-      dest.writeByte((byte) 1);
+      dest.writeByte(( byte ) 1);
       dest.writeInt(id);
     }
     dest.writeSerializable(dateBegin);

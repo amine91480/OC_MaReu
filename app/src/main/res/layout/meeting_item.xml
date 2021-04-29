@@ -11,7 +11,7 @@
     android:layout_height="@dimen/img"
     android:contentDescription="@string/image"
     android:padding="@dimen/img_p"
-    android:src="@drawable/ic_baseline_room"
+    android:src="@drawable/ic_album"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
@@ -61,6 +61,6 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:srcCompat="@drawable/ic_baseline_delete" />
+    app:srcCompat="@drawable/ic_delete" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -39,6 +39,7 @@ public class AddNewMeeting extends AppCompatActivity {
   private Room mRoom; // Room choose by the User
   private LocalDateTime mDateBegin, mDateFinish; // Date/Time choose by the User
   private String mParticipants; // All Email insert by the User split by 's'
+  private String mSubject;
 
 
   @Override
@@ -55,7 +56,7 @@ public class AddNewMeeting extends AppCompatActivity {
     chooseYourDate(); // Open Dialogue Alert to choose a Date -> OK but the Time not Working :/
     chooseYourRoom(); // Spinner for choose the Room of the Meeting -> OK
     chooseYourParticipant(); //
-    binding.toolbarNew.setNavigationIcon(R.drawable.ic_baseline_arrow_back); // Insert the Drawable on the Toolbar
+    binding.toolbarNew.setNavigationIcon(R.drawable.ic_arrow_back); // Insert the Drawable on the Toolbar
     binding.toolbarNew.setNavigationOnClickListener(v -> onBackPressed()); // Insert the Drawable icone on the Toolbar and lambda to setAction Previous Button
     createNewMeeting(); // Method to send setResult to Main for the creation of Meeting
   }
@@ -66,12 +67,14 @@ public class AddNewMeeting extends AppCompatActivity {
     } return mRoomName;
   }
 
+  @SuppressLint("ResourceAsColor")
   public void chooseYourRoom() { // Spinner for choose the Room of the Meeting -> OK
     mRoom = mRoomList.get(0);// Securité pour que la salle soit toujours séléctionner sur le première Item
     ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getListNameRooms());
     binding.autoCompleteRoom.setText(mRoomList.get(0).getName()); // Insert the first Room of the list default value view
     binding.autoCompleteRoom.setAdapter(spinnerArrayAdapter);
-    binding.autoCompleteRoom.setOnItemClickListener((parent, view, position, id) -> mRoom = mRoomList.get(position));
+    binding.autoCompleteRoom.setOnItemClickListener((parent, view, position, id) ->
+        mRoom = mRoomList.get(position));
   }
 
   private void chooseYourDate() {
@@ -123,7 +126,7 @@ public class AddNewMeeting extends AppCompatActivity {
           binding.labelParticipant.setErrorEnabled(true);
         } else {
           binding.labelParticipant.setErrorEnabled(false);
-          binding.labelParticipant.setEndIconDrawable(R.drawable.ic_check);
+          binding.labelParticipant.setEndIconDrawable(R.drawable.ic_check_circle);
         }
       });
 
@@ -139,12 +142,13 @@ public class AddNewMeeting extends AppCompatActivity {
     });
   }
 
+  @SuppressLint("ResourceAsColor")
   private void createNewMeeting() {
     binding.addMeeting.setOnClickListener(v -> {
       // -> We take all data send by the user to send this to MainActivity for the Creation and closed the Activity
-      String subject = binding.subject.getText().toString();
+      mSubject = binding.subject.getText().toString();
       Intent intent = new Intent();
-      intent.putExtra("newMeeting", new Meeting(0, mDateBegin, mDateFinish, mRoom, subject, mParticipants));
+      intent.putExtra("newMeeting", new Meeting(0, mDateBegin, mDateFinish, mRoom, mSubject, mParticipants));
       setResult(1, intent); finish();
     });
   }
