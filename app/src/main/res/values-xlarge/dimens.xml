@@ -15,4 +15,5 @@
   <dimen name="tps">18dip</dimen>
   <dimen name="textview_first">28sp</dimen>
   <dimen name="textview_second">20sp</dimen>
+  <dimen name="weight">0dp</dimen>
 </resources>

@@ -17,5 +17,4 @@
   <dimen name="textview_first">16sp</dimen>
   <dimen name="textview_second">12sp</dimen>
   <dimen name="weight">0dp</dimen>
-
 </resources>
