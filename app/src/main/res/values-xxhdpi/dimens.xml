@@ -2,20 +2,18 @@
 <!-- // FOR 480DPI < 640DPI - 5 1080P  -->
 <resources>
   <!-- String for Application && MainActivity-->
-  <dimen name="fab_margin">16dp</dimen>
-
+  <dimen name="fab_margin">16dip</dimen>
   <!-- Dimensions for FilterDialogueFragmentComponent && AddNewMeetingComposent-->
-  <dimen name="dim_1">32dp</dimen>
-
+  <dimen name="dim_1">32dip</dimen>
   <!-- Dimensions for MeetingItemComponent -->
-  <!-- IMG -->
-  <dimen name="img">64dp</dimen>
-  <dimen name="img_p">8dp</dimen>
+  <!-- IMG ROOM -->
+  <dimen name="size_room_img">64dip</dimen>
+  <dimen name="padding_room_img">8dip</dimen>
+  <!-- IMG DELETE -->
+  <dimen name="sizeh_delete_img">32dip</dimen>
+  <dimen name="sizew_delete_img">32dip</dimen>
   <!-- TextView -->
-  <dimen name="tps">8dp</dimen>
+  <dimen name="tps">8dip</dimen>
   <dimen name="textview_first">16sp</dimen>
   <dimen name="textview_second">12sp</dimen>
-  <dimen name="min_width">0dp</dimen>
-  <dimen name="max_width">18dp</dimen>
-
 </resources>

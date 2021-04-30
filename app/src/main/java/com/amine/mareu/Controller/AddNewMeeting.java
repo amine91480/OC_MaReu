@@ -16,9 +16,10 @@ import com.amine.mareu.Model.Meeting;
 import com.amine.mareu.Model.Room;
 import com.amine.mareu.R;
 import com.amine.mareu.Service.DummyRoomGenerator;
-import com.amine.mareu.databinding.ActivityAddNewReunionBinding;
+import com.amine.mareu.databinding.ActivityAddReunionBinding;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +27,7 @@ import java.util.Objects;
 
 public class AddNewMeeting extends AppCompatActivity {
 
-  private ActivityAddNewReunionBinding binding; // BindingView to return the XML and Element View
+  private ActivityAddReunionBinding binding; // BindingView to return the XML and Element View
   private DatePickerDialog mDateSetListener;
   private TimePickerDialog mTimePickerDialog;
 
@@ -45,7 +46,7 @@ public class AddNewMeeting extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    binding = ActivityAddNewReunionBinding.inflate(getLayoutInflater()); //ViewBinding
+    binding = ActivityAddReunionBinding.inflate(getLayoutInflater()); //ViewBinding
     View view = binding.getRoot(); setContentView(view); // Return the View by BindingView
 
     mRoomList = DummyRoomGenerator.DUMMY_ROOM; // ListOfRoom
@@ -67,14 +68,12 @@ public class AddNewMeeting extends AppCompatActivity {
     } return mRoomName;
   }
 
-  @SuppressLint("ResourceAsColor")
   public void chooseYourRoom() { // Spinner for choose the Room of the Meeting -> OK
     mRoom = mRoomList.get(0);// Securité pour que la salle soit toujours séléctionner sur le première Item
     ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getListNameRooms());
     binding.autoCompleteRoom.setText(mRoomList.get(0).getName()); // Insert the first Room of the list default value view
     binding.autoCompleteRoom.setAdapter(spinnerArrayAdapter);
-    binding.autoCompleteRoom.setOnItemClickListener((parent, view, position, id) ->
-        mRoom = mRoomList.get(position));
+    binding.autoCompleteRoom.setOnItemClickListener((parent, view, position, id) -> mRoom = mRoomList.get(position));
   }
 
   private void chooseYourDate() {
@@ -100,7 +99,8 @@ public class AddNewMeeting extends AppCompatActivity {
         // We Take add 1 to the month because DataPicker begin to 0 and LocalDate to 1
         mDateBegin = LocalDateTime.of(year, month + 1, dayOfMonth, hourOfDay, minute);
         mDateFinish = mDateBegin.plusHours(1);
-        final String theReturnDate = mDateBegin.toLocalDate().toString()+" "+mDateBegin.toLocalTime().toString();
+        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        final String theReturnDate = mDateBegin.format(formatterDate).toString()+" "+mDateBegin.toLocalTime().toString();
         binding.info.setText(theReturnDate);
       }, mHour, mMinute, true); mTimePickerDialog.show();
     };
@@ -142,7 +142,6 @@ public class AddNewMeeting extends AppCompatActivity {
     });
   }
 
-  @SuppressLint("ResourceAsColor")
   private void createNewMeeting() {
     binding.addMeeting.setOnClickListener(v -> {
       // -> We take all data send by the user to send this to MainActivity for the Creation and closed the Activity

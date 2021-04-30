@@ -7,10 +7,10 @@
 
   <ImageView
     android:id="@+id/icone"
-    android:layout_width="@dimen/img"
-    android:layout_height="@dimen/img"
+    android:layout_width="@dimen/size_room_img"
+    android:layout_height="@dimen/size_room_img"
     android:contentDescription="@string/image"
-    android:padding="@dimen/img_p"
+    android:padding="@dimen/padding_room_img"
     android:src="@drawable/ic_album"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -18,7 +18,7 @@
 
   <TextView
     android:id="@+id/text"
-    android:layout_width="@dimen/min_width"
+    android:layout_width="@dimen/weight"
     android:layout_height="wrap_content"
     android:ellipsize="end"
     android:paddingStart="@dimen/tps"
@@ -35,7 +35,7 @@
 
   <TextView
     android:id="@+id/participation"
-    android:layout_width="@dimen/min_width"
+    android:layout_width="@dimen/weight"
     android:layout_height="wrap_content"
     android:ellipsize="end"
     android:gravity=""
@@ -53,8 +53,8 @@
 
   <ImageView
     android:id="@+id/delete"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="@dimen/sizew_delete_img"
+    android:layout_height="@dimen/sizeh_delete_img"
     android:layout_marginLeft="@dimen/tps"
     android:layout_marginRight="@dimen/tps"
     android:contentDescription="@string/trash"

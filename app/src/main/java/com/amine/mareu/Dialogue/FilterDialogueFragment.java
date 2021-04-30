@@ -78,7 +78,7 @@ public class FilterDialogueFragment extends AppCompatDialogFragment {
     ArrayAdapter<String> autoCompleteTextViewRoom = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, mRoomsName);
     mBinding.autoCompleteFilterRoom.setAdapter(autoCompleteTextViewRoom);
     mBinding.autoCompleteFilterRoom.setOnItemClickListener((AdapterView<?> adapterView, View view, int position, long id) -> {
-      mRoom = mRooms.get(position); viewResult(); mBinding.progressBar.setVisibility(View.GONE);
+      mRoom = mRooms.get(position); viewResult();
     });
   }
 
@@ -99,7 +99,7 @@ public class FilterDialogueFragment extends AppCompatDialogFragment {
   private DatePickerDialog.OnDateSetListener onDateSet() {
     return (DatePicker view, int year, int month, int dayOfMonth) -> {
       mDate = LocalDate.of(year, month + 1, dayOfMonth);
-      mBinding.progressBar.setVisibility(View.GONE); viewResult();
+      viewResult();
       //Log.d("OK", date + " " + mDate + " " + mDateSetListener.getDatePicker().getDayOfMonth());
     };
   }
@@ -114,7 +114,7 @@ public class FilterDialogueFragment extends AppCompatDialogFragment {
     } if ( mDate == null && ! (mRoom == null) ) {
       result = mRoom.getName(); mBinding.result.setText(result);
     } if ( ! (mRoom == null) && ! (mDate == null) ) {
-      result = mRoom.getName() + " le " + mDate.format(formatterDate);
+      result = mRoom.getName() + " the " + mDate.format(formatterDate);
       mBinding.result.setText(result);
     }
   }

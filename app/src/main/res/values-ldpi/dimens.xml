@@ -6,9 +6,12 @@
   <!-- Dimensions for FilterDialogueFragmentComponent && AddNewMeetingComposent-->
   <dimen name="dim_1">8dip</dimen>
   <!-- Dimensions for MeetingItemComponent -->
-  <!-- IMG -->
-  <dimen name="img">46dip</dimen>
-  <dimen name="img_p">4dip</dimen>
+  <!-- IMG ROOM -->
+  <dimen name="size_room_img">46dip</dimen>
+  <dimen name="padding_room_img">4dip</dimen>
+  <!-- IMG DELETE -->
+  <dimen name="sizeh_delete_img">28dip</dimen>
+  <dimen name="sizew_delete_img">28dip</dimen>
   <!-- TextView -->
   <dimen name="tps">2dip</dimen>
   <dimen name="textview_first">12sp</dimen>
