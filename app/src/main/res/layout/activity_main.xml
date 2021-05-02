@@ -11,14 +11,17 @@
     android:id="@+id/appBarLayout2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:contentDescription="@string/contentDescription"
+    android:contentDescription="@string/toolbar"
     android:theme="@style/Theme.MaReu.AppBarOverlay"
-    tools:ignore="MissingConstraints">
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    >
 
     <androidx.appcompat.widget.Toolbar
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
+      android:layout_height="wrap_content"
       android:background="?attr/colorPrimary"
       app:menu="@menu/menu_main"
       app:popupTheme="@style/Theme.MaReu.PopupOverlay"
@@ -26,11 +29,11 @@
 
   </com.google.android.material.appbar.AppBarLayout>
 
-
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/myRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
     tools:listitem="@layout/meeting_item" />
@@ -40,10 +43,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/fab_margin"
-    android:src="@drawable/ic_baseline_add"
+    android:contentDescription="@string/fab_add"
+    android:src="@drawable/ic_add"
+
     app:backgroundTint="@color/red"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    tools:ignore="ContentDescription" />
+    app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

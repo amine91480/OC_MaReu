@@ -1,5 +1,6 @@
 package com.amine.mareu.Controller;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,7 +62,7 @@ public class MyListMeetingAdapter extends RecyclerView.Adapter<MyListMeetingAdap
       DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm");
       String data = meeting.getRoom().getName() + " - " + meeting.getDateBegin().format(formatTime) + " - " + meeting.getSubject();
       binding.text.setText(data); binding.participation.setText(meeting.getParticipants());
-      binding.icone.setColorFilter(Color.parseColor(meeting.getRoom().getColor()));
+      binding.icone.setImageTintList(ColorStateList.valueOf(Color.parseColor(meeting.getRoom().getColor())));
     }
   }
 }

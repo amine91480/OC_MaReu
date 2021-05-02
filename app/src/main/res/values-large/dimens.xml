@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- String for Application && MainActivity-->
+  <dimen name="fab_margin">24dip</dimen>
+  <!-- Dimensions for FilterDialogueFragmentComponent -->
+  <dimen name="dim_1">32dip</dimen>
+  <!-- Dimensions for MeetingItemComponent -->
+  <!-- IMG ROOM -->
+  <dimen name="size_room_img">100dip</dimen>
+  <dimen name="padding_room_img">12dip</dimen>
+  <!-- IMG DELETE -->
+  <dimen name="sizeh_delete_img">64dip</dimen>
+  <dimen name="sizew_delete_img">64dip</dimen>
+  <!-- TextView -->
+  <dimen name="tps">12dip</dimen>
+  <dimen name="textview_first">22sp</dimen>
+  <dimen name="textview_second">16sp</dimen>
+  <dimen name="weight">0dp</dimen>
+</resources>

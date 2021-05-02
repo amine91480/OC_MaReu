@@ -41,19 +41,18 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    binding = ActivityMainBinding.inflate(getLayoutInflater()); View view = binding.getRoot();
+    binding = ActivityMainBinding.inflate(getLayoutInflater());
+    View view = binding.getRoot();
     setContentView(view);
-
     setSupportActionBar(binding.toolbar);
-
     binding.myRecyclerView.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
     binding.myRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-
-    mMeetingList = mApiService.getMeetings(); mAdapter = new MyListMeetingAdapter(mMeetingList);
+    mMeetingList = mApiService.getMeetings();
+    mAdapter = new MyListMeetingAdapter(mMeetingList);
     binding.myRecyclerView.setAdapter(mAdapter);
 
-    binding.fab.setColorFilter(Color.WHITE); binding.fab.setOnClickListener(view1 -> {
+    binding.fab.setColorFilter(Color.WHITE);
+    binding.fab.setOnClickListener(view1 -> {
       Intent intent = new Intent(view1.getContext(), AddNewMeeting.class);
       startActivityForResult(intent, 1);
     });
@@ -67,7 +66,8 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_main, menu); return true;
+    getMenuInflater().inflate(R.menu.menu_main, menu);
+    return true;
   }
 
 
@@ -76,7 +76,8 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
     if ( item.getItemId() == R.id.button_menu ) {
       openDialogue(); // Call method to init and Lunch openDialog
       return true;
-    } return super.onOptionsItemSelected(item);
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   public void openDialogue() { // Instancie notre FilterDialogueFragment et l'apelle
@@ -92,15 +93,16 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
 
   @Override
   public void returnData(LocalDate date, Room room) {
-    List<Meeting> mFilterListMeeting ;
+    List<Meeting> mFilterListMeeting;
     mFilterListMeeting = mApiService.getFilteredMeeting(room, date);
     mAdapter = new MyListMeetingAdapter(mFilterListMeeting);
     binding.myRecyclerView.setAdapter(mAdapter);
 
-    binding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back);
+    binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
     binding.toolbar.setNavigationOnClickListener(e -> {
       mAdapter = new MyListMeetingAdapter(mMeetingList);
-      binding.myRecyclerView.setAdapter(mAdapter); binding.toolbar.setNavigationIcon(null);
+      binding.myRecyclerView.setAdapter(mAdapter);
+      binding.toolbar.setNavigationIcon(null);
     });
 
     // Call ReturnData on AlertFiltered to receip the list of Meeting Filtred and return this on the Adapter
@@ -114,16 +116,17 @@ public class MainActivity extends AppCompatActivity implements FilterDialogueFra
     if ( data != null ) {// Récupère la data si elle n'est pas vide
       Meeting addNewMeeting = data.getExtras().getParcelable("newMeeting");
       if ( addNewMeeting.isCompleted() && (! mApiService.checkTheFuturReservation(addNewMeeting.getDateBegin(), addNewMeeting.getDateAfter(), addNewMeeting.getRoom())) ) {
-        addNewMeeting.setId(mMeetingList.size() + 1); mApiService.createMeeting(addNewMeeting);
+        addNewMeeting.setId(mMeetingList.size() + 1);
+        mApiService.createMeeting(addNewMeeting);
         mMeetingList = mApiService.getMeetings();
       } else {
-        Toast.makeText(getApplicationContext(), "Votre Réservation ne peux pas être effectuer", Toast.LENGTH_SHORT).show();
-        System.out.println("Votre Réservation ne peux pas être effectuer");
+        Toast.makeText(getApplicationContext(), "Your Reservation cannot be made", Toast.LENGTH_SHORT).show();
       }
     } else {
       Toast.makeText(getApplicationContext(), "Error System", Toast.LENGTH_SHORT).show();
       System.out.println("Error System");
-    } mAdapter = new MyListMeetingAdapter(mMeetingList);
+    }
+    mAdapter = new MyListMeetingAdapter(mMeetingList);
     binding.myRecyclerView.setAdapter(mAdapter);
   }
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
@@ -9,8 +10,9 @@
     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/padd"
-    app:layout_constraintBottom_toTopOf="@+id/progressBar"
+    android:layout_margin="@dimen/dim_1"
+    android:hint="@string/label_filter_room"
+    app:layout_constraintBottom_toTopOf="@+id/button_to_date"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.5"
     app:layout_constraintStart_toStartOf="parent"
@@ -21,8 +23,8 @@
       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:hint="Choose Room"
-      android:inputType="none" />
+      android:inputType="none"
+      tools:ignore="LabelFor" />
 
   </com.google.android.material.textfield.TextInputLayout>
 
@@ -30,46 +32,37 @@
     android:id="@+id/button_to_date"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Date"
-    app:layout_constraintBottom_toTopOf="@+id/progressBar"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/label_filter_room" />
-
-  <ProgressBar
-    android:id="@+id/progressBar"
-    style="?android:attr/progressBarStyle"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:layout_constraintBottom_toTopOf="@+id/textRoom"
+    android:hint="@string/button_date"
+    app:layout_constraintBottom_toTopOf="@+id/label_result"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.5"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/label_filter_room" />
 
 
-  <TextView
-    android:id="@+id/textRoom"
-    android:layout_width="wrap_content"
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/label_result"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="AlertDialogue !"
+    android:layout_margin="@dimen/dim_1"
+    android:hint="@string/label_result"
+    app:endIconMode="custom"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.5"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+    app:layout_constraintTop_toBottomOf="@+id/button_to_date"
+    app:layout_constraintVertical_chainStyle="packed">
+    <!--app:startIconDrawable="@drawable/ic_baseline_subject"-->
 
-  <TextView
-    android:id="@+id/textDate"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="356dp"
-    android:text="AlertDialogue !"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/result"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:focusable="false"
+      android:inputType="text" />
+
+  </com.google.android.material.textfield.TextInputLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

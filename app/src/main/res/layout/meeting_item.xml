@@ -7,23 +7,23 @@
 
   <ImageView
     android:id="@+id/icone"
-    android:layout_width="80dp"
-    android:layout_height="80dp"
-    android:contentDescription="@string/contentDescription"
-    android:padding="15dp"
-    android:src="@drawable/ic_baseline_room"
+    android:layout_width="@dimen/size_room_img"
+    android:layout_height="@dimen/size_room_img"
+    android:contentDescription="@string/image"
+    android:padding="@dimen/padding_room_img"
+    android:src="@drawable/ic_album"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
   <TextView
     android:id="@+id/text"
-    android:layout_width="269dp"
+    android:layout_width="@dimen/weight"
     android:layout_height="wrap_content"
     android:ellipsize="end"
-    android:paddingStart="10dp"
+    android:paddingStart="@dimen/tps"
     android:singleLine="true"
-    android:textSize="18sp"
+    android:textSize="@dimen/textview_first"
     android:textStyle="bold"
     app:layout_constraintBottom_toTopOf="@+id/participation"
     app:layout_constraintEnd_toStartOf="@+id/delete"
@@ -31,17 +31,18 @@
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_chainStyle="spread"
     tools:ignore="RtlSymmetry"
-    tools:text="Réunion Z - 12h00 - Vegetaoui bien sur " />
+    tools:text="Réunion K - 12h00 - Soutenance Android " />
 
   <TextView
     android:id="@+id/participation"
-    android:layout_width="0dp"
+    android:layout_width="@dimen/weight"
     android:layout_height="wrap_content"
     android:ellipsize="end"
-    android:paddingStart="10dp"
-    android:paddingEnd="10dp"
+    android:gravity=""
+    android:paddingStart="@dimen/tps"
+    android:paddingEnd="@dimen/tps"
     android:singleLine="true"
-    android:textSize="14sp"
+    android:textSize="@dimen/textview_second"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toStartOf="@+id/delete"
     app:layout_constraintStart_toEndOf="@+id/icone"
@@ -52,15 +53,14 @@
 
   <ImageView
     android:id="@+id/delete"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:contentDescription="@string/contentDescription"
+    android:layout_width="@dimen/sizew_delete_img"
+    android:layout_height="@dimen/sizeh_delete_img"
+    android:layout_marginLeft="@dimen/tps"
+    android:layout_marginRight="@dimen/tps"
+    android:contentDescription="@string/trash"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:srcCompat="@drawable/ic_baseline_delete" />
-
+    app:srcCompat="@drawable/ic_delete" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

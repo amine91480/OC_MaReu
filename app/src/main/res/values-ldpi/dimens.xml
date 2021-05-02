@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--// FOR 120DPI < 160DPI -->
+<resources>
+  <!-- String for Application && MainActivity-->
+  <dimen name="fab_margin">16dip</dimen>
+  <!-- Dimensions for FilterDialogueFragmentComponent && AddNewMeetingComposent-->
+  <dimen name="dim_1">8dip</dimen>
+  <!-- Dimensions for MeetingItemComponent -->
+  <!-- IMG ROOM -->
+  <dimen name="size_room_img">46dip</dimen>
+  <dimen name="padding_room_img">4dip</dimen>
+  <!-- IMG DELETE -->
+  <dimen name="sizeh_delete_img">28dip</dimen>
+  <dimen name="sizew_delete_img">28dip</dimen>
+  <!-- TextView -->
+  <dimen name="tps">2dip</dimen>
+  <dimen name="textview_first">12sp</dimen>
+  <dimen name="textview_second">10sp</dimen>
+  <dimen name="weight">0dp</dimen>
+</resources>
