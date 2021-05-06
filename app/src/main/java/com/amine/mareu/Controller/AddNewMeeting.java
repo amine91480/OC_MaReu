@@ -121,11 +121,12 @@ public class AddNewMeeting extends AppCompatActivity {
 
       binding.labelParticipant.addOnEditTextAttachedListener(textInputLayout -> {
         if ( (!email.matches(patrn)) || (email.isEmpty()) ) {
+         /* // TODO For Test
           binding.labelParticipant.setError("The email address is invalid...");
-          //binding.labelParticipant.setEndIconDrawable(R.drawable.ic_check);
           binding.labelParticipant.setErrorEnabled(true);
+          // TODO For Test*/
         } else {
-          binding.labelParticipant.setErrorEnabled(false);
+          /*binding.labelParticipant.setErrorEnabled(false);*/
           binding.labelParticipant.setEndIconDrawable(R.drawable.ic_check_circle);
         }
       });
