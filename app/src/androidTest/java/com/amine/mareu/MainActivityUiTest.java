@@ -1,41 +1,23 @@
 package com.amine.mareu;
 
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
-import android.widget.DatePicker;
 import android.widget.TextView;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.IntDef;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.ViewAssertion;
-import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.contrib.PickerActions;
-import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.amine.mareu.Controller.AddNewMeeting;
-import com.amine.mareu.Service.DummyRoomGenerator;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -49,41 +31,20 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.assertion.ViewAssertions.selectedDescendantsMatch;
-import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
-import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
-import static androidx.test.espresso.matcher.ViewMatchers.hasBackground;
-import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
-import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withChild;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withParent;
-import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.amine.mareu.EspressoTestsMatchers.hasDrawable;
-import static com.amine.mareu.EspressoTestsMatchers.withDrawable;
-import static com.amine.mareu.MainActivityTest.childAtPosition;
-import static com.google.android.material.internal.ContextUtils.getActivity;
 import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityInstrumentationTestUI {
+public class MainActivityUiTest {
 
-  private MainActivity mActivity;
 
   @Rule
   public ActivityScenarioRule<MainActivity> activityTestRule =
@@ -118,49 +79,30 @@ public class MainActivityInstrumentationTestUI {
   }
 
   @Test
-  public void goToAddNewActivity_andCheckTheAutoCompleteView() throws InterruptedException {
+  public void goToAddNewActivity_andCheckTheAutoCompleteView() {
 
-      myFabButton_lunchAddNewMeeting();
-      onView(withId(R.id.autoComplete_room)).perform(click());
-      onData(anything())
-          .atPosition(2)
-          .inRoot(RootMatchers.isPlatformPopup())
-          /*.onChildView(withId(R.id.autoComplete_room))*/
-          .perform(click());
+    myFabButton_lunchAddNewMeeting();
+    onView(withId(R.id.autoComplete_room)).perform(click());
+    onData(anything()).atPosition(2).inRoot(RootMatchers.isPlatformPopup()).perform(click());
 
-      onView(withId(R.id.subject)).perform(replaceText("UITestEspresso"));
+    onView(withId(R.id.subject)).perform(replaceText("UITestEspresso"));
 
-      onView(withId(R.id.label_info)).perform(click());
-      onView(withText("OK")).perform(click());
-      onView(withText("OK")).perform(click());
+    onView(withId(R.id.label_info)).perform(click());
+    onView(withText("OK")).perform(click());
+    onView(withText("OK")).perform(click());
 
-      onView(withId(R.id.label_participant)).perform(click());
-      onView(withId(R.id.participant)).perform(replaceText("amine91480@hotmail.fr"));
+    onView(withId(R.id.label_participant)).perform(click());
+    onView(withId(R.id.participant)).perform(replaceText("amine91480@hotmail.fr"));
 
-     /* onView(withId(R.id.label_participant)).perform(click());*/
-      /*onView(withId(R.id.label_participant)).check(matches(withDrawable(R.drawable.ic_check_circle)));*/
     onView(withId(R.id.label_participant)).perform(click());
     onView(withId(R.id.participant)).perform(new ClickDrawableAction(ClickDrawableAction.Right));
-
-    /*ViewInteraction clickToDrawable = onView(
-        allOf(withId(R.id.participant),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.label_participant),
-                    0),
-                0),
-            isDisplayed()));
-
-    clickToDrawable.check(matches(withDrawable(R.drawable.ic_check_circle)));*/
-
-
 
     onView(withId(R.id.participant)).perform(closeSoftKeyboard());
 
     onView(withId(R.id.addMeeting)).perform(click());
-sleep(2000);
-  }
 
+    onView(withId(R.id.toolbar)).check(matches(isDisplayed()));
+  }
   // TEST AddNewMeeting ->
 
   // TEST FilteredDialogue ->
