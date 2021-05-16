@@ -21,6 +21,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 
 import java.lang.annotation.Retention;
@@ -47,6 +48,7 @@ public class AddNewMeetingUiTest {
       new ActivityScenarioRule<>(AddNewMeeting.class);
 
   @Test
+  @DisplayName("Check if all elements is visible")
   public void testIfAddNewMeetingIsDisplay() {
     onView(withId(R.id.appBarLayout)).check(matches(isDisplayed()));
     onView(withId(R.id.toolbar_new)).check(matches(isDisplayed()));
@@ -59,6 +61,7 @@ public class AddNewMeetingUiTest {
   }
 
   @Test
+  @DisplayName("Fill all elements and create a Meeting")
   public void testToCreateMeeting() {
     onView(withId(R.id.autoComplete_room)).perform(click());
     onData(anything()).atPosition(2).inRoot(RootMatchers.isPlatformPopup()).perform(click());
